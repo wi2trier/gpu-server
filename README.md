@@ -65,6 +65,8 @@ There are three main commands in Apptainer:
 Some images (e.g., `nvidia/cuda` or `ubuntu`) provide no default command, meaning it will do nothing by default.
 In this special case, `apptainer run` and `apptainer exec` are equivalent and can be used interchangeably.
 
+### GPU Selection
+
 To access the GPUs from within the container, you need to set the `CUDA_VISIBLE_DEVICES` environment variable and pass the `--nv` flag to the Apptainer command.
 Here is the general call signature for the `apptainer exec` command:
 
