@@ -1,0 +1,103 @@
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    systems.url = "github:nix-systems/default";
+    system-manager = {
+      url = "github:numtide/system-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixglhost = {
+      url = "github:numtide/nix-gl-host";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixgl = {
+      url = "github:nix-community/nixgl";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    flake-parts,
+    systems,
+    system-manager,
+    ...
+  }:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = import systems;
+      flake = let
+        system = "x86_64-linux";
+        pkgs = import nixpkgs {
+          inherit system;
+          config = {
+            allowUnfree = true;
+            cudaSupport = true;
+          };
+        };
+        lib = pkgs.lib;
+        builder = system-manager.packages.${system}.default;
+      in {
+        lib = import ./lib.nix nixpkgs.lib;
+        packages.${system} = rec {
+          default = install;
+          install = pkgs.writeShellApplication {
+            name = "system-manager-rebuild";
+            text = ''
+              set -x #echo on
+              exec sudo ${lib.getExe builder} "''${1:-switch}" --flake ${self} "''${@:2}"
+            '';
+          };
+          uninstall = pkgs.writeShellApplication {
+            name = "system-manager-uninstall";
+            text = ''
+              set -x #echo on
+              exec sudo ${lib.getExe builder} deactivate "''$@"
+            '';
+          };
+          setup = let
+            setupHelper = pkgs.writeShellApplication {
+              name = "system-manager-setup-helper";
+              text = ''
+                # only root possible
+                if [ "$(id -u)" -ne 0 ]; then
+                  echo "This script must be run as root" >&2
+                  exit 1
+                fi
+                set -x #echo on
+                # set up nix
+                sudo cp -f ${./etc/nix.conf} /etc/nix/nix.conf
+                # set up cuda support for oci engines like podman
+                sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+                sudo chmod -R 755 /etc/cdi
+                # set compute mode to exclusive process (https://stackoverflow.com/a/50056586)
+                sudo nvidia-smi -c 3
+                # set up mount folders for apptainer
+                sudo mkdir -p /var/lib/{apptainer,singularity}/mnt/{container,final,overlay,session}
+              '';
+            };
+          in
+            pkgs.writeShellApplication {
+              name = "system-manager-setup";
+              text = ''
+                exec sudo ${lib.getExe setupHelper}
+              '';
+            };
+        };
+        systemConfigs.default = system-manager.lib.makeSystemConfig {
+          extraSpecialArgs = {
+            inherit inputs;
+            mylib = self.lib;
+          };
+          modules = [
+            ./modules
+            {
+              _module.args.pkgs = lib.mkForce pkgs;
+              nixpkgs.hostPlatform = system;
+            }
+          ];
+        };
+      };
+    };
+}

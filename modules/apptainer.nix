@@ -1,0 +1,34 @@
+# https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/virtualization/singularity/generic.nix
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: let
+  apptainerOverride = pkgs.apptainer.override {
+    enableNvidiaContainerCli = false;
+  };
+  apptainer = pkgs.writeShellApplication {
+    name = "apptainer";
+    text = ''
+      case "''${CUDA_VISIBLE_DEVICES:-100}" in
+        100) APPTAINERENV_CUDA_VISIBLE_DEVICES="$(findgpu)" ;;
+        *) APPTAINERENV_CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES" ;;
+      esac
+      export APPTAINERENV_CUDA_VISIBLE_DEVICES
+      exec ${lib.getExe apptainerOverride} "$@"
+    '';
+  };
+in {
+  environment = {
+    systemPackages = [
+      apptainer
+      (pkgs.writeShellApplication {
+        name = "singularity";
+        text = ''
+          exec ${lib.getExe apptainer} "$@"
+        '';
+      })
+    ];
+  };
+}
