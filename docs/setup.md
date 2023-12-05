@@ -3,7 +3,7 @@
 To apply changes to the config, run the following:
 
 ```shell
-nix run github:mirkolenz/gpu-server
+nix run github:wi2trier/gpu-server
 ```
 
 ## Base Setup
@@ -21,7 +21,7 @@ Afterwards, open a new shell to apply the changes (e.g., exit and reconnect via 
 Then we can apply the system manager configuration.
 
 ```shell
-nix run github:mirkolenz/gpu-server
+nix run github:wi2trier/gpu-server
 ```
 
 Again open a new shell to apply the changes.
@@ -47,7 +47,7 @@ The following script sets up some basic configuration for the server.
 It can be applied at any time later on to update the configuration.
 
 ```shell
-nix run github:mirkolenz/gpu-server#setup
+nix run github:wi2trier/gpu-server#setup
 ```
 
 ## Verify Installation
@@ -75,5 +75,5 @@ CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://nvidia/cuda:12.3.
 ## Uninstall
 
 ```shell
-nix run github:mirkolenz/gpu-server#uninstall
+nix run github:wi2trier/gpu-server#uninstall
 ```
