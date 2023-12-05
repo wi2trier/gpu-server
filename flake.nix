@@ -84,6 +84,8 @@
                 exec sudo ${lib.getExe setupHelper}
               '';
             };
+          docker-nlp = pkgs.callPackage ./packages/docker-nlp.nix {};
+          docker-poetry = pkgs.callPackage ./packages/docker-poetry.nix {};
         };
         systemConfigs.default = system-manager.lib.makeSystemConfig {
           extraSpecialArgs = {
