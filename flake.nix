@@ -68,6 +68,7 @@
                 set -x #echo on
                 # set up nix
                 sudo cp -f ${./etc/nix.conf} /etc/nix/nix.conf
+                sudo systemctl restart nix-daemon
                 # set up cuda support for oci engines like podman
                 sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
                 sudo chmod -R 755 /etc/cdi
