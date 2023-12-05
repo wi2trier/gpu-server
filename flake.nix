@@ -74,8 +74,6 @@
                 sudo chmod -R 755 /etc/cdi
                 # set compute mode to exclusive process (https://stackoverflow.com/a/50056586)
                 sudo nvidia-smi -c 3
-                # set up mount folders for apptainer
-                sudo mkdir -p /var/lib/{apptainer,singularity}/mnt/{container,final,overlay,session}
               '';
             };
           in
