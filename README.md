@@ -81,9 +81,11 @@ For example, to run the `nvidia-smi` command on any available GPU, execute
 apptainer exec --nv docker://nvidia/cuda nvidia-smi
 ```
 
-### File Access
+### [File Access](https://apptainer.org/docs/user/main/bind_paths_and_mounts.html)
 
-By default, Apptainer mounts your home directory into the container at the same location, so no additional configuration is needed.
+By default, Apptainer mounts both (i) your home directory and (ii) your current working directory into the container, so no additional configuration is needed.
+In case you only need your working directory and not your home folder, pass the option `--no-home` to the Apptainer command.
+When needing access to other file locations, you can use the `--bind source:target` option to mount them into the container.
 
 ### Port Forwarding
 
@@ -91,7 +93,9 @@ When starting a server in a container, it is directly accessible without the nee
 This also means that in case two users want to run two instances of the same app on the server, you are responsible for choosing different ports.
 Please consult the documentation of the corresponding app for more details on how to change the default port.
 
-### Image Caching
+**Please note:** As a regular user, you can only use ports above 1024.
+
+### [Image Caching](https://apptainer.org/docs/user/main/cli/apptainer_cache.html)
 
 Apptainer caches images on the server to speed up subsequent runs.
 They are stored in your home folder, so you may want to clean them up from time to time:
@@ -101,6 +105,35 @@ apptainer cache clean --days $DAYS
 ```
 
 All images not accessed within the last `$DAYS` days will be deleted.
+
+### [Running Services](https://apptainer.org/docs/user/main/running_services.html)
+
+If starting a service like a Jupyter notebook, you need to keep the terminal open.
+To mitigate this, you may either use the `tmux` command (see above) or start the container as an _instance_:
+
+```shell
+apptainer instance start --nv docker://$IMAGE $INSTANCE_NAME [$ARGS...]
+```
+
+To see a list of all running instances, execute
+
+```shell
+apptainer instance list
+```
+
+While an instance is running, you can execute code in it via
+
+```shell
+apptainer instance exec $INSTANCE_NAME $COMMAND [$ARGS...]
+```
+
+To stop an instance, execute
+
+```shell
+apptainer instance stop $INSTANCE_NAME
+# or, to stop all instances
+apptainer instance stop --all
+```
 
 ## Podman Usage
 
