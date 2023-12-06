@@ -1,0 +1,29 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * 1" # every Monday at 1am UTC
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+      - uses: DeterminateSystems/nix-installer-action@v9
+        with:
+          extra-conf: |
+            extra-platforms = aarch64-linux
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+        name: Run git config
+      - run: |
+          nix flake update \
+            --commit-lock-file \
+            --commit-lockfile-summary "chore(deps): update flake.lock"
+        name: Run nix flake update
+      - run: nix flake check
+      - run: git push
