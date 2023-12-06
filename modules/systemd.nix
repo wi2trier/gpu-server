@@ -3,7 +3,27 @@
   pkgs,
   ...
 }: {
+  systemd.timers = {
+    update-system = {
+      enable = true;
+      timerConfig = {
+        OnCalendar = "*-*-* 04:00:00";
+        Persistent = true;
+        Unit = "update-system.service";
+      };
+      wantedBy = ["system-manager.target"];
+    };
+  };
   systemd.services = {
+    update-system = {
+      enable = true;
+      script = ''
+        ${lib.getExe pkgs.nix} run github:wi2trier/gpu-server
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+      };
+    };
     link-cuda = let
       # Regenerate with: nvidia-container-cli list --libraries
       libraries = [
