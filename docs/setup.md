@@ -3,10 +3,10 @@
 To apply changes to the config, run the following:
 
 ```shell
-nix run github:wi2trier/gpu-server
+sudo nix run github:wi2trier/gpu-server
 ```
 
-## Base Setup
+## Initial Setup
 
 First, install the dependencies for nix and the CUDA installation.
 The package(s) `uidmap` are needed for rootless podman.
@@ -18,10 +18,10 @@ sudo apt install -y git curl wget uidmap
 
 Then install nix using the [DeterminateSystems installer](https://github.com/DeterminateSystems/nix-installer).
 Afterwards, open a new shell to apply the changes (e.g., exit and reconnect via ssh).
-Then we can apply the system manager configuration.
+Then we can apply the system manager configuration for the first time.
 
 ```shell
-nix run github:wi2trier/gpu-server
+sudo /nix/var/nix/profiles/default/bin/nix run github:wi2trier/gpu-server
 ```
 
 Again open a new shell to apply the changes.
@@ -47,7 +47,7 @@ The following script sets up some basic configuration for the server.
 It can be applied at any time later on to update the configuration.
 
 ```shell
-nix run github:wi2trier/gpu-server#setup
+sudo nix run github:wi2trier/gpu-server#setup
 ```
 
 ## Verify Installation
@@ -75,5 +75,5 @@ CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://nvidia/cuda:12.3.
 ## Uninstall
 
 ```shell
-nix run github:wi2trier/gpu-server#uninstall
+sudo nix run github:wi2trier/gpu-server#uninstall
 ```

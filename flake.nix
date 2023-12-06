@@ -46,14 +46,14 @@
             name = "system-manager-rebuild";
             text = ''
               set -x #echo on
-              exec sudo ${lib.getExe builder} "''${1:-switch}" --flake ${self} "''${@:2}"
+              exec ${lib.getExe builder} "''${1:-switch}" --flake ${self} "''${@:2}"
             '';
           };
           uninstall = pkgs.writeShellApplication {
             name = "system-manager-uninstall";
             text = ''
               set -x #echo on
-              exec sudo ${lib.getExe builder} deactivate "''$@"
+              exec ${lib.getExe builder} deactivate "''$@"
             '';
           };
           setup = let
@@ -67,20 +67,20 @@
                 fi
                 set -x #echo on
                 # set up nix
-                sudo cp -f ${./etc/nix.conf} /etc/nix/nix.conf
-                sudo systemctl restart nix-daemon
+                cp -f ${./etc/nix.conf} /etc/nix/nix.conf
+                systemctl restart nix-daemon
                 # set up cuda support for oci engines like podman
-                sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
-                sudo chmod -R 755 /etc/cdi
+                nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+                chmod -R 755 /etc/cdi
                 # set compute mode to exclusive process (https://stackoverflow.com/a/50056586)
-                sudo nvidia-smi -c 3
+                nvidia-smi -c 3
               '';
             };
           in
             pkgs.writeShellApplication {
               name = "system-manager-setup";
               text = ''
-                exec sudo ${lib.getExe setupHelper}
+                exec ${lib.getExe setupHelper}
               '';
             };
           docker-nlp = pkgs.callPackage ./packages/docker-nlp.nix {};
