@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/backport-269324-to-release-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11-small";
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
     system-manager = {
