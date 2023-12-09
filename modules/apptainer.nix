@@ -5,9 +5,6 @@
   inputs,
   ...
 }: let
-  apptainerOverride = pkgs.apptainer.override {
-    enableNvidiaContainerCli = false;
-  };
   apptainer = pkgs.writeShellApplication {
     name = "apptainer";
     text = ''
@@ -16,7 +13,7 @@
         *) APPTAINERENV_CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES" ;;
       esac
       export APPTAINERENV_CUDA_VISIBLE_DEVICES
-      exec ${lib.getExe apptainerOverride} "$@"
+      exec ${lib.getExe pkgs.apptainer} "$@"
     '';
   };
 in {

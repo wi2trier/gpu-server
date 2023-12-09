@@ -35,6 +35,13 @@
             allowUnfree = true;
             cudaSupport = true;
           };
+          overlays = [
+            (final: prev: {
+              apptainer = prev.apptainer.override {
+                enableNvidiaContainerCli = false;
+              };
+            })
+          ];
         };
         lib = pkgs.lib;
         builder = system-manager.packages.${system}.default;
