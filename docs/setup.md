@@ -13,10 +13,16 @@ The package(s) `uidmap` are needed for rootless podman.
 
 ```shell
 sudo apt update
+sudo apt upgrade -y
 sudo apt install -y git curl wget uidmap
 ```
 
 Then install nix using the [DeterminateSystems installer](https://github.com/DeterminateSystems/nix-installer).
+
+```shell
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
+
 Afterwards, open a new shell to apply the changes (e.g., exit and reconnect via ssh).
 Then we can apply the system manager configuration for the first time.
 
@@ -41,6 +47,10 @@ sudo apt install -y cuda nvidia-container-toolkit
 
 Restart the server to load the new driver.
 
+```shell
+sudo reboot
+```
+
 ## Additional Setup
 
 The following script sets up some basic configuration for the server.
@@ -55,8 +65,8 @@ sudo nix run github:wi2trier/gpu-server#setup
 Correctly setting up the CUDA drivers is crucial, so please verify that the following commands work as expected.
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 apptainer run --nv docker://nvidia/cuda:12.3.0-runtime-ubuntu22.04 nvidia-smi
-podman run --rm --device nvidia.com/gpu=0 nvidia/cuda:12.3.0-runtime-ubuntu22.04 nvidia-smi
+CUDA_VISIBLE_DEVICES=0 apptainer run --nv docker://ubuntu nvidia-smi
+podman run --rm --device nvidia.com/gpu=0 ubuntu nvidia-smi
 ```
 
 In addition, you may test the setup using the `pytorch` image:
@@ -69,7 +79,7 @@ podman run --rm --device nvidia.com/gpu=0 pytorch/pytorch python -c "import torc
 The new Apptainer runtime using `nvidia-container-cli` currently does not work:
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://nvidia/cuda:12.3.0-runtime-ubuntu22.04 nvidia-smi
+CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://ubuntu nvidia-smi
 ```
 
 ## Uninstall

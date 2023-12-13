@@ -4,13 +4,40 @@
 
 We offer the custom command `userctl` to manage users on the server.
 Please do **not** use the standard Linux commands (e.g., `useradd`, `adduser`, ...)!
-The script allows to add, remove, and edit users.
-Please run `sudo userctl --help` for more information.
+In addition to adding, removing, and editing users, `userctl` also manages the ZFS dataset for the user.
+Run `sudo userctl --help` for more information.
 
 Users on this server are identified by their university email address.
 Thus, `userctl` expects the full email address as argument.
-When creating student accounts, please provide `--expire-date` to automatically disable login after their project is finished.
+
+### Adding Users
+
+When creating student accounts, you need to provide the full name of the student via `--full-name`.
+Please also provide `--expire-date` to automatically disable login after their project is finished.
 We recommend to set the date to nine months after the account creation, this should cover most use cases.
+Also consider adding a quota to the user, e.g., `--quota 100G`.
+
+```shell
+sudo userctl add s9name@uni-trier.de --full-name "Full Name" --expire-date 2022-12-31 --quota 100G
+```
+
+### Removing Users
+
+When removing users, you can choose to keep the data by adding `--keep-home`.
+
+```shell
+sudo userctl remove s9name@uni-trier.de
+```
+
+### Editing Users
+
+You may change the expiration date and the quota of a user at any time.
+
+```shell
+sudo userctl edit s9name@uni-trier.de --expire-date 2022-12-31 --quota 100G
+```
+
+If one of these options is not provided, the current value will be kept.
 
 ## Process Management
 
