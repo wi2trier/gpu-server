@@ -69,8 +69,8 @@ def add(
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man1/passwd.1.html
     run_cmd(
-        ["passwd", "--expire", "--stdin", user],
-        input=password.encode("utf-8"),
+        ["passwd", "--expire", user],
+        input=f"{password}\n{password}\n".encode("utf-8"),
     )
 
     typer.echo(f"Password for {user}: {password}")
