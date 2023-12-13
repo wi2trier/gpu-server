@@ -1,10 +1,9 @@
 {pkgs, ...}: {
-  environment.etc."motd".source = pkgs.writeShellScript "motd" ''
-    echo "Welcome to our GPU server!"
-    echo "Please check out our documentation:"
-    tput bold
-    echo "https://github.com/wi2trier/gpu-server"
-    tput sgr0
-    echo
+  environment.etc."motd".text = ''
+    Welcome to our GPU server! Please check out our documentation:
+
+    https://github.com/wi2trier/gpu-server
+
+    If you encounter any problems, feel free to open an issue on GitHub or contact your supervisor.
   '';
 }
