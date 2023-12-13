@@ -63,33 +63,25 @@
               exec ${lib.getExe builder} deactivate "''$@"
             '';
           };
-          setup = let
-            setupHelper = pkgs.writeShellApplication {
-              name = "system-manager-setup-helper";
-              text = ''
-                # only root possible
-                if [ "$(id -u)" -ne 0 ]; then
-                  echo "This script must be run as root" >&2
-                  exit 1
-                fi
-                set -x #echo on
-                # set up nix
-                cp -f ${./etc/nix.conf} /etc/nix/nix.conf
-                systemctl restart nix-daemon
-                # set up cuda support for oci engines like podman
-                nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
-                chmod -R 755 /etc/cdi
-                # set compute mode to exclusive process (https://stackoverflow.com/a/50056586)
-                nvidia-smi -c 3
-              '';
-            };
-          in
-            pkgs.writeShellApplication {
-              name = "system-manager-setup";
-              text = ''
-                exec ${lib.getExe setupHelper}
-              '';
-            };
+          setup = pkgs.writeShellApplication {
+            name = "system-manager-setup";
+            text = ''
+              # only root possible
+              if [ "$(id -u)" -ne 0 ]; then
+                echo "This script must be run as root" >&2
+                exit 1
+              fi
+              set -x #echo on
+              # set up nix
+              cp -f ${./etc/nix.conf} /etc/nix/nix.conf
+              systemctl restart nix-daemon
+              # set up cuda support for oci engines like podman
+              nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+              chmod -R 755 /etc/cdi
+              # set compute mode to exclusive process (https://stackoverflow.com/a/50056586)
+              nvidia-smi -c 3
+            '';
+          };
           docker-nlp = pkgs.callPackage ./packages/docker-nlp.nix {};
           docker-poetry = pkgs.callPackage ./packages/docker-poetry.nix {};
         };
