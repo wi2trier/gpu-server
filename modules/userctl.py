@@ -40,12 +40,12 @@ def add(
     ],
     full_name: Annotated[
         str,
-        typer.Option(prompt=True),
+        typer.Option(),
     ],
     expire_date: Annotated[
-        datetime,
-        typer.Option(prompt=True, formats=[DATE_FORMAT]),
-    ],
+        Optional[datetime],
+        typer.Option(formats=[DATE_FORMAT]),
+    ] = None,
 ) -> None:
     password = secrets.token_urlsafe()
 

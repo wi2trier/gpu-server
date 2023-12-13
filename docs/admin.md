@@ -4,11 +4,13 @@
 
 We offer the custom command `userctl` to manage users on the server.
 Please do **not** use the standard Linux commands (e.g., `useradd`, `adduser`, ...)!
-The script is interactive and allows to add, remove, and edit users.
+The script allows to add, remove, and edit users.
 Please run `sudo userctl --help` for more information.
 
 Users on this server are identified by their university email address.
 Thus, `userctl` expects the full email address as argument.
+When creating student accounts, please provide `--expire-date` to automatically disable login after their project is finished.
+We recommend to set the date to nine months after the account creation, this should cover most use cases.
 
 ## Process Management
 
