@@ -73,7 +73,10 @@ def add(
         input=f"{password}\n{password}\n".encode("utf-8"),
     )
 
-    typer.echo(f"Password for {user}: {password}")
+    typer.echo("Login data for new user:")
+    typer.echo(f"Username: {user}")
+    typer.echo(f"Password: {password}")
+    typer.echo("The initial password has to be changed on the first login.")
 
 
 @app.command()
