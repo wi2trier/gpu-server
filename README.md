@@ -15,6 +15,11 @@ To run your code on the server, we provide two container runtimes:
 Due to its ease of use, we generally recommend Apptainer for users unfamiliar with container engines like Docker.
 Among others, it automatically forwards ports form your applications and makes sure that your files on the server are accessible in the container without any configuration (unlike Podman).
 
+> [!warning]
+> Even users with sudo permissions shall not install additional software through `apt` or other package managers.
+> The server is declaratively managed through Nix, so this may interfere with the configuration.
+> Instead, refer to the section _consuming packages_ in this document.
+
 ## Access
 
 The server can only be accessed when connected to the VPN of Trier University.
@@ -38,6 +43,26 @@ We found the following utilities to be useful for everyday use:
 - `htop`: Show the active processes on the server.
 - `nvidia-smi` and `gpustat`: Show the active processes on the GPUs.
 - `tmux`: Create a new terminal session that can be detached and reattached later.
+
+### Consuming Packages
+
+We use the [Nix package manager](https://nixos.org) to declaratively manage the server configuration.
+This allows you to spawn a temporary shell with additional packages easily.
+For instance, to create a shell with Node.js and Python 3, execute:
+
+```shell
+nix-shell -p nodejs python3
+```
+
+You may also provide a command that shall be run in the shell:
+
+```shell
+nix-shell -p python3 --run "python --version"
+```
+
+You can search for available packages on [search.nixos.org](https://search.nixos.org/packages).
+This is useful to quickly test a new package before using it in production in a containerized environment like Apptainer.
+If you would like to install a package permanently, please open a pull request on GitHub.
 
 ### GPU Selection
 
