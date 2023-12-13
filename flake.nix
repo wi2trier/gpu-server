@@ -80,6 +80,8 @@
               chmod -R 755 /etc/cdi
               # set compute mode to exclusive process (https://stackoverflow.com/a/50056586)
               nvidia-smi -c 3
+              # disable default motd
+              chmod -x /etc/update-motd.d/*
             '';
           };
           docker-nlp = pkgs.callPackage ./packages/docker-nlp.nix {};
