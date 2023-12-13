@@ -8,6 +8,7 @@
       startAt = "*-*-* 04:00:00";
       script = ''
         ${lib.getExe pkgs.nix} run github:wi2trier/gpu-server
+        ${lib.getExe pkgs.nix} run github:wi2trier/gpu-server#setup
       '';
       serviceConfig.Type = "oneshot";
     };
