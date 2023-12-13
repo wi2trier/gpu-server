@@ -1,7 +1,9 @@
 import os
 import secrets
 import subprocess
-from typing import Annotated, Optional, Sequence
+from collections.abc import Sequence
+from datetime import datetime
+from typing import Annotated, Optional
 
 import typer
 
@@ -32,15 +34,15 @@ def check_email(user: str):
 def add(
     user: Annotated[
         str,
-        typer.Option(prompt=True, callback=check_email),
+        typer.Argument(callback=check_email),
     ],
     full_name: Annotated[
         str,
         typer.Option(prompt=True),
     ],
     expire_date: Annotated[
-        str,
-        typer.Option(prompt=True),
+        datetime,
+        typer.Option(prompt=True, formats=[DATE_FORMAT]),
     ],
 ) -> None:
     password = secrets.token_urlsafe()
@@ -58,7 +60,7 @@ def add(
     ]
 
     if expire_date:
-        args += ["--expiredate", expire_date]
+        args += ["--expiredate", expire_date.strftime(DATE_FORMAT)]
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/useradd.8.html
     run_cmd(["useradd", *args, user])
@@ -76,7 +78,7 @@ def add(
 def remove(
     user: Annotated[
         str,
-        typer.Option(prompt=True, callback=check_email),
+        typer.Argument(callback=check_email),
     ],
     force: bool = False,
     keep_home: bool = False,
@@ -99,17 +101,17 @@ def remove(
 def edit(
     user: Annotated[
         str,
-        typer.Option(prompt=True, callback=check_email),
+        typer.Argument(callback=check_email),
     ],
     expire_date: Annotated[
-        Optional[str],
-        typer.Option(default=None),
-    ],
+        Optional[datetime],
+        typer.Option(formats=[DATE_FORMAT]),
+    ] = None,
 ) -> None:
     args: list[str] = []
 
     if expire_date:
-        args += ["--expiredate", expire_date]
+        args += ["--expiredate", expire_date.strftime(DATE_FORMAT)]
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/useradd.8.html
     run_cmd(["usermod", *args, user])
