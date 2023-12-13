@@ -38,6 +38,7 @@
     ${lib.getExe setup-env}
     source "${venvPath}/bin/activate"
     export LD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.cc zlib]}:$LD_LIBRARY_PATH"
+    export PIP_DISABLE_PIP_VERSION_CHECK=1
   '';
 
   jupyter = writeShellScriptBin "jupyter" ''
