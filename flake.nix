@@ -84,8 +84,8 @@
               chmod -x /etc/update-motd.d/*
             '';
           };
-          docker-nlp = pkgs.callPackage ./packages/docker-nlp.nix {};
-          docker-poetry = pkgs.callPackage ./packages/docker-poetry.nix {};
+          nlpImage = pkgs.callPackage ./images/nlp.nix {};
+          poetryImage = pkgs.callPackage ./images/poetry.nix {};
         };
         systemConfigs.default = system-manager.lib.makeSystemConfig {
           extraSpecialArgs = {
