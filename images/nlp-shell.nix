@@ -6,7 +6,7 @@
 }:
 dockerTools.buildNixShellImage {
   drv = mkShell {
-    name = "nlp";
+    name = "nlp-shell";
     venvDir = "./.venv";
     buildInputs = with python3Packages; [
       python

@@ -85,6 +85,7 @@
             '';
           };
           nlpImage = pkgs.callPackage ./images/nlp.nix {};
+          nlpShellImage = pkgs.callPackage ./images/nlp-shell.nix {};
           poetryImage = pkgs.callPackage ./images/poetry.nix {};
         };
         systemConfigs.default = system-manager.lib.makeSystemConfig {
