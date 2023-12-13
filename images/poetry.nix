@@ -3,7 +3,6 @@
   dockerTools,
   buildEnv,
   writeShellScriptBin,
-  bashInteractive,
   git,
   coreutils,
   neovim,
@@ -33,7 +32,6 @@
   env = buildEnv {
     name = "root-env";
     paths = [
-      bashInteractive
       poetryWrapper
       pythonWrapper
       git

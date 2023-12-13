@@ -3,7 +3,6 @@
   dockerTools,
   buildEnv,
   writeShellScriptBin,
-  bashInteractive,
   git,
   coreutils,
   neovim,
@@ -14,7 +13,7 @@
 }: let
   venvPath = "./.venv";
 
-  setup-env = writeShellScriptBin "venv" ''
+  venvSetup = writeShellScriptBin "venv" ''
     if [ -d "${venvPath}" ]; then
       echo "Skipping venv creation, '${venvPath}' already exists"
       echo "Remove '${venvPath}' to force venv recreation with 'rm -rf ${venvPath}'"
@@ -34,36 +33,24 @@
     fi
   '';
 
-  activateEnv = ''
-    ${lib.getExe setup-env}
-    source "${venvPath}/bin/activate"
-    export LD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.cc zlib]}:$LD_LIBRARY_PATH"
-    export PIP_DISABLE_PIP_VERSION_CHECK=1
-  '';
+  venvCmd = name: args:
+    writeShellScriptBin name ''
+      ${lib.getExe venvSetup}
+      source "${venvPath}/bin/activate"
+      export LD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.cc zlib]}:$LD_LIBRARY_PATH"
+      export PIP_DISABLE_PIP_VERSION_CHECK=1
+      exec ${name} ${args} "$@"
+    '';
 
-  jupyter = writeShellScriptBin "jupyter" ''
-    ${activateEnv}
-    exec jupyter lab --ip=0.0.0.0 --allow-root --no-browser --ServerApp.terminado_settings=shell_command=/bin/sh "$@"
-  '';
-
-  python = writeShellScriptBin "python" ''
-    ${activateEnv}
-    exec python "$@"
-  '';
-
-  pip = writeShellScriptBin "pip" ''
-    ${activateEnv}
-    exec pip "$@"
-  '';
+  venvJupyter = venvCmd "jupyter" "lab --ip=0.0.0.0 --allow-root --no-browser --ServerApp.terminado_settings=shell_command=/bin/sh";
 
   env = buildEnv {
     name = "root-env";
     paths = [
-      bashInteractive
-      python
-      pip
-      setup-env
-      jupyter
+      venvSetup
+      (venvCmd "python" "")
+      (venvCmd "pip" "")
+      venvJupyter
       git
       coreutils
       nano
@@ -84,7 +71,7 @@ in
       fakeNss
     ];
     config = {
-      entrypoint = [(lib.getExe jupyter)];
+      entrypoint = [(lib.getExe venvJupyter)];
       cmd = [];
     };
   }
