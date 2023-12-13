@@ -2,7 +2,7 @@ import os
 import secrets
 import subprocess
 from typing import Annotated, Optional, Sequence
-from datetime import datetime
+
 import typer
 
 DATE_FORMAT = "%Y-%m-%d"
@@ -39,8 +39,8 @@ def add(
         typer.Option(prompt=True),
     ],
     expire_date: Annotated[
-        datetime,
-        typer.Option(prompt=True, formats=[DATE_FORMAT]),
+        str,
+        typer.Option(prompt=True),
     ],
 ) -> None:
     password = secrets.token_urlsafe()
@@ -58,7 +58,7 @@ def add(
     ]
 
     if expire_date:
-        args += ["--expiredate", expire_date.strftime(DATE_FORMAT)]
+        args += ["--expiredate", expire_date]
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/useradd.8.html
     run_cmd(["useradd", *args, user])
@@ -102,14 +102,14 @@ def edit(
         typer.Option(prompt=True, callback=check_email),
     ],
     expire_date: Annotated[
-        Optional[datetime],
-        typer.Option(formats=[DATE_FORMAT], default=None),
+        Optional[str],
+        typer.Option(default=None),
     ],
 ) -> None:
     args: list[str] = []
 
     if expire_date:
-        args += ["--expiredate", expire_date.strftime(DATE_FORMAT)]
+        args += ["--expiredate", expire_date]
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/useradd.8.html
     run_cmd(["usermod", *args, user])
