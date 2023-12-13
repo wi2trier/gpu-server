@@ -1,7 +1,6 @@
 {pkgs, ...}: let
   app =
     pkgs.writers.writePython3Bin "findgpu" {
-      libraries = with pkgs.python3Packages; [];
       flakeIgnore = ["E203" "E501"];
     }
     (builtins.readFile ./findgpu.py);

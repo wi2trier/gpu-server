@@ -2,8 +2,10 @@
 
 ## User Management
 
-User accounts shall use the following naming scheme: `first initial + lastname`.
-A user with the name `John Doe` would thus have the username `jdoe`.
+We offer the custom command `userctl` to manage users on the server.
+Please do **not** use the standard Linux commands (e.g., `useradd`, `adduser`, ...)!
+The script is interactive and allows to add, remove, and edit users.
+Please run `userctl --help` for more information.
 
 ## Process Management
 

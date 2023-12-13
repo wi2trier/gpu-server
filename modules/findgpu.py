@@ -5,8 +5,8 @@ import subprocess
 import random
 
 
-def run_cmd(cmd):
-    return (subprocess.check_output(cmd, shell=True)).decode("utf-8")[:-1]
+def run_cmd(cmd: str) -> str:
+    return (subprocess.check_output(cmd, shell=True)).decode("utf-8").rstrip("\n")
 
 
 def get_free_gpu_indices():
