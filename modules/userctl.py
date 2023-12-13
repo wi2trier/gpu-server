@@ -25,7 +25,9 @@ def run_cmd(cmd: Sequence[str], **kwargs) -> str:
 
 def check_email(user: str):
     if not user.endswith("@uni-trier.de"):
-        raise typer.BadParameter("Only university mail addresses are allowed")
+        raise typer.BadParameter(
+            "Please provide the university email address, the script determines the username automatically"
+        )
 
     return user.split("@")[0]
 
