@@ -5,7 +5,7 @@
 We offer the custom command `userctl` to manage users on the server.
 Please do **not** use the standard Linux commands (e.g., `useradd`, `adduser`, ...)!
 The script is interactive and allows to add, remove, and edit users.
-Please run `userctl --help` for more information.
+Please run `sudo userctl --help` for more information.
 
 ## Process Management
 

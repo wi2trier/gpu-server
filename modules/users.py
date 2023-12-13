@@ -1,3 +1,4 @@
+import os
 import secrets
 import subprocess
 from typing import Annotated, Optional, Sequence
@@ -11,7 +12,9 @@ app = typer.Typer()
 
 @app.callback()
 def app_callback():
-    pass
+    if os.geteuid() != 0:
+        typer.echo("Please run this script as root")
+        raise typer.Abort()
 
 
 def run_cmd(cmd: Sequence[str], **kwargs) -> str:
@@ -58,11 +61,11 @@ def add(
         args += ["--expiredate", expire_date.strftime(DATE_FORMAT)]
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/useradd.8.html
-    run_cmd(["sudo", "useradd", *args, user])
+    run_cmd(["useradd", *args, user])
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man1/passwd.1.html
     run_cmd(
-        ["sudo", "passwd", "--expire", "--stdin", user],
+        ["passwd", "--expire", "--stdin", user],
         input=password.encode("utf-8"),
     )
 
@@ -89,7 +92,7 @@ def remove(
         args.append("--remove")
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/userdel.8.html
-    run_cmd(["sudo", "userdel", *args, user])
+    run_cmd(["userdel", *args, user])
 
 
 @app.command()
@@ -109,7 +112,7 @@ def edit(
         args += ["--expiredate", expire_date.strftime(DATE_FORMAT)]
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/useradd.8.html
-    run_cmd(["sudo", "usermod", *args, user])
+    run_cmd(["usermod", *args, user])
 
 
 if __name__ == "__main__":
