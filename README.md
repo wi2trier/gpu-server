@@ -229,9 +229,9 @@ For instance, when running `build-container jupyter`, a new file called `jupyter
 The images are stored in the `docker-archive` format, so you can load them into Apptainer or Podman as follows:
 
 ```shell
-apptainer run --nv docker-archive:./IMAGE_NAME.tar.gz
+apptainer run --nv docker-archive:IMAGE_NAME.tar.gz
 # or
-podman run --rm --device nvidia.com/gpu=0 docker-archive:./IMAGE_NAME.tar.gz
+podman run --rm --device nvidia.com/gpu=0 docker-archive:IMAGE_NAME.tar.gz
 ```
 
 Since Apptainer converts the images to its SIF format anyway, we offer a streamlined integration:
@@ -239,7 +239,7 @@ Since Apptainer converts the images to its SIF format anyway, we offer a streaml
 ```shell
 build-apptainer IMAGE_NAME [OUTPUT_FOLDER]
 # then
-apptainer run --nv ./IMAGE_NAME.sif
+apptainer run --nv IMAGE_NAME.sif
 ```
 
 This will make subsequent loads significantly faster since Apptainer does not need to parse the Docker image every time.
