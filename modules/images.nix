@@ -28,7 +28,7 @@
           exit 1
         fi
         BUILDER_SCRIPT="$1-builder.sh"
-        ${lib.getExe pkgs.nix} build -o "$1-builder" "github:wi2trier/gpu-server#image-$1"
+        ${lib.getExe pkgs.nix} build -o "$BUILDER_SCRIPT" "github:wi2trier/gpu-server#image-$1"
         ./"$BUILDER_SCRIPT" \
           | ${lib.getExe pkgs.pigz} -nTR \
           | ${lib.getExe pkgs.apptainer} build "./$1.sif" docker-archive:/dev/stdin
