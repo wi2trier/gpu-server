@@ -93,8 +93,9 @@ nix shell pkgs#python3 --command python --version
 ```
 
 You can search for available packages on [search.nixos.org](https://search.nixos.org/packages).
-This is useful to quickly test a new package before using it in production in a containerized environment like Apptainer.
-If you would like to install a package permanently, please open a pull request on GitHub.
+
+These temporary shells are useful to quickly test a new package before using it in production in a containerized environment like Apptainer.
+If you would like to install a package permanently, please open an issue on GitHub.
 
 ### GPU Selection
 
