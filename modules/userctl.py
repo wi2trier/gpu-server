@@ -8,7 +8,6 @@ from typing import Annotated, Mapping, Optional
 import typer
 
 DATE_FORMAT = "%Y-%m-%d"
-ZFS_TANK = "data"
 
 app = typer.Typer()
 
@@ -47,6 +46,14 @@ def zfs_options(kwargs: Mapping[str, str]) -> list[str]:
     return args
 
 
+def homedir(user: str) -> str:
+    return f"/home/{user}"
+
+
+def homedir_zfs(user: str) -> str:
+    return f"data/home/{user}"
+
+
 @app.command()
 def add(
     user: Annotated[
@@ -61,7 +68,6 @@ def add(
     quota: Annotated[Optional[str], typer.Option()] = None,
 ) -> None:
     password = secrets.token_urlsafe()
-    homedir = f"/home/{user}"
 
     zfs_args: dict[str, str] = {}
 
@@ -69,14 +75,14 @@ def add(
         zfs_args["quota"] = quota
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/zfs.8.html
-    run_cmd(["zfs", "create", *zfs_options(zfs_args), f"{ZFS_TANK}/{homedir}"])
+    run_cmd(["zfs", "create", *zfs_options(zfs_args), homedir_zfs(user)])
 
     # copy skeleton
-    run_cmd(["cp", "--recursive", "/etc/skel/.", homedir])
+    run_cmd(["cp", "--recursive", "/etc/skel/.", homedir(user)])
 
     useradd_args: list[str] = [
         "--home-dir",
-        homedir,
+        homedir(user),
         "--shell",
         "/bin/bash",
         "--comment",
@@ -90,8 +96,8 @@ def add(
     run_cmd(["useradd", *useradd_args, user])
 
     # set permissions
-    run_cmd(["chown", "-R", f"{user}:{user}", homedir])
-    run_cmd(["chmod", "750", homedir])
+    run_cmd(["chown", "-R", f"{user}:{user}", homedir(user)])
+    run_cmd(["chmod", "750", homedir(user)])
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/chpasswd.8.html
     run_cmd(["chpasswd"], input=f"{user}:{password}")
@@ -125,7 +131,7 @@ def remove(
     run_cmd(["userdel", *userdel_args, user])
 
     if not keep_home:
-        run_cmd(["zfs", "destroy", "--force", f"{ZFS_TANK}/home/{user}"])
+        run_cmd(["zfs", "destroy", "--force", homedir_zfs(user)])
 
 
 @app.command()
@@ -155,7 +161,7 @@ def edit(
         zfs_args["quota"] = quota
 
     if zfs_args:
-        run_cmd(["zfs", "set", *zfs_options(zfs_args), f"{ZFS_TANK}/home/{user}"])
+        run_cmd(["zfs", "set", *zfs_options(zfs_args), homedir_zfs(user)])
 
 
 if __name__ == "__main__":
