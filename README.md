@@ -217,7 +217,7 @@ build-container IMAGE_NAME [OUTPUT_FOLDER]
 
 where `OUTPUT_FOLDER` is your current working directory by default and `IMAGE_NAME` is one of the following:
 
-- `jupyter`: A Jupyter Lab server with common NLP dependencies: numpy, scipy, spacy, nltk, torch, openai, transformers, sentence-transformers.
+- `jupyter`: A Jupyter Lab server with common NLP dependencies: numpy, scipy, spacy, nltk, torch, openai, transformers, sentence-transformers. TODO: Port selection! IP Address Change!
 - `poetry`: An image for managing Python dependencies and virtual environments with Poetry.
 
 > [!note]
@@ -244,8 +244,39 @@ apptainer run --nv IMAGE_NAME.sif
 
 This will make subsequent loads significantly faster since Apptainer does not need to parse the Docker image every time.
 
+## Editor Integrations
+
+### Visual Studio Code
+
+- Install the [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension.
+- Connect to the server by clicking on the green icon in the bottom left corner of the window and selecting `Remote-SSH: Connect to Host...`.
+- Enter the connection string of the server: `USER@IP` and add it as a new host.
+- You now have access to the server's file system and can edit files directly on the server.
+
+> [!important]
+> VSCode currently does not use a login shell by default, meaning that some commands like Apptainer will be missing.
+> You can track this issue on [GitHub](https://github.com/microsoft/vscode-remote-release/issues/1671).
+> As a workaround, open the command palette (Ctrl+Shift+P), select `Preferences: Open Remote Settings`, and paste the following snippet:
+
+```json
+{
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash",
+      "icon": "terminal-bash",
+      "args": ["-l"]
+    }
+  }
+}
+```
+
+### PyCharm
+
+- Go to `Settings > Tools > SSH Configurations` and create a new connection using the credentials provided to you via mail. The server uses the default SSH port 22.
+- Go to `Settings > Build, Execution, Deployment > Deployment`. Choose `SFTP` as the connection type and select the connection you created in the previous step. Set your home path to `/home/<username>`. The option `Mappings` allows to configure where your local project is uploaded to on the server. For instance, setting `Deployment Path` to `projects/thesis` will upload your project to `/home/<username>/projects/thesis`. Adding excluded paths allows to exclude files from the upload. For instance, adding `.venv` will exclude the virtual environment from the upload.
+
 ## Additional Docs
 
 - [Administration](./docs/admin.md)
 - [Setup instructions](./docs/setup.md)
-- [PyCharm integration](./docs/pycharm.md)
