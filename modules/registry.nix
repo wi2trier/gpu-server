@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  inputs,
+  pkgs,
+  ...
+}: let
   json = pkgs.formats.json {};
 in {
   environment.etc."nix/registry.json".source = json.generate "registry.json" {
@@ -11,7 +15,17 @@ in {
         };
         to = {
           type = "path";
-          path = pkgs.path;
+          path = inputs.nixpkgs.outPath;
+        };
+      }
+      {
+        from = {
+          type = "indirect";
+          id = "pkgs";
+        };
+        to = {
+          type = "path";
+          path = inputs.nixpkgs.outPath;
         };
       }
     ];
