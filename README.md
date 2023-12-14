@@ -90,20 +90,41 @@ There are three main commands in Apptainer:
 Some images (e.g., `nvidia/cuda` or `ubuntu`) provide no default command, meaning it will do nothing by default.
 In this special case, `apptainer run` and `apptainer exec` are equivalent and can be used interchangeably.
 
+### Image Selection
+
+Apptainer supports a variety of container image formats, including Docker and its own SIF format.
+To run a container from a Docker registry, use the `docker://` prefix:
+
+```shell
+apptainer run docker://$IMAGE [$ARGS...]
+```
+
+It is recommended to convert such images to the SIF format, which is more efficient and allows for faster loading.
+
+```shell
+apptainer build $IMAGE.sif docker://$IMAGE
+```
+
+In later runs, you can then use the SIF image directly:
+
+```shell
+apptainer run $IMAGE.sif [$ARGS...]
+```
+
 ### GPU Selection
 
 To access the GPUs from within the container, you need to set the `CUDA_VISIBLE_DEVICES` environment variable and pass the `--nv` flag to the Apptainer command.
 Here is the general call signature for the `apptainer exec` command:
 
 ```shell
-CUDA_VISIBLE_DEVICES=$GPU_ID apptainer exec --nv docker://$IMAGE $COMMAND
+CUDA_VISIBLE_DEVICES=$GPU_ID apptainer exec --nv $IMAGE $COMMAND
 ```
 
 You may omit the `CUDA_VISIBLE_DEVICES` environment variable, in which case Apptainer will automatically select a GPU that is currently not in use.
 For example, to run the `nvidia-smi` command on any available GPU, execute
 
 ```shell
-apptainer exec --nv docker://nvidia/cuda nvidia-smi
+apptainer exec --nv docker://ubuntu nvidia-smi
 ```
 
 ### [File Access](https://apptainer.org/docs/user/main/bind_paths_and_mounts.html)
@@ -137,7 +158,7 @@ If starting a service like a Jupyter notebook, you need to keep the terminal ope
 To mitigate this, you may either use the `tmux` command (see above) or start the container as an _instance_:
 
 ```shell
-apptainer instance start --nv docker://$IMAGE $INSTANCE_NAME [$ARGS...]
+apptainer instance start --nv $IMAGE $INSTANCE_NAME [$ARGS...]
 ```
 
 To see a list of all running instances, execute
