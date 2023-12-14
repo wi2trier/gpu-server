@@ -16,7 +16,7 @@
         ${lib.getExe pkgs.nix} build -o "$BUILDER_SCRIPT" "github:wi2trier/gpu-server#image-$1"
         ./"$BUILDER_SCRIPT" \
           | ${lib.getExe pkgs.pigz} -nTR \
-          > "./$1.tar.gz"
+          > "$1.tar.gz"
         rm "$BUILDER_SCRIPT"
       '';
     })
@@ -27,12 +27,9 @@
           echo "Usage: $0 IMAGE_NAME" >&2
           exit 1
         fi
-        BUILDER_SCRIPT="$1-builder.sh"
-        ${lib.getExe pkgs.nix} build -o "$BUILDER_SCRIPT" "github:wi2trier/gpu-server#image-$1"
-        ./"$BUILDER_SCRIPT" \
-          | ${lib.getExe pkgs.pigz} -nTR \
-          | ${lib.getExe pkgs.apptainer} build "./$1.sif" docker-archive:/dev/stdin
-        rm "$BUILDER_SCRIPT"
+        build-container "$1"
+        ${lib.getExe pkgs.apptainer} build "$1.sif" "docker-archive:$1.tar.gz"
+        rm "$1.tar.gz"
       '';
     })
   ];
