@@ -1,12 +1,26 @@
 # Server Setup
 
+- [Updates](#updates)
+- [Initial Setup](#initial-setup)
+  - [Ubuntu](#ubuntu)
+  - [Nix](#nix)
+  - [CUDA](#cuda)
+  - [Additional Setup](#additional-setup)
+  - [Verify Installation](#verify-installation)
+- [Uninstall](#uninstall)
+
+## Updates
+
 To apply changes to the config, run the following:
 
 ```shell
 sudo nix run github:wi2trier/gpu-server
+sudo nix run github:wi2trier/gpu-server#setup
 ```
 
 ## Initial Setup
+
+### Ubuntu
 
 First, install the dependencies for nix and the CUDA installation.
 The package(s) `uidmap` are needed for rootless podman.
@@ -16,6 +30,8 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install -y git curl wget uidmap
 ```
+
+### Nix
 
 Then install nix using the [DeterminateSystems installer](https://github.com/DeterminateSystems/nix-installer).
 
@@ -32,7 +48,7 @@ sudo /nix/var/nix/profiles/default/bin/nix run github:wi2trier/gpu-server
 
 Again open a new shell to apply the changes.
 
-## CUDA Setup
+### CUDA
 
 First install the [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads) and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
 Make sure to update the keyring url when changing the distro!
@@ -51,7 +67,7 @@ Restart the server to load the new driver.
 sudo reboot
 ```
 
-## Additional Setup
+### Additional Setup
 
 The following script sets up some basic configuration for the server.
 It can be applied at any time later on to update the configuration.
@@ -60,7 +76,7 @@ It can be applied at any time later on to update the configuration.
 sudo nix run github:wi2trier/gpu-server#setup
 ```
 
-## Verify Installation
+### Verify Installation
 
 Correctly setting up the CUDA drivers is crucial, so please verify that the following commands work as expected.
 

@@ -1,5 +1,29 @@
 # WI2 GPU Server
 
+- [Overview](#overview)
+- [Access](#access)
+- [General Usage](#general-usage)
+  - [Consuming Packages](#consuming-packages)
+  - [GPU Selection](#gpu-selection)
+  - [tmux](#tmux)
+- [Apptainer Usage](#apptainer-usage)
+  - [Image Selection](#image-selection)
+  - [GPU Selection](#gpu-selection-1)
+  - [File Access](#file-access)
+  - [Port Forwarding](#port-forwarding)
+  - [Image Caching](#image-caching)
+  - [Running Services](#running-services)
+- [Podman Usage](#podman-usage)
+  - [GPU Selection](#gpu-selection-2)
+  - [Image Caching](#image-caching-1)
+- [Ready-to-Use Container Images](#ready-to-use-container-images)
+- [Editor Integrations](#editor-integrations)
+  - [Visual Studio Code](#visual-studio-code)
+  - [PyCharm](#pycharm)
+- [Additional Docs](#additional-docs)
+
+## Overview
+
 Our GPU server is provided for research in the field of machine learning and deep learning.
 Please do not run/host CPU-based applications, we will happily provide you with a virtual machine for that.
 It shall also not be used as a development machine, please test your code locally and only use the server for training and evaluation.
@@ -70,7 +94,7 @@ All GPUs of the server are set to exclusive compute mode, meaning that only one 
 To select a GPU, you can set the `CUDA_VISIBLE_DEVICES=$GPU_ID` environment variable.
 Please use the aforementioned `nvidia-smi` command to check which GPUs are currently in use.
 
-### `tmux`
+### tmux
 
 The `tmux` command allows you to spawn a "virtual" shell that persists even after you disconnect from the server.
 Among others, this allows you to start a long-running process and then close the session without interrupting it.
