@@ -8,6 +8,7 @@ from typing import Annotated, Mapping, Optional
 import typer
 
 DATE_FORMAT = "%Y-%m-%d"
+ZFS_TANK = "data"
 
 app = typer.Typer()
 
@@ -68,7 +69,7 @@ def add(
         zfs_args["quota"] = quota
 
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/zfs.8.html
-    run_cmd(["zfs", "create", *zfs_options(zfs_args), f"data/{homedir}"])
+    run_cmd(["zfs", "create", *zfs_options(zfs_args), f"{ZFS_TANK}/{homedir}"])
 
     # copy skeleton
     run_cmd(["cp", "--recursive", "/etc/skel/.", homedir])
@@ -124,7 +125,7 @@ def remove(
     run_cmd(["userdel", *userdel_args, user])
 
     if not keep_home:
-        run_cmd(["zfs", "destroy", "--force", f"data/home/{user}"])
+        run_cmd(["zfs", "destroy", "--force", f"{ZFS_TANK}/home/{user}"])
 
 
 @app.command()
@@ -154,7 +155,7 @@ def edit(
         zfs_args["quota"] = quota
 
     if zfs_args:
-        run_cmd(["zfs", "set", *zfs_options(zfs_args), f"data/home/{user}"])
+        run_cmd(["zfs", "set", *zfs_options(zfs_args), f"{ZFS_TANK}/home/{user}"])
 
 
 if __name__ == "__main__":
