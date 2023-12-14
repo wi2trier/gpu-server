@@ -53,12 +53,12 @@ def add(
         str,
         typer.Argument(callback=check_email),
     ],
-    full_name: str,
+    full_name: Annotated[str, typer.Option()],
     expire_date: Annotated[
         Optional[datetime],
         typer.Option(formats=[DATE_FORMAT]),
     ] = None,
-    quota: Optional[str] = None,
+    quota: Annotated[Optional[str], typer.Option()] = None,
 ) -> None:
     password = secrets.token_urlsafe()
     homedir = f"/home/{user}"
@@ -138,7 +138,7 @@ def edit(
         Optional[datetime],
         typer.Option(formats=[DATE_FORMAT]),
     ] = None,
-    quota: Optional[str] = None,
+    quota: Annotated[Optional[str], typer.Option()] = None,
 ) -> None:
     usermod_args: list[str] = []
 
