@@ -172,7 +172,8 @@ This also means that in case two users want to run two instances of the same app
 Please consult the documentation of the corresponding app for more details on how to change the default port.
 
 > [!important]
-> Only ports in the range `6000-8000` are accessible from the university VPN.
+> Regular users are allowed use ports above `1024`.
+> If connecting via the university VPN, only ports in the range `6000-8000` will be accessible!
 
 ### [Image Caching](https://apptainer.org/docs/user/main/cli/apptainer_cache.html)
 
