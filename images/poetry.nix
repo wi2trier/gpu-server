@@ -44,9 +44,10 @@
     pathsToLink = ["/bin"];
   };
 in
-  dockerTools.buildLayeredImage {
+  dockerTools.streamLayeredImage {
     name = "poetry";
-    tag = "v1";
+    tag = "latest";
+    created = "now";
     contents = with dockerTools; [
       env
       usrBinEnv

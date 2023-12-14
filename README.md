@@ -183,3 +183,48 @@ You may delete the entire cache as follows:
 ```shell
 podman system reset
 ```
+
+## Ready-to-Use Container Images
+
+We provide a number of ready-to-use container images for common use cases.
+They are updated regularly, so we require you to store a copy of them in your home folder before using them.
+To do so, execute the following command:
+
+```shell
+build-container IMAGE_NAME [OUTPUT_FOLDER]
+```
+
+where `OUTPUT_FOLDER` is your current working directory by default and `IMAGE_NAME` is one of the following:
+
+- `jupyter`: A Jupyter Lab server with common NLP dependencies: numpy, scipy, spacy, nltk, torch, openai, transformers, sentence-transformers.
+- `poetry`: An image for managing Python dependencies and virtual environments with Poetry.
+
+> [!info]
+> These images install their dependencies in a virtual environment in your current working directory (i.e., `./.venv`).
+> This allows to cache the dependencies and reuse them across multiple runs.
+> Please make sure to add the virtual environment to your `.gitignore` file and always start the container in the same working directory.
+
+For instance, when running `build-container jupyter`, a new file called `jupyter.tar.gz` will be created in your current working directory.
+The images are stored in the `docker-archive` format, so you can load them into Apptainer or Podman as follows:
+
+```shell
+apptainer run --nv docker-archive:./IMAGE_NAME.tar.gz
+# or
+podman run --rm --device nvidia.com/gpu=0 docker-archive:./IMAGE_NAME.tar.gz
+```
+
+Since Apptainer converts the images to its SIF format anyway, we offer a streamlined integration:
+
+```shell
+build-apptainer IMAGE_NAME [OUTPUT_FOLDER]
+# then
+apptainer run --nv ./IMAGE_NAME.sif
+```
+
+This will make subsequent loads significantly faster since Apptainer does not need to parse the Docker image every time.
+
+## Additional Docs
+
+- [Administration](./docs/admin.md)
+- [Setup instructions](./docs/setup.md)
+- [PyCharm integration](./docs/pycharm.md)

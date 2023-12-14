@@ -4,7 +4,7 @@
   mkShell,
   python3Packages,
 }:
-dockerTools.buildNixShellImage {
+dockerTools.streamNixShellImage {
   drv = mkShell {
     name = "nlp-shell";
     venvDir = "./.venv";
@@ -25,5 +25,5 @@ dockerTools.buildNixShellImage {
         "sentence-transformers>=2.2,<3"
     '';
   };
-  tag = "v1";
+  tag = "latest";
 }

@@ -61,9 +61,10 @@
     pathsToLink = ["/bin"];
   };
 in
-  dockerTools.buildLayeredImage {
-    name = "nlp";
-    tag = "v1";
+  dockerTools.streamLayeredImage {
+    name = "jupyter";
+    tag = "latest";
+    created = "now";
     contents = with dockerTools; [
       env
       usrBinEnv

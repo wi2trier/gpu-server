@@ -84,9 +84,8 @@
               chmod -x /etc/update-motd.d/*
             '';
           };
-          nlpImage = pkgs.callPackage ./images/nlp.nix {};
-          nlpShellImage = pkgs.callPackage ./images/nlp-shell.nix {};
-          poetryImage = pkgs.callPackage ./images/poetry.nix {};
+          image-jupyter = pkgs.callPackage ./images/jupyter.nix {};
+          image-poetry = pkgs.callPackage ./images/poetry.nix {};
         };
         systemConfigs.default = system-manager.lib.makeSystemConfig {
           extraSpecialArgs = {
