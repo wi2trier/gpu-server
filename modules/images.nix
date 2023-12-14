@@ -8,25 +8,31 @@
       # https://github.com/NixOS/nixpkgs/blob/aa9d4729cbc99dabacb50e3994dcefb3ea0f7447/pkgs/build-support/docker/default.nix#L490
       name = "build-container";
       text = ''
-        if [ "$#" -lt 1 ]; then
-          echo "Usage: $0 IMAGE_NAME [OUTPUT_FOLDER]" >&2
+        if [ "$#" -ne 1 ]; then
+          echo "Usage: $0 IMAGE_NAME" >&2
           exit 1
         fi
-        ${lib.getExe pkgs.nix} run "github:wi2trier/gpu-server#image-$1" \
+        BUILDER_SCRIPT="$1-builder.sh"
+        ${lib.getExe pkgs.nix} build -o "$BUILDER_SCRIPT" "github:wi2trier/gpu-server#image-$1"
+        ./"$BUILDER_SCRIPT" \
           | ${lib.getExe pkgs.pigz} -nTR \
-          > "''${2:-.}/$1.tar.gz"
+          > "./$1.tar.gz"
+        rm "$BUILDER_SCRIPT"
       '';
     })
     (pkgs.writeShellApplication {
       name = "build-apptainer";
       text = ''
-        if [ "$#" -lt 1 ]; then
-          echo "Usage: $0 IMAGE_NAME [OUTPUT_FOLDER]" >&2
+        if [ "$#" -ne 1 ]; then
+          echo "Usage: $0 IMAGE_NAME" >&2
           exit 1
         fi
-        ${lib.getExe pkgs.nix} run "github:wi2trier/gpu-server#image-$1" \
+        BUILDER_SCRIPT="$1-builder.sh"
+        ${lib.getExe pkgs.nix} build -o "$1-builder" "github:wi2trier/gpu-server#image-$1"
+        ./"$BUILDER_SCRIPT" \
           | ${lib.getExe pkgs.pigz} -nTR \
-          | ${lib.getExe pkgs.apptainer} build "''${2:-.}/$1.sif" docker-archive:/dev/stdin
+          | ${lib.getExe pkgs.apptainer} build "./$1.sif" docker-archive:/dev/stdin
+        rm "$BUILDER_SCRIPT"
       '';
     })
   ];
