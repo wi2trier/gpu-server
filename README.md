@@ -15,7 +15,7 @@ To run your code on the server, we provide two container runtimes:
 Due to its ease of use, we generally recommend Apptainer for users unfamiliar with container engines like Docker.
 Among others, it automatically forwards ports form your applications and makes sure that your files on the server are accessible in the container without any configuration (unlike Podman).
 
-> [!warning]
+> [!important]
 > Even users with sudo permissions shall not install additional software through `apt` or other package managers.
 > The server is declaratively managed through Nix, so this may interfere with the configuration.
 > Instead, refer to the section _consuming packages_ in this document.
