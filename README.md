@@ -3,7 +3,7 @@
 - [Overview](#overview)
 - [Access](#access)
 - [General Usage](#general-usage)
-  - [Consuming Packages](#consuming-packages)
+  - [Installing/Using Packages](#installingusing-packages)
   - [GPU Selection](#gpu-selection)
   - [tmux](#tmux)
 - [Apptainer Usage](#apptainer-usage)
@@ -17,6 +17,8 @@
   - [GPU Selection](#gpu-selection-2)
   - [Image Caching](#image-caching-1)
 - [Ready-to-Use Container Images](#ready-to-use-container-images)
+  - [Poetry](#poetry)
+  - [Jupyter](#jupyter)
 - [Editor Integrations](#editor-integrations)
   - [Visual Studio Code](#visual-studio-code)
   - [PyCharm](#pycharm)
@@ -68,20 +70,26 @@ We found the following utilities to be useful for everyday use:
 - `nvidia-smi` and `gpustat`: Show the active processes on the GPUs.
 - `tmux`: Create a new terminal session that can be detached and reattached later.
 
-### Consuming Packages
+### Installing/Using Packages
 
 We use the [Nix package manager](https://nixos.org) to declaratively manage the server configuration.
 This allows you to spawn a temporary shell with additional packages easily.
-For instance, to create a shell with Node.js and Python 3, execute:
+For instance, to create a shell with Python, execute:
 
 ```shell
-nix-shell -p nodejs python3
+nix shell pkgs#python3
+```
+
+Multiple packages can be specified as follows:
+
+```shell
+nix shell pkgs#{python3,nodejs}
 ```
 
 You may also provide a command that shall be run in the shell:
 
 ```shell
-nix-shell -p python3 --run "python --version"
+nix shell pkgs#python3 --command python --version
 ```
 
 You can search for available packages on [search.nixos.org](https://search.nixos.org/packages).
@@ -163,7 +171,8 @@ When starting a server in a container, it is directly accessible without the nee
 This also means that in case two users want to run two instances of the same app on the server, you are responsible for choosing different ports.
 Please consult the documentation of the corresponding app for more details on how to change the default port.
 
-**Please note:** As a regular user, you can only use ports above 1024.
+> [!important]
+> Only ports in the range `6000-8000` are accessible from the university VPN.
 
 ### [Image Caching](https://apptainer.org/docs/user/main/cli/apptainer_cache.html)
 
@@ -239,34 +248,40 @@ To do so, execute the following command:
 build-container IMAGE_NAME [OUTPUT_FOLDER]
 ```
 
-where `OUTPUT_FOLDER` is your current working directory by default and `IMAGE_NAME` is one of the following:
+where `OUTPUT_FOLDER` is your current working directory by default.
+The images are stored in the `docker-archive` format (ending in `.tar.gz`).
+Since Apptainer converts the images to its SIF format anyway, we offer a streamlined integration:
 
-- `jupyter`: A Jupyter Lab server with common NLP dependencies: numpy, scipy, spacy, nltk, torch, openai, transformers, sentence-transformers. TODO: Port selection! IP Address Change!
-- `poetry`: An image for managing Python dependencies and virtual environments with Poetry.
+```shell
+build-apptainer IMAGE_NAME [OUTPUT_FOLDER]
+```
+
+The image can then be run as follows:
+
+```shell
+apptainer run --nv IMAGE_NAME.sif
+# or
+podman run --rm --device nvidia.com/gpu=0 docker-archive:IMAGE_NAME.tar.gz
+```
 
 > [!note]
 > These images install their dependencies in a virtual environment in your current working directory (i.e., `./.venv`).
 > This allows to cache the dependencies and reuse them across multiple runs.
 > Please make sure to add the virtual environment to your `.gitignore` file and always start the container in the same working directory.
 
-For instance, when running `build-container jupyter`, a new file called `jupyter.tar.gz` will be created in your current working directory.
-The images are stored in the `docker-archive` format, so you can load them into Apptainer or Podman as follows:
+### Poetry
 
-```shell
-apptainer run --nv docker-archive:IMAGE_NAME.tar.gz
-# or
-podman run --rm --device nvidia.com/gpu=0 docker-archive:IMAGE_NAME.tar.gz
-```
+The image `poetry` contains Python 3.11 together with Poetry 1.7.
+This image allows proper dependency specification via `pyproject.toml` and `poetry.lock` files.
+Using `apptainer run ARGS...` executes `poetry ARGS...` by default.
 
-Since Apptainer converts the images to its SIF format anyway, we offer a streamlined integration:
+### Jupyter
 
-```shell
-build-apptainer IMAGE_NAME [OUTPUT_FOLDER]
-# then
-apptainer run --nv IMAGE_NAME.sif
-```
-
-This will make subsequent loads significantly faster since Apptainer does not need to parse the Docker image every time.
+The image `jupyter` contains a Jupyter Lab server with common NLP dependencies (numpy, scipy, spacy, nltk, torch, openai, transformers, sentence-transformers).
+It allows easy interaction with the server through a browser-based interface.
+Using `apptainer run ARGS...` executes `jupyter ARGS...` by default.
+Jupyter by default listens on port `8888` which is not accessible from the outside.
+Thus, choose a different port within the range `6000-8000` by passing the `--port $PORT` option to the `apptainer run` command.
 
 ## Editor Integrations
 
