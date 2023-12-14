@@ -199,7 +199,7 @@ where `OUTPUT_FOLDER` is your current working directory by default and `IMAGE_NA
 - `jupyter`: A Jupyter Lab server with common NLP dependencies: numpy, scipy, spacy, nltk, torch, openai, transformers, sentence-transformers.
 - `poetry`: An image for managing Python dependencies and virtual environments with Poetry.
 
-> [!info]
+> [!note]
 > These images install their dependencies in a virtual environment in your current working directory (i.e., `./.venv`).
 > This allows to cache the dependencies and reuse them across multiple runs.
 > Please make sure to add the virtual environment to your `.gitignore` file and always start the container in the same working directory.
