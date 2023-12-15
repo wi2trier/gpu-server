@@ -33,8 +33,9 @@ def run_cmd(msg: str | None, cmd: Sequence[str], input: str | None = None) -> st
 
 def check_email(user: str):
     if not user.endswith("@uni-trier.de"):
-        raise typer.BadParameter(
-            "Please provide the university email address, the script determines the username automatically"
+        typer.confirm(
+            "You did not provide a university email address. This is only recommended for external users. Continue?",
+            abort=True,
         )
 
     return user.lower().split("@")[0]

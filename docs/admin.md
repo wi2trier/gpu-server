@@ -15,6 +15,7 @@ Run `sudo userctl --help` for more information.
 
 Users on this server are identified by their university email address.
 Thus, `userctl` expects the full email address as argument.
+For users without a university email address, use the pattern `FIRST_INITIAL + LASTNAME` (e.g., `jdoe` for John Doe).
 
 ### Adding Users
 
