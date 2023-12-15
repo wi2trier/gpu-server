@@ -134,12 +134,19 @@ def add(
     ip = run_cmd(None, ["hostname", "-i"])
 
     typer.echo()
-    typer.echo("Login data for new user:")
+    typer.echo(f"Send the following data to {full_name}:")
+    typer.echo()
     typer.echo(f"Username: {user}")
     typer.echo(f"Initial password: {password}")
     typer.echo(f"Hostname: {hostname}")
     typer.echo(f"IP: {ip}")
     typer.echo("Documentation: https://github.com/wi2trier/gpu-server")
+
+    if quota:
+        typer.echo(f"Quota: {quota}")
+
+    if expire_date:
+        typer.echo(f"Expiration date: {expire_date.strftime(DATE_FORMAT)}")
 
 
 @app.command()
