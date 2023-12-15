@@ -64,12 +64,12 @@ def add(
         str,
         typer.Argument(callback=check_email),
     ],
-    full_name: Annotated[str, typer.Option()],
+    full_name: str,
     expire_date: Annotated[
         Optional[datetime],
         typer.Option(formats=[DATE_FORMAT]),
     ] = None,
-    quota: Annotated[Optional[str], typer.Option()] = None,
+    quota: Optional[str] = None,
 ) -> None:
     password = secrets.token_urlsafe()
 
@@ -136,11 +136,11 @@ def add(
     typer.echo()
     typer.echo(f"Send the following data to {full_name}:")
     typer.echo()
-    typer.echo(f"Username: {user}")
-    typer.echo(f"Initial password: {password}")
+    typer.echo("Documentation: https://github.com/wi2trier/gpu-server")
     typer.echo(f"Hostname: {hostname}")
     typer.echo(f"IP: {ip}")
-    typer.echo("Documentation: https://github.com/wi2trier/gpu-server")
+    typer.echo(f"Username: {user}")
+    typer.echo(f"Initial password: {password}")
 
     if quota:
         typer.echo(f"Quota: {quota}")
@@ -188,7 +188,7 @@ def edit(
         Optional[datetime],
         typer.Option(formats=[DATE_FORMAT]),
     ] = None,
-    quota: Annotated[Optional[str], typer.Option()] = None,
+    quota: Optional[str] = None,
 ) -> None:
     usermod_args: list[str] = []
 

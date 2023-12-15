@@ -19,13 +19,12 @@ For users without a university email address, use the pattern `FIRST_INITIAL + L
 
 ### Adding Users
 
-When creating student accounts, you need to provide the full name of the student via `--full-name`.
 Please also provide `--expire-date` to automatically disable login after their project is finished.
 We recommend to set the date to nine months after the account creation, this should cover most use cases.
 Also consider adding a quota to the user, e.g., `--quota 100G`.
 
 ```shell
-sudo userctl add s9name@uni-trier.de --full-name "Full Name" --expire-date 2022-12-31 --quota 100G
+sudo userctl add username@uni-trier.de "Full Name" --expire-date 2022-12-31 --quota 100G
 ```
 
 ### Removing Users
