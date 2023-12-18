@@ -1,4 +1,5 @@
 {
+  self,
   pkgs,
   lib,
   ...
@@ -14,7 +15,7 @@
         fi
         cd "''${2:-.}" || exit 1
         BUILDER_SCRIPT="$1-builder.sh"
-        ${lib.getExe pkgs.nix} build -o "$BUILDER_SCRIPT" "github:wi2trier/gpu-server#image-$1"
+        ${lib.getExe pkgs.nix} build --show-trace -o "$BUILDER_SCRIPT" "${self.outPath}#image-$1"
         ./"$BUILDER_SCRIPT" \
           | ${lib.getExe pkgs.pigz} -nTR \
           > "$1.tar.gz"

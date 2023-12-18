@@ -275,15 +275,18 @@ podman run --rm --device nvidia.com/gpu=0 docker-archive:IMAGE_NAME.tar.gz
 
 The image `poetry` contains Python 3.11 together with Poetry 1.7.
 This image allows proper dependency specification via `pyproject.toml` and `poetry.lock` files.
-Using `apptainer run ARGS...` executes `poetry ARGS...` by default.
+Using `apptainer run IMAGE ARGS...` executes `poetry ARGS...`, so you could execute a Python script via `apptainer run IMAGE run python SCRIPT.py`.
 
 ### Jupyter
 
 The image `jupyter` contains a Jupyter Lab server with common NLP dependencies (numpy, scipy, spacy, nltk, torch, openai, transformers, sentence-transformers).
 It allows easy interaction with the server through a browser-based interface.
-Using `apptainer run ARGS...` executes `jupyter ARGS...` by default.
 Jupyter by default listens on port `8888` which is not accessible from the outside.
 Thus, choose a different port within the range `6000-8000` by passing the `--port $PORT` option to the `apptainer run` command.
+
+You may install arbitrary Python packages by running `!pip install NAME` in a notebook.
+Alternatively, open a Terminal and execute `pip install NAME` there.
+Please note that the binaries installed in the virtual environment are only available in the Terminal when your working directory contains the `.venv` folder (i.e., using `cd` to change the folder removes `.venv/bin` from your `$PATH`).
 
 ## Editor Integrations
 

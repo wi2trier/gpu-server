@@ -84,12 +84,13 @@
               chmod -x /etc/update-motd.d/*
             '';
           };
-          image-jupyter = pkgs.callPackage ./images/jupyter.nix {};
-          image-poetry = pkgs.callPackage ./images/poetry.nix {};
+          image-base = pkgs.callPackage ./images/base.nix {};
+          image-jupyter = pkgs.callPackage ./images/jupyter.nix {base = image-base;};
+          image-poetry = pkgs.callPackage ./images/poetry.nix {base = image-base;};
         };
         systemConfigs.default = system-manager.lib.makeSystemConfig {
           extraSpecialArgs = {
-            inherit inputs;
+            inherit inputs self;
             mylib = self.lib;
           };
           modules = [

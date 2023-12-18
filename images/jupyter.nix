@@ -1,15 +1,8 @@
 {
   lib,
-  dockerTools,
-  buildEnv,
   writeShellScriptBin,
-  git,
-  coreutils,
-  neovim,
-  nano,
-  zlib,
-  stdenv,
   python3,
+  base,
 }: let
   venvPath = "./.venv";
 
@@ -33,46 +26,33 @@
     fi
   '';
 
-  venvCmd = name: args:
-    writeShellScriptBin name ''
-      ${lib.getExe venvSetup}
-      source "${venvPath}/bin/activate"
-      export LD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.cc zlib]}:$LD_LIBRARY_PATH"
-      export PIP_DISABLE_PIP_VERSION_CHECK=1
-      exec ${name} ${args} "$@"
-    '';
-
-  venvJupyter = venvCmd "jupyter" "lab --ip=0.0.0.0 --allow-root --no-browser --ServerApp.terminado_settings=shell_command=/bin/sh";
-
-  env = buildEnv {
-    name = "root-env";
-    paths = [
-      venvSetup
-      (venvCmd "python" "")
-      (venvCmd "pip" "")
-      venvJupyter
-      git
-      coreutils
-      nano
-      neovim
-      (writeShellScriptBin "vim" neovim)
-      (writeShellScriptBin "vi" neovim)
-    ];
-    pathsToLink = ["/bin"];
+  jupyterArgs = lib.cli.toGNUCommandLineShell {} {
+    ip = "0.0.0.0";
+    allow-root = true;
+    no-browser = true;
+    "ServerApp.terminado_settings" = ''shell_command=["/bin/sh"]'';
   };
+
+  entrypoint = writeShellScriptBin "entrypoint" ''
+    ${lib.getExe venvSetup}
+    exec jupyter lab ${jupyterArgs} "$@"
+  '';
 in
-  dockerTools.streamLayeredImage {
-    name = "jupyter";
-    tag = "latest";
-    created = "now";
-    contents = with dockerTools; [
-      env
-      usrBinEnv
-      binSh
-      fakeNss
+  base.override (prev: {
+    contents = [
+      venvSetup
     ];
-    config = {
-      entrypoint = [(lib.getExe venvJupyter)];
-      cmd = [];
+    entrypoint = [(lib.getExe entrypoint)];
+    env = {
+      VIRTUAL_ENV = venvPath;
+      PATH = lib.concatStringsSep ":" [
+        "${venvPath}/bin"
+        "/usr/local/sbin"
+        "/usr/local/bin"
+        "/usr/sbin"
+        "/usr/bin"
+        "/sbin"
+        "/bin"
+      ];
     };
-  }
+  })
