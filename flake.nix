@@ -11,8 +11,8 @@
       url = "github:numtide/nix-gl-host";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixgl = {
-      url = "github:nix-community/nixgl";
+    flocken = {
+      url = "github:mirkolenz/flocken/v2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -29,6 +29,7 @@
       systems = import systems;
       flake = let
         system = "x86_64-linux";
+        lib = nixpkgs.lib;
         pkgs = import nixpkgs {
           inherit system;
           config = {
@@ -43,10 +44,8 @@
             })
           ];
         };
-        lib = pkgs.lib;
         builder = system-manager.packages.${system}.default;
       in {
-        lib = import ./lib.nix nixpkgs.lib;
         packages.${system} = rec {
           default = install;
           install = pkgs.writeShellApplication {
@@ -91,7 +90,9 @@
         systemConfigs.default = system-manager.lib.makeSystemConfig {
           extraSpecialArgs = {
             inherit inputs self;
-            mylib = self.lib;
+            mylib = {
+              flocken = inputs.flocken.lib;
+            };
           };
           modules = [
             ./modules
