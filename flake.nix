@@ -90,7 +90,7 @@
         systemConfigs.default = system-manager.lib.makeSystemConfig {
           extraSpecialArgs = {
             inherit inputs self;
-            mylib = {
+            lib' = {
               flocken = inputs.flocken.lib;
             };
           };
