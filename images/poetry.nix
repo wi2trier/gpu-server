@@ -6,7 +6,7 @@
 }:
 base.override (prev: let
   poetryWrapper = writeShellScriptBin "poetry" ''
-    export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
+    ${base.passthru.exportLibraryPath}
     exec ${lib.getExe poetry} "$@"
   '';
 in {

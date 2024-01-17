@@ -34,7 +34,7 @@
   };
 
   entrypoint = writeShellScriptBin "entrypoint" ''
-    export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
+    ${base.passthru.exportLibraryPath}
     ${lib.getExe venvSetup}
     exec ${venvPath}/bin/jupyter lab ${jupyterArgs} "$@"
   '';

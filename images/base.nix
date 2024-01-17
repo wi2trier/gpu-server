@@ -23,6 +23,11 @@ dockerTools.streamLayeredImage {
   inherit name;
   tag = "latest";
   created = "now";
+  passthru = {
+    # https://unix.stackexchange.com/a/415028
+    # the existing LD_LIBRARY_PATH is only appended if it is not empty
+    exportLibraryPath = ''export LD_LIBRARY_PATH="''${NIX_LD_LIBRARY_PATH}''${LD_LIBRARY_PATH:+:''${LD_LIBRARY_PATH}}"'';
+  };
   contents =
     contents
     ++ [
