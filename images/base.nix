@@ -2,9 +2,10 @@
   lib,
   dockerTools,
   runCommand,
+  writeShellScriptBin,
   git,
   busybox,
-  vim,
+  neovim,
   nano,
   zlib,
   stdenv,
@@ -30,7 +31,13 @@ dockerTools.streamLayeredImage {
       git
       nano
       tzdata
-      vim
+      neovim
+      (writeShellScriptBin "vim" ''
+        exec ${lib.getExe neovim} "$@"
+      '')
+      (writeShellScriptBin "vi" ''
+        exec ${lib.getExe neovim} "$@"
+      '')
       (lib.getBin glibc)
       # https://github.com/Mic92/nix-ld/wiki/Using-with-docker-images
       # https://github.com/Mic92/nix-ld/issues/60
