@@ -41,11 +41,14 @@ def check_email(user: str):
     return user.lower().split("@")[0]
 
 
-def zfs_options(kwargs: Mapping[str, str]) -> list[str]:
+def zfs_options(kwargs: Mapping[str, str], prefix: Optional[str] = None) -> list[str]:
     args: list[str] = []
 
     for key, value in kwargs.items():
-        args += ["-o", f"{key}={value}"]
+        if prefix:
+            args.append(prefix)
+
+        args.append(f"{key}={value}")
 
     return args
 
@@ -82,7 +85,7 @@ def add(
     # https://manpages.ubuntu.com/manpages/jammy/en/man8/zfs.8.html
     run_cmd(
         "Creating ZFS dataset...",
-        ["zfs", "create", *zfs_options(zfs_args), homedir_zfs(user)],
+        ["zfs", "create", *zfs_options(zfs_args, "-o"), homedir_zfs(user)],
     )
 
     run_cmd(
