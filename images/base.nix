@@ -14,7 +14,7 @@
   nix-ld,
   name ? "base",
   contents ? [],
-  entrypoint ? [],
+  entrypoint ? ["/bin/sh"],
   cmd ? [],
   env ? {},
 }:
