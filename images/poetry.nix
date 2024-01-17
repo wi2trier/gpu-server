@@ -1,14 +1,20 @@
 {
   lib,
+  writeShellScriptBin,
   poetry,
   base,
 }:
-base.override (prev: {
+base.override (prev: let
+  poetryWrapper = writeShellScriptBin "poetry" ''
+    export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
+    exec ${lib.getExe poetry} "$@"
+  '';
+in {
   name = "poetry";
   contents = [
-    poetry
+    poetryWrapper
   ];
-  entrypoint = [(lib.getExe poetry)];
+  entrypoint = [(lib.getExe poetryWrapper)];
   env = {
     POETRY_VIRTUALENVS_IN_PROJECT = "1";
   };

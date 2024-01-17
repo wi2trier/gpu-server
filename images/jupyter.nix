@@ -34,14 +34,12 @@
   };
 
   entrypoint = writeShellScriptBin "entrypoint" ''
+    export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
     ${lib.getExe venvSetup}
-    exec jupyter lab ${jupyterArgs} "$@"
+    exec ${venvPath}/bin/jupyter lab ${jupyterArgs} "$@"
   '';
 in
   base.override (prev: {
-    contents = [
-      venvSetup
-    ];
     entrypoint = [(lib.getExe entrypoint)];
     env = {
       VIRTUAL_ENV = venvPath;
