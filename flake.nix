@@ -48,7 +48,7 @@
         };
       };
       systems = lib.singleton system;
-      persystem.packages = rec {
+      perSystem.packages = rec {
         default = install;
         install = pkgs.writeShellApplication {
           name = "system-manager-rebuild";
