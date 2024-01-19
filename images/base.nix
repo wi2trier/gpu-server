@@ -36,13 +36,10 @@ dockerTools.streamLayeredImage {
       git
       nano
       tzdata
-      neovim
-      (writeShellScriptBin "vim" ''
-        exec ${lib.getExe neovim} "$@"
-      '')
-      (writeShellScriptBin "vi" ''
-        exec ${lib.getExe neovim} "$@"
-      '')
+      (neovim.override {
+        viAlias = true;
+        vimAlias = true;
+      })
       (lib.getBin glibc)
       # https://github.com/Mic92/nix-ld/wiki/Using-with-docker-images
       # https://github.com/Mic92/nix-ld/issues/60
@@ -64,6 +61,7 @@ dockerTools.streamLayeredImage {
         NIX_LD = stdenv.cc.bintools.dynamicLinker;
         SHELL = "/bin/sh";
         PIP_DISABLE_PIP_VERSION_CHECK = "1";
+        EDITOR = "nano";
       }
       // env
     );
