@@ -33,11 +33,10 @@
     "ServerApp.terminado_settings" = ''shell_command=["/bin/sh"]'';
   };
 
-  entrypoint = writeShellScriptBin "entrypoint" ''
-    ${base.passthru.exportLibraryPath}
+  entrypoint = base.passthru.wrapLibraryPath (writeShellScriptBin "entrypoint" ''
     ${lib.getExe venvSetup}
     exec ${venvPath}/bin/jupyter lab ${jupyterArgs} "$@"
-  '';
+  '');
 in
   base.override (prev: {
     entrypoint = [(lib.getExe entrypoint)];

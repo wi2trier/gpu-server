@@ -1,14 +1,10 @@
 {
   lib,
-  writeShellScriptBin,
   poetry,
   base,
 }:
 base.override (prev: let
-  poetryWrapper = writeShellScriptBin "poetry" ''
-    ${base.passthru.exportLibraryPath}
-    exec ${lib.getExe poetry} "$@"
-  '';
+  poetryWrapper = base.passthru.wrapLibraryPath poetry;
 in {
   name = "poetry";
   contents = [
