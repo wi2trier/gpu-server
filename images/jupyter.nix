@@ -38,7 +38,7 @@
     exec ${venvPath}/bin/jupyter lab ${jupyterArgs} "$@"
   '');
 in
-  base.override (prev: {
+  base.override {
     entrypoint = [(lib.getExe entrypoint)];
     env = {
       VIRTUAL_ENV = venvPath;
@@ -52,4 +52,4 @@ in
         "/bin"
       ];
     };
-  })
+  }
