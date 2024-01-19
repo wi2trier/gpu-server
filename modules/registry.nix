@@ -1,11 +1,12 @@
 {
   inputs,
   pkgs,
+  lib,
   ...
 }: let
   json = pkgs.formats.json {};
 in {
-  environment.etc."nix/registry.json".source = json.generate "registry.json" {
+  environment.etc."nix/registry.json".source = lib.mkForce (json.generate "registry.json" {
     version = 2;
     flakes = [
       {
@@ -29,5 +30,5 @@ in {
         };
       }
     ];
-  };
+  });
 }

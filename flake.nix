@@ -89,20 +89,38 @@
         image-jupyter = pkgs.callPackage ./images/jupyter.nix {base = image-base;};
         image-poetry = pkgs.callPackage ./images/poetry.nix {base = image-base;};
       };
-      flake.systemConfigs.default = system-manager.lib.makeSystemConfig {
-        extraSpecialArgs = {
+      flake = let
+        specialArgs = {
           inherit inputs self;
           lib' = {
             flocken = inputs.flocken.lib;
           };
         };
-        modules = [
-          ./modules
-          {
-            _module.args.pkgs = lib.mkForce pkgs;
-            nixpkgs.hostPlatform = system;
-          }
-        ];
+      in {
+        systemConfigs.default = system-manager.lib.makeSystemConfig {
+          extraSpecialArgs = specialArgs;
+          modules = [
+            ./modules
+            ./options
+            {
+              _module.args.pkgs = lib.mkForce pkgs;
+              nixpkgs.hostPlatform = system;
+            }
+          ];
+        };
+        nixosConfigurations.default = nixpkgs.lib.nixosSystem {
+          inherit system pkgs specialArgs;
+          modules = [
+            ./modules
+            ({modulesPath, ...}: {
+              # use virtual machine profile, otherwise file systems need to be defined
+              imports = [
+                "${modulesPath}/virtualisation/lxc-container.nix"
+              ];
+              system.stateVersion = "23.11";
+            })
+          ];
+        };
       };
     });
 }
