@@ -31,14 +31,14 @@ def run_cmd(msg: str | None, cmd: Sequence[str], input: str | None = None) -> st
     return subprocess.check_output(cmd, **cmd_kwargs).decode("utf-8").rstrip("\n")
 
 
-def check_email(user: str):
-    if not user.endswith("@uni-trier.de"):
+def generate_username(email: str):
+    if not email.endswith("@uni-trier.de"):
         typer.confirm(
             "You did not provide a university email address. This is only recommended for external users. Continue?",
             abort=True,
         )
 
-    return user.lower().split("@")[0]
+    return email.lower().split("@")[0]
 
 
 def zfs_options(kwargs: Mapping[str, str], prefix: Optional[str] = None) -> list[str]:
@@ -65,7 +65,7 @@ def homedir_zfs(user: str) -> str:
 def add(
     user: Annotated[
         str,
-        typer.Argument(callback=check_email),
+        typer.Argument(callback=generate_username),
     ],
     full_name: str,
     expire_date: Annotated[
@@ -156,7 +156,7 @@ def add(
 def remove(
     user: Annotated[
         str,
-        typer.Argument(callback=check_email),
+        typer.Argument(callback=generate_username),
     ],
     force: bool = False,
     keep_home: bool = False,
@@ -185,7 +185,7 @@ def remove(
 def edit(
     user: Annotated[
         str,
-        typer.Argument(callback=check_email),
+        typer.Argument(callback=generate_username),
     ],
     expire_date: Annotated[
         Optional[datetime],
