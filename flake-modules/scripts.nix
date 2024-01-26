@@ -3,21 +3,27 @@
   self,
   ...
 }: {
-  perSystem = {pkgs, ...}: {
+  perSystem = {
+    pkgs,
+    config,
+    ...
+  }: let
+    manager = lib.getExe' pkgs.system-manager "system-manager";
+  in {
     packages = {
-      manager = lib.getExe pkgs.system-manager;
+      manager = pkgs.system-manager;
       install = pkgs.writeShellApplication {
         name = "system-manager-rebuild";
         text = ''
           set -x #echo on
-          exec ${lib.getExe pkgs.system-manager} "''${1:-switch}" --flake ${self} "''${@:2}"
+          exec ${manager} "''${1:-switch}" --flake ${self} "''${@:2}"
         '';
       };
       uninstall = pkgs.writeShellApplication {
         name = "system-manager-uninstall";
         text = ''
           set -x #echo on
-          exec ${lib.getExe pkgs.system-manager} deactivate "''$@"
+          exec ${manager} deactivate "''$@"
         '';
       };
       setup = pkgs.writeShellApplication {
