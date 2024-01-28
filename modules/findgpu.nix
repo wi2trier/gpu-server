@@ -11,6 +11,7 @@ in {
       # Make sure that no user uses all GPUs accidentally
       "profile.d/gpu-selection.sh".text = ''
         export CUDA_VISIBLE_DEVICES="100"
+        export CUDA_DEVICE_ORDER="PCI_BUS_ID
       '';
     };
   };
