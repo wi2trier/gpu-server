@@ -1,6 +1,8 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   bannerFile = "sshd-banner.txt";
-in {
+in
+{
   environment.etc = {
     "ssh/sshd_config.d/nixos.conf".text = ''
       PermitRootLogin no

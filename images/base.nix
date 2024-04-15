@@ -15,10 +15,10 @@
   gcc,
   nix-ld,
   name ? "base",
-  contents ? [],
-  entrypoint ? ["/bin/sh"],
-  cmd ? [],
-  env ? {},
+  contents ? [ ],
+  entrypoint ? [ "/bin/sh" ],
+  cmd ? [ ],
+  env ? { },
 }:
 dockerTools.streamLayeredImage {
   inherit name;
@@ -28,7 +28,8 @@ dockerTools.streamLayeredImage {
     # https://unix.stackexchange.com/a/415028
     # the existing LD_LIBRARY_PATH is only appended if it is not empty
     exportLibraryPath = ''export LD_LIBRARY_PATH="''${NIX_LD_LIBRARY_PATH}''${LD_LIBRARY_PATH:+:''${LD_LIBRARY_PATH}}"'';
-    wrapLibraryPath = pkg:
+    wrapLibraryPath =
+      pkg:
       writeShellScriptBin (lib.getName pkg) ''
         ${exportLibraryPath}
         exec ${lib.getExe pkg} "$@"
@@ -50,7 +51,7 @@ dockerTools.streamLayeredImage {
       (lib.getBin gcc)
       # https://github.com/Mic92/nix-ld/wiki/Using-with-docker-images
       # https://github.com/Mic92/nix-ld/issues/60
-      (runCommand "nix-ld" {} ''
+      (runCommand "nix-ld" { } ''
         install -D -m755 ${nix-ld}/libexec/nix-ld $out/lib64/$(basename ${stdenv.cc.bintools.dynamicLinker})
       '')
     ]
@@ -64,7 +65,10 @@ dockerTools.streamLayeredImage {
     inherit entrypoint cmd;
     env = lib.mapAttrsToList (k: v: "${k}=${v}") (
       {
-        NIX_LD_LIBRARY_PATH = lib.makeLibraryPath [stdenv.cc.cc zlib];
+        NIX_LD_LIBRARY_PATH = lib.makeLibraryPath [
+          stdenv.cc.cc
+          zlib
+        ];
         NIX_LD = stdenv.cc.bintools.dynamicLinker;
         SHELL = "/bin/sh";
         PIP_DISABLE_PIP_VERSION_CHECK = "1";

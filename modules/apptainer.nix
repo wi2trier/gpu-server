@@ -4,7 +4,8 @@
   lib,
   inputs,
   ...
-}: let
+}:
+let
   apptainer = pkgs.writeShellApplication {
     name = "apptainer";
     text = ''
@@ -16,7 +17,8 @@
       exec ${lib.getExe pkgs.apptainer} "$@"
     '';
   };
-in {
+in
+{
   environment = {
     systemPackages = [
       apptainer

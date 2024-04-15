@@ -1,6 +1,7 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   environment = {
-    systemPackages = with pkgs; [tmux];
+    systemPackages = with pkgs; [ tmux ];
     etc."tmux.conf".text = ''
       new-session
     '';

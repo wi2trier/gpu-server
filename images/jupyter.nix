@@ -3,7 +3,8 @@
   writeShellScriptBin,
   python3,
   base,
-}: let
+}:
+let
   venvPath = "./.venv";
 
   venvSetup = writeShellScriptBin "venv" ''
@@ -26,30 +27,32 @@
     fi
   '';
 
-  jupyterArgs = lib.cli.toGNUCommandLineShell {} {
+  jupyterArgs = lib.cli.toGNUCommandLineShell { } {
     ip = "0.0.0.0";
     allow-root = true;
     no-browser = true;
     "ServerApp.terminado_settings" = ''shell_command=["/bin/sh"]'';
   };
 
-  entrypoint = base.passthru.wrapLibraryPath (writeShellScriptBin "entrypoint" ''
-    ${lib.getExe venvSetup}
-    exec ${venvPath}/bin/jupyter lab ${jupyterArgs} "$@"
-  '');
+  entrypoint = base.passthru.wrapLibraryPath (
+    writeShellScriptBin "entrypoint" ''
+      ${lib.getExe venvSetup}
+      exec ${venvPath}/bin/jupyter lab ${jupyterArgs} "$@"
+    ''
+  );
 in
-  base.override {
-    entrypoint = [(lib.getExe entrypoint)];
-    env = {
-      VIRTUAL_ENV = venvPath;
-      PATH = lib.concatStringsSep ":" [
-        "${venvPath}/bin"
-        "/usr/local/sbin"
-        "/usr/local/bin"
-        "/usr/sbin"
-        "/usr/bin"
-        "/sbin"
-        "/bin"
-      ];
-    };
-  }
+base.override {
+  entrypoint = [ (lib.getExe entrypoint) ];
+  env = {
+    VIRTUAL_ENV = venvPath;
+    PATH = lib.concatStringsSep ":" [
+      "${venvPath}/bin"
+      "/usr/local/sbin"
+      "/usr/local/bin"
+      "/usr/sbin"
+      "/usr/bin"
+      "/sbin"
+      "/bin"
+    ];
+  };
+}

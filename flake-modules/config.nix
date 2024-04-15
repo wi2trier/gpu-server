@@ -6,11 +6,13 @@
   system,
   lib',
   ...
-}: let
+}:
+let
   specialArgs = {
     inherit inputs self lib';
   };
-in {
+in
+{
   flake = {
     systemConfigs.default = inputs.system-manager.lib.makeSystemConfig {
       extraSpecialArgs = specialArgs;
@@ -27,13 +29,14 @@ in {
       inherit system pkgs specialArgs;
       modules = [
         ../modules
-        ({modulesPath, ...}: {
-          # use virtual machine profile, otherwise file systems need to be defined
-          imports = [
-            "${modulesPath}/virtualisation/lxc-container.nix"
-          ];
-          system.stateVersion = "23.11";
-        })
+        (
+          { modulesPath, ... }:
+          {
+            # use virtual machine profile, otherwise file systems need to be defined
+            imports = [ "${modulesPath}/virtualisation/lxc-container.nix" ];
+            system.stateVersion = "23.11";
+          }
+        )
       ];
     };
   };

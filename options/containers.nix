@@ -4,13 +4,15 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.virtualisation.containers;
 
   inherit (lib) mkOption types;
 
-  toml = pkgs.formats.toml {};
-in {
+  toml = pkgs.formats.toml { };
+in
+{
   options.virtualisation.containers = {
     enable = mkOption {
       type = types.bool;
@@ -22,7 +24,7 @@ in {
 
     containersConf.settings = mkOption {
       type = toml.type;
-      default = {};
+      default = { };
       description = lib.mdDoc "containers.conf configuration";
     };
 
@@ -41,14 +43,17 @@ in {
     registries = {
       search = mkOption {
         type = types.listOf types.str;
-        default = ["docker.io" "quay.io"];
+        default = [
+          "docker.io"
+          "quay.io"
+        ];
         description = lib.mdDoc ''
           List of repositories to search.
         '';
       };
 
       insecure = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = lib.mdDoc ''
           List of insecure repositories.
@@ -56,7 +61,7 @@ in {
       };
 
       block = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = lib.mdDoc ''
           List of blocked repositories.
@@ -66,14 +71,12 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.etc."containers/containers.conf".source =
-      toml.generate "containers.conf" cfg.containersConf.settings;
+    environment.etc."containers/containers.conf".source = toml.generate "containers.conf" cfg.containersConf.settings;
 
-    environment.etc."containers/storage.conf".source =
-      toml.generate "storage.conf" cfg.storage.settings;
+    environment.etc."containers/storage.conf".source = toml.generate "storage.conf" cfg.storage.settings;
 
     environment.etc."containers/registries.conf".source = toml.generate "registries.conf" {
-      registries = lib.mapAttrs (n: v: {registries = v;}) cfg.registries;
+      registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
     };
 
     environment.etc."containers/policy.json".source = "${pkgs.skopeo.policy}/default-policy.json";

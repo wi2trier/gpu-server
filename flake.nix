@@ -16,12 +16,13 @@
     };
   };
 
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    flake-parts,
-    ...
-  }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      flake-parts,
+      ...
+    }:
     flake-parts.lib.mkFlake {
       inherit inputs;
       specialArgs = {
@@ -30,7 +31,5 @@
           flocken = inputs.flocken.lib;
         };
       };
-    } {
-      imports = [./flake-modules];
-    };
+    } { imports = [ ./flake-modules ]; };
 }

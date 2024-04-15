@@ -1,4 +1,5 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   securePaths = [
     "/run/system-manager/sw/bin"
     "/usr/local/sbin"
@@ -6,7 +7,8 @@
     "/usr/sbin"
     "/usr/bin"
   ];
-in {
+in
+{
   environment.etc."sudoers.d/nixos".text = ''
     Defaults secure_path="${lib.concatStringsSep ":" securePaths}"
   '';
