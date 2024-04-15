@@ -12,6 +12,7 @@
   cacert,
   tzdata,
   glibc,
+  gcc,
   nix-ld,
   name ? "base",
   contents ? [],
@@ -46,6 +47,7 @@ dockerTools.streamLayeredImage {
         vimAlias = true;
       })
       (lib.getBin glibc)
+      (lib.getBin gcc)
       # https://github.com/Mic92/nix-ld/wiki/Using-with-docker-images
       # https://github.com/Mic92/nix-ld/issues/60
       (runCommand "nix-ld" {} ''
