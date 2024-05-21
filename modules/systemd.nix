@@ -2,6 +2,7 @@
 {
   systemd.services = {
     update-system = {
+      enable = true;
       startAt = "*-*-* 04:00:00";
       script = ''
         ${lib.getExe pkgs.nix} run github:wi2trier/gpu-server
@@ -15,6 +16,7 @@
         target = "/run/opengl-driver/lib";
       in
       {
+        enable = true;
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
