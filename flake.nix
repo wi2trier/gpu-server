@@ -3,7 +3,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     flake-parts.url = "github:hercules-ci/flake-parts";
     system-manager = {
-      url = "github:numtide/system-manager";
+      url = "github:numtide/system-manager/073f275b566b83be3183375337ee96f05f8dda33";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixglhost = {
