@@ -15,7 +15,6 @@
         target = "/run/opengl-driver/lib";
       in
       {
-        enable = true;
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
