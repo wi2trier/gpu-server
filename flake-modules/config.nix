@@ -34,7 +34,7 @@ in
           {
             # use virtual machine profile, otherwise file systems need to be defined
             imports = [ "${modulesPath}/virtualisation/lxc-container.nix" ];
-            system.stateVersion = "23.11";
+            system.stateVersion = lib.trivial.release;
           }
         )
       ];
