@@ -1,12 +1,4 @@
-{
-  lib',
-  pkgs,
-  inputs,
-  ...
-}:
-let
-  nixglhost = inputs.nixglhost.defaultPackage.${pkgs.system};
-in
+{ lib', pkgs, ... }:
 {
   imports = lib'.flocken.getModules ./.;
   environment = {

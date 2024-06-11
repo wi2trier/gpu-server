@@ -16,6 +16,7 @@ let
       final: prev: {
         apptainer = prev.apptainer.override { enableNvidiaContainerCli = false; };
         system-manager = inputs.system-manager.packages.${system}.default;
+        nixglhost = inputs.nixglhost.defaultPackage.${system};
       }
     );
   };
