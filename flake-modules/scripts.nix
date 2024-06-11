@@ -1,7 +1,7 @@
 { lib, self, ... }:
 {
   perSystem =
-    { pkgs, config, ... }:
+    { pkgs, ... }:
     let
       manager = lib.getExe' pkgs.system-manager "system-manager";
     in

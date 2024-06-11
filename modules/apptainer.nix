@@ -1,10 +1,5 @@
 # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/virtualization/singularity/generic.nix
-{
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ pkgs, lib, ... }:
 let
   apptainer = pkgs.writeShellApplication {
     name = "apptainer";

@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ ... }:
 let
   bannerFile = "sshd-banner.txt";
 in

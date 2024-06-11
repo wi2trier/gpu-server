@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 let
   userctl = pkgs.writers.writePython3Bin "userctl" {
     libraries = with pkgs.python3Packages; [ typer ];
