@@ -14,7 +14,10 @@ let
     };
     overlays = lib.singleton (
       final: prev: {
-        apptainer = prev.apptainer.override { enableNvidiaContainerCli = false; };
+        apptainer = prev.apptainer.override {
+          enableNvidiaContainerCli = false;
+          forceNvcCli = false;
+        };
         system-manager = inputs.system-manager.packages.${system}.default;
         nixglhost = inputs.nixglhost.defaultPackage.${system};
       }
