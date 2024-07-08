@@ -58,7 +58,7 @@ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
 rm cuda-keyring_1.1-1_all.deb
 sudo apt update
-sudo apt install -y cuda nvidia-container-toolkit
+sudo apt install -y nvidia-driver-555-open cuda-drivers-555 cuda-toolkit-12-5 nvidia-container-toolkit
 ```
 
 Restart the server to load the new driver.
