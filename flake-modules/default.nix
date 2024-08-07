@@ -19,7 +19,7 @@ let
           forceNvcCli = false;
         };
         system-manager = inputs.system-manager.packages.${system}.default;
-        nixglhost = inputs.nixglhost.defaultPackage.${system};
+        nixglhost = inputs.nixglhost.packages.${system}.default;
       }
     );
   };
