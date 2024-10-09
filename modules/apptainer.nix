@@ -1,7 +1,7 @@
 # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/virtualization/singularity/generic.nix
 { pkgs, lib, ... }:
 let
-  apptainer = pkgs.writeShellApplication {
+  wrapper = pkgs.writeShellApplication {
     name = "apptainer";
     text = ''
       case "''${CUDA_VISIBLE_DEVICES:-100}" in
@@ -16,11 +16,11 @@ in
 {
   environment = {
     systemPackages = [
-      apptainer
+      wrapper
       (pkgs.writeShellApplication {
         name = "singularity";
         text = ''
-          exec ${lib.getExe apptainer} "$@"
+          exec ${lib.getExe wrapper} "$@"
         '';
       })
     ];
