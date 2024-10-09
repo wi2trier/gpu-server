@@ -7,7 +7,6 @@
       git
       python3Packages.gpustat
       nixglhost
-      unstable.ollama
     ];
   };
 }
