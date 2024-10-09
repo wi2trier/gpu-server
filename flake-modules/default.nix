@@ -20,6 +20,13 @@ let
         };
         system-manager = inputs.system-manager.packages.${system}.default;
         nixglhost = inputs.nixglhost.packages.${system}.default;
+        unstable = import inputs.nixpkgs-unstable {
+          inherit system;
+          config = {
+            allowUnfree = true;
+            cudaSupport = true;
+          };
+        };
       }
     );
   };
