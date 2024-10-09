@@ -11,14 +11,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
-      - run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-        name: Run git config
-      - run: |
-          nix flake update \
-            --commit-lock-file \
-            --commit-lock-file-summary "chore(deps): update flake.lock"
-        name: Run nix flake update
-      - run: nix flake check
-      - run: git push
+      - run: nix flake update
+      - run: nix flake check --show-trace
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(deps): update flake.lock"
+          file_pattern: "flake.lock"
