@@ -19,6 +19,7 @@
 - [Ready-to-Use Container Images](#ready-to-use-container-images)
   - [Poetry](#poetry)
   - [Jupyter](#jupyter)
+- [Ollama Usage](#ollama-usage)
 - [Editor Integrations](#editor-integrations)
   - [Visual Studio Code](#visual-studio-code)
   - [PyCharm](#pycharm)
@@ -287,6 +288,31 @@ Thus, choose a different port within the range `6000-8000` by passing the `--por
 You may install arbitrary Python packages by running `!pip install NAME` in a notebook.
 Alternatively, open a Terminal and execute `pip install NAME` there.
 Please note that the binaries installed in the virtual environment are only available in the Terminal when your working directory contains the `.venv` folder (i.e., using `cd` to change the folder removes `.venv/bin` from your `$PATH`).
+
+## Ollama Usage
+
+The server is equipped with the [Ollama](https://ollama.com) library for serving LLMs.
+It automatically selects one free GPU, but you can override this behavior by setting the `CUDA_VISIBLE_DEVICES` environment variable (just like with Apptainer).
+By default, Ollama does not allow remote requests and uses a fixed port (potentially conflicting with other users).
+To change this, you need to modify the `OLLAMA_HOST` environment variable:
+
+- Accessing from your computer: `OLLAMA_HOST=0.0.0.0:PORT`.
+  `PORT` must be in the range `6000-8000`).
+- Accessing from the server only: `OLLAMA_HOST=127.0.0.1:PORT`.
+  `PORT` can be arbitrarily chosen `>1024`.
+
+```shell
+OLLAMA_HOST=SEE_ABOVE ollama serve
+```
+
+In another terminal, pull the models before performing API requests:
+
+```shell
+OLLAMA_HOST=SEE_ABOVE ollama pull MODEL_NAME
+```
+
+To make requests, either use the `ollama` library or the `openai` library.
+Remember to modify their respective endpoints to point to the IP of the GPU server and the chosen port.
 
 ## Editor Integrations
 
