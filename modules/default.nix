@@ -7,6 +7,7 @@
       git
       python3Packages.gpustat
       nixglhost
+      uv
     ];
   };
 }
