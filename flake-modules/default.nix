@@ -20,6 +20,7 @@ let
         };
         system-manager = inputs.system-manager.packages.${system}.default;
         nixglhost = inputs.nixglhost.packages.${system}.default;
+        stable = prev;
         unstable = import inputs.nixpkgs-unstable {
           inherit system;
           config = {
@@ -27,6 +28,7 @@ let
             cudaSupport = true;
           };
         };
+        inherit (final.unstable) uv ollama;
       }
     );
   };
