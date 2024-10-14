@@ -18,6 +18,7 @@
   - [Image Caching](#image-caching-1)
 - [Ready-to-Use Container Images](#ready-to-use-container-images)
   - [Poetry](#poetry)
+  - [uv](#uv)
   - [Jupyter](#jupyter)
 - [Ollama Usage](#ollama-usage)
 - [Editor Integrations](#editor-integrations)
@@ -274,9 +275,15 @@ podman run --rm --device nvidia.com/gpu=0 docker-archive:IMAGE_NAME.tar.gz
 
 ### Poetry
 
-The image `poetry` contains Python 3.11 together with Poetry 1.7.
+The image `poetry` contains Python 3 together with the package manager Poetry.
 This image allows proper dependency specification via `pyproject.toml` and `poetry.lock` files.
 Using `apptainer run IMAGE ARGS...` executes `poetry ARGS...`, so you could execute a Python script via `apptainer run IMAGE run python SCRIPT.py`.
+
+### uv
+
+The image `uv` contains Python 3 together with the package manager uv.
+This image allows proper dependency specification via `pyproject.toml` and `uv.lock` files.
+Using `apptainer run IMAGE ARGS...` executes `uv ARGS...`, so you could execute a Python script via `apptainer run IMAGE run python SCRIPT.py`.
 
 ### Jupyter
 
