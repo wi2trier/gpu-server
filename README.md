@@ -283,7 +283,7 @@ Using `apptainer run IMAGE ARGS...` executes `poetry ARGS...`, so you could exec
 
 The image `uv` contains Python 3 together with the package manager uv.
 This image allows proper dependency specification via `pyproject.toml` and `uv.lock` files.
-Using `apptainer run IMAGE ARGS...` executes `uv ARGS...`, so you could execute a Python script via `apptainer run IMAGE run python SCRIPT.py`.
+Using `apptainer run IMAGE ARGS...` executes `uv ARGS...`, so you could execute a Python script via `apptainer run IMAGE run SCRIPT.py`.
 
 ### Jupyter
 
