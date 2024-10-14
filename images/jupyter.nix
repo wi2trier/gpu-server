@@ -56,6 +56,7 @@ base.override {
     UV_PYTHON_PREFERENCE = "only-system";
     PATH = lib.concatStringsSep ":" [
       "${venvPath}/bin"
+      "${python3}/bin"
       "/usr/local/sbin"
       "/usr/local/bin"
       "/usr/sbin"
