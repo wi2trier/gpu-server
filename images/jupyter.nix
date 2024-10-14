@@ -3,6 +3,7 @@
   writeShellScriptBin,
   python3,
   base,
+  uv,
 }:
 let
   venvPath = "./.venv";
@@ -13,17 +14,24 @@ let
       echo "Remove '${venvPath}' to force venv recreation with 'rm -rf ${venvPath}'"
     else
       echo "Creating new venv environment in path: '${venvPath}'"
-      ${python3.interpreter} -m venv "${venvPath}"
-      ${venvPath}/bin/pip install \
-        "jupyterlab>=4.0,<5" \
-        "numpy>=1.24,<2" \
-        "scipy>=1.10,<2" \
-        "spacy>=3.7,<4" \
-        "nltk>=3.8,<4" \
-        "torch>=2.1.1,<3" \
-        "openai>=1.3,<2" \
-        "transformers>=4.34,<5" \
-        "sentence-transformers>=2.2,<3"
+      ${lib.getExe uv} venv --seed ${venvPath}
+      ${lib.getExe uv} pip install \
+        cbrkit \
+        jupyterlab \
+        matplotlib \
+        nltk \
+        numpy \
+        openai \
+        pandas \
+        scikit-learn \
+        scipy \
+        seaborn \
+        sentence-transformers \
+        spacy \
+        torch \
+        transformers \
+        ;
+
     fi
   '';
 
@@ -45,6 +53,8 @@ base.override {
   entrypoint = [ (lib.getExe entrypoint) ];
   env = {
     VIRTUAL_ENV = venvPath;
+    UV_PYTHON_PREFERENCE = "only-system";
+    UV_PYTHON = lib.getExe python3;
     PATH = lib.concatStringsSep ":" [
       "${venvPath}/bin"
       "/usr/local/sbin"
