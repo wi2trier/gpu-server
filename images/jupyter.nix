@@ -51,17 +51,17 @@ let
 in
 base.override {
   entrypoint = [ (lib.getExe entrypoint) ];
+  contents = [
+    python3
+    uv
+  ];
   env = {
     VIRTUAL_ENV = venvPath;
     UV_PYTHON_PREFERENCE = "only-system";
     PATH = lib.concatStringsSep ":" [
       "${venvPath}/bin"
-      "${python3}/bin"
-      "/usr/local/sbin"
       "/usr/local/bin"
-      "/usr/sbin"
       "/usr/bin"
-      "/sbin"
       "/bin"
     ];
   };
