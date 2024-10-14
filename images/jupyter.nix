@@ -6,7 +6,7 @@
   uv,
 }:
 let
-  venvPath = "$PWD/.venv";
+  venvPath = "./.venv";
 
   venvSetup = writeShellScriptBin "venv" ''
     if [ -d "${venvPath}" ]; then
