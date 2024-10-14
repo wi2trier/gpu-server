@@ -14,7 +14,7 @@ let
       echo "Remove '${venvPath}' to force venv recreation with 'rm -rf ${venvPath}'"
     else
       echo "Creating new venv environment in path: '${venvPath}'"
-      ${lib.getExe uv} venv --seed ${venvPath}
+      ${lib.getExe uv} venv ${venvPath}
       ${lib.getExe uv} pip install \
         cbrkit \
         jupyterlab \
