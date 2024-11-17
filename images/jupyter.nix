@@ -14,7 +14,10 @@ let
       echo "Remove '${venvPath}' to force venv recreation with 'rm -rf ${venvPath}'"
     else
       echo "Creating new venv environment in path: '${venvPath}'"
-      ${lib.getExe uv} venv --seed ${venvPath}
+      ${lib.getExe uv} venv \
+        --seed \
+        --python ${lib.getExe python3} \
+        ${venvPath}
       ${lib.getExe uv} pip install \
         cbrkit \
         jupyterlab \
@@ -31,7 +34,6 @@ let
         torch \
         transformers \
         ;
-
     fi
   '';
 
@@ -50,14 +52,13 @@ let
   );
 in
 base.override {
+  name = "jupyter";
   entrypoint = [ (lib.getExe entrypoint) ];
-  contents = [
-    python3
-    uv
-  ];
+  contents = [ uv ];
   env = {
     VIRTUAL_ENV = venvPath;
     UV_PYTHON_PREFERENCE = "only-system";
+    UV_PYTHON_DOWNLOADS = "never";
     PATH = lib.concatStringsSep ":" [
       "${venvPath}/bin"
       "/usr/local/bin"

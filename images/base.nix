@@ -14,7 +14,7 @@
   glibc,
   gcc,
   nix-ld,
-  name ? "base",
+  name,
   contents ? [ ],
   entrypoint ? [ "/bin/sh" ],
   cmd ? [ ],
