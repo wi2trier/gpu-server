@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   systemd = {
-    enableStrictShellChecks = true;
+    enableStrictShellChecks = false; # todo: currently broken due to upstream system manager issues
     services = {
       update-system = {
         enable = true;
@@ -30,8 +30,8 @@
             mkdir -p ${target}
 
             # Link all .so files specified in Apptainer
-            grep '\.so$' ${pkgs.apptainer}/etc/apptainer/nvliblist.conf | while read file; do
-              ln -s ${source}/$file.* ${target}
+            grep '\.so$' ${pkgs.apptainer}/etc/apptainer/nvliblist.conf | while read -r file; do
+              ln -s ${source}/"$file".* ${target}
             done
 
             # Remove broken links
