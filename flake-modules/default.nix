@@ -10,13 +10,16 @@ let
     inherit system;
     config = {
       allowUnfree = true;
-      cudaSupport = true;
+      cudaSupport = false;
     };
     overlays = lib.singleton (
       final: prev: {
         apptainer = prev.apptainer.override {
           enableNvidiaContainerCli = false;
           forceNvcCli = false;
+        };
+        ollama = final.unstable.ollama.override {
+          acceleration = "cuda";
         };
         system-manager = inputs.system-manager.packages.${system}.default;
         nixglhost = inputs.nixglhost.packages.${system}.default;
@@ -25,10 +28,10 @@ let
           inherit system;
           config = {
             allowUnfree = true;
-            cudaSupport = true;
+            cudaSupport = false;
           };
         };
-        inherit (final.unstable) uv;
+        inherit (final.unstable) uv open-webui;
       }
     );
   };
