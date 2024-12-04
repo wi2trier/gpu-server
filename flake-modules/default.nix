@@ -28,7 +28,7 @@ let
             cudaSupport = true;
           };
         };
-        inherit (final.unstable) uv ollama;
+        inherit (final.unstable) uv;
       }
     );
   };
