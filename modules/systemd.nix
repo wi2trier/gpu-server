@@ -23,7 +23,7 @@
             Type = "oneshot";
             RemainAfterExit = true;
           };
-          wantedBy = [ "system-manager.target" ];
+          wantedBy = [ "multi-user.target" ];
           script = ''
             # Remove old links
             rm -rf ${target}

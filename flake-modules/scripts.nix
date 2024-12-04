@@ -31,14 +31,13 @@
               exit 1
             fi
             set -x #echo on
-            # set up nix
+            # set up nix configuration
             cp -f ${../etc/nix.conf} /etc/nix/nix.conf
-            systemctl restart nix-daemon
             # set up cuda support for oci engines like podman
-            nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+            /usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
             chmod -R 755 /etc/cdi
             # set compute mode to exclusive process (https://stackoverflow.com/a/50056586)
-            nvidia-smi -c 3
+            /usr/bin/nvidia-smi -c 3
             # disable default motd
             chmod -x /etc/update-motd.d/*
           '';
