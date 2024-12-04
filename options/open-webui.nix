@@ -77,7 +77,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.open-webui = {
       description = "User-friendly WebUI for LLMs";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "system-manager.target" ];
       after = [ "network.target" ];
 
       environment = {

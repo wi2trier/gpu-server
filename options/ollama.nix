@@ -83,7 +83,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.ollama = {
       description = "Server for local large language models";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "system-manager.target" ];
       after = [ "network.target" ];
       environment = cfg.environmentVariables // {
         HOME = cfg.home;
@@ -152,7 +152,7 @@ in
     systemd.services.ollama-model-loader = lib.mkIf (cfg.loadModels != [ ]) {
       description = "Download ollama models in the background";
       wantedBy = [
-        "multi-user.target"
+        "system-manager.target"
         "ollama.service"
       ];
       after = [ "ollama.service" ];
