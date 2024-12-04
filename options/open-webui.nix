@@ -81,6 +81,7 @@ in
       after = [ "network.target" ];
 
       environment = {
+        HOME = cfg.stateDir;
         STATIC_DIR = ".";
         DATA_DIR = ".";
         HF_HOME = ".";
