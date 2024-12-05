@@ -5,35 +5,14 @@
   ...
 }:
 let
+  config = {
+    allowUnfree = true;
+    cudaSupport = false;
+  };
   system = "x86_64-linux";
   pkgs = import inputs.nixpkgs {
-    inherit system;
-    config = {
-      allowUnfree = true;
-      cudaSupport = false;
-    };
-    overlays = lib.singleton (
-      final: prev: {
-        apptainer = prev.apptainer.override {
-          enableNvidiaContainerCli = false;
-          forceNvcCli = false;
-        };
-        ollama = final.unstable.ollama.override {
-          acceleration = "cuda";
-        };
-        system-manager = inputs.system-manager.packages.${system}.default;
-        nixglhost = inputs.nixglhost.packages.${system}.default;
-        stable = prev;
-        unstable = import inputs.nixpkgs-unstable {
-          inherit system;
-          config = {
-            allowUnfree = true;
-            cudaSupport = false;
-          };
-        };
-        inherit (final.unstable) uv open-webui;
-      }
-    );
+    inherit system config;
+    overlays = lib.singleton (import ../overlays { inherit inputs system config; });
   };
 in
 {

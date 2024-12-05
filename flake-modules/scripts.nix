@@ -7,7 +7,7 @@
     in
     {
       packages = {
-        manager = pkgs.system-manager;
+        inherit (pkgs) system-manager setup;
         install = pkgs.writeShellApplication {
           name = "system-manager-rebuild";
           text = ''
@@ -20,26 +20,6 @@
           text = ''
             set -x #echo on
             exec ${manager} deactivate "''$@"
-          '';
-        };
-        setup = pkgs.writeShellApplication {
-          name = "system-manager-setup";
-          text = ''
-            # only root possible
-            if [ "$(id -u)" -ne 0 ]; then
-              echo "This script must be run as root" >&2
-              exit 1
-            fi
-            set -x #echo on
-            # set up nix configuration
-            cp -f ${../etc/nix.conf} /etc/nix/nix.conf
-            # set up cuda support for oci engines like podman
-            /usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
-            chmod -R 755 /etc/cdi
-            # set compute mode to exclusive process (https://stackoverflow.com/a/50056586)
-            /usr/bin/nvidia-smi -c 3
-            # disable default motd
-            chmod -x /etc/update-motd.d/*
           '';
         };
       };
