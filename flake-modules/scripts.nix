@@ -9,14 +9,14 @@
       packages = {
         inherit (pkgs) system-manager system-setup;
         system-install = pkgs.writeShellApplication {
-          name = "system-manager-rebuild";
+          name = "system-install";
           text = ''
             set -x #echo on
             exec ${manager} "''${1:-switch}" --flake ${self} "''${@:2}"
           '';
         };
         system-uninstall = pkgs.writeShellApplication {
-          name = "system-manager-uninstall";
+          name = "system-uninstall";
           text = ''
             set -x #echo on
             exec ${manager} deactivate "''$@"
