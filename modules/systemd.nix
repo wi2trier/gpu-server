@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   systemd.services = {
-    update-system = {
+    system-update = {
       enable = true;
       startAt = "*-*-* 04:00:00";
       script = ''
@@ -9,14 +9,14 @@
       '';
       serviceConfig.Type = "oneshot";
     };
-    setup-system = {
+    system-setup = {
       enable = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
       };
       wantedBy = [ "system-manager.target" ];
-      script = lib.getExe pkgs.setup-system;
+      script = lib.getExe pkgs.system-setup;
     };
   };
 }

@@ -15,7 +15,7 @@ To apply changes to the config, run the following:
 
 ```shell
 sudo nix run github:wi2trier/gpu-server
-sudo nix run github:wi2trier/gpu-server#setup
+sudo nix run github:wi2trier/gpu-server#system-setup
 ```
 
 ## Initial Setup
@@ -73,7 +73,7 @@ The following script sets up some basic configuration for the server.
 It can be applied at any time later on to update the configuration.
 
 ```shell
-sudo nix run github:wi2trier/gpu-server#setup
+sudo nix run github:wi2trier/gpu-server#system-setup
 ```
 
 ### Verify Installation
@@ -101,5 +101,5 @@ CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://ubuntu nvidia-smi
 ## Uninstall
 
 ```shell
-sudo nix run github:wi2trier/gpu-server#uninstall
+sudo nix run github:wi2trier/gpu-server#system-uninstall
 ```

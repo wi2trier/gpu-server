@@ -18,6 +18,6 @@ final: prev: {
   ollama = final.unstable.ollama.override {
     acceleration = "cuda";
   };
-  setup-system = final.callPackage ./setup-system.nix { };
+  system-setup = final.callPackage ./system-setup.nix { };
   mkCudaWrapper = final.callPackage ./cuda-wrapper.nix { };
 }

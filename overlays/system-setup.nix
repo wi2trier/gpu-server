@@ -4,7 +4,7 @@ let
   cudaTarget = "/run/opengl-driver/lib";
 in
 writeShellApplication {
-  name = "setup-system";
+  name = "system-setup";
   text = ''
     # set up nix configuration
     cp -f ${../etc/nix.conf} /etc/nix/nix.conf
