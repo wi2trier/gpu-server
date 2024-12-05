@@ -1,7 +1,7 @@
 { writeShellApplication, lib }:
 package:
 writeShellApplication {
-  inherit (package) name;
+  inherit (package) pname;
   text = ''
     case "''${CUDA_VISIBLE_DEVICES:-100}" in
       100) CUDA_VISIBLE_DEVICES="$(findgpu)" ;;
