@@ -23,6 +23,11 @@
       default = { };
       type = lib.types.attrs;
     };
+    virtualisation.docker = lib.mkOption {
+      internal = true;
+      default = { };
+      type = lib.types.attrs;
+    };
   };
   config = lib.mkMerge [
     {
