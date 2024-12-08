@@ -6,8 +6,10 @@
       startAt = "*-*-* 04:00:00";
       script = ''
         ${lib.getExe pkgs.nix} run github:wi2trier/gpu-server --refresh
+        ${lib.getExe pkgs.podman} auto-update
       '';
       serviceConfig.Type = "oneshot";
+      after = [ "network.target" ];
     };
     system-setup = {
       enable = true;
