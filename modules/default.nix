@@ -8,6 +8,7 @@
       python3Packages.gpustat
       nixglhost
       uv
+      findgpu
     ];
   };
 }

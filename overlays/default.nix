@@ -20,4 +20,10 @@ final: prev: {
   };
   system-setup = final.callPackage ./system-setup.nix { };
   mkCudaWrapper = final.callPackage ./cuda-wrapper.nix { };
+  findgpu = final.writers.writePython3Bin "findgpu" {
+    flakeIgnore = [
+      "E203"
+      "E501"
+    ];
+  } (builtins.readFile ./findgpu.py);
 }
