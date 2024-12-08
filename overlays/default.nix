@@ -14,10 +14,7 @@ final: prev: {
   };
   system-manager = inputs.system-manager.packages.${system}.default;
   nixglhost = inputs.nixglhost.packages.${system}.default;
-  inherit (final.unstable) uv open-webui;
-  ollama = final.unstable.ollama.override {
-    acceleration = "cuda";
-  };
+  inherit (final.unstable) uv open-webui ollama;
   system-setup = final.callPackage ./system-setup.nix { };
   mkCudaWrapper = final.callPackage ./cuda-wrapper.nix { };
   findgpu = final.writers.writePython3Bin "findgpu" {
