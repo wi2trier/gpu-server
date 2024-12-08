@@ -23,4 +23,13 @@ final: prev: {
       "E501"
     ];
   } (builtins.readFile ./findgpu.py);
+  userctl = final.writers.writePython3Bin "userctl" {
+    libraries = with final.python3Packages; [ typer ];
+    flakeIgnore = [
+      "E203"
+      "E501"
+    ];
+  } (builtins.readFile ./userctl.py);
+  build-container = final.callPackage ./build-container.nix { inherit (inputs) self; };
+  build-apptainer = final.callPackage ./build-apptainer.nix { };
 }

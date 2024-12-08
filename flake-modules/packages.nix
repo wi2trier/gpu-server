@@ -7,7 +7,14 @@
     in
     {
       packages = {
-        inherit (pkgs) system-manager system-setup;
+        inherit (pkgs)
+          system-manager
+          system-setup
+          findgpu
+          userctl
+          build-apptainer
+          build-container
+          ;
         system-install = pkgs.writeShellApplication {
           name = "system-install";
           text = ''

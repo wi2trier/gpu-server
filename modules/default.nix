@@ -9,6 +9,9 @@
       nixglhost
       uv
       findgpu
+      userctl
+      build-apptainer
+      build-container
     ];
   };
 }

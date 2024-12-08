@@ -32,6 +32,26 @@ in
             path = inputs.nixpkgs.outPath;
           };
         }
+        {
+          from = {
+            type = "indirect";
+            id = "stable";
+          };
+          to = {
+            type = "path";
+            path = inputs.nixpkgs.outPath;
+          };
+        }
+        {
+          from = {
+            type = "indirect";
+            id = "unstable";
+          };
+          to = {
+            type = "path";
+            path = inputs.nixpkgs-unstable.outPath;
+          };
+        }
       ];
     }
   );
