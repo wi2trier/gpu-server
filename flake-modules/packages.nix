@@ -14,6 +14,7 @@
           userctl
           build-apptainer
           build-container
+          ollama
           ;
         system-install = pkgs.writeShellApplication {
           name = "system-install";
