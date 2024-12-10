@@ -18,8 +18,8 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    install -m755 -D bin/ollama $out/bin/ollama
+    mkdir -p $out
+    cp -r * $out
 
     runHook postInstall
   '';
