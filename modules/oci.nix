@@ -4,6 +4,7 @@ let
     attrs@{
       labels ? { },
       extraOptions ? [ ],
+      ...
     }:
     {
       labels = {
