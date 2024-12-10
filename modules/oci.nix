@@ -33,7 +33,7 @@ in
       group = "containers";
     };
   };
-  virtualisation.oci-containers = {
+  virtualisation.oci-containers.containers = {
     ollama = mkContainer {
       image = "docker.io/ollama/ollama:latest";
       volumes = [
