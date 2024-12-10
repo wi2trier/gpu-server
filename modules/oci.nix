@@ -35,7 +35,7 @@ in
       ];
       extraOptions = [
         "--device"
-        "nvidia.com/gpu=4,5,6,7"
+        "nvidia.com/gpu=all"
       ];
     };
     open-webui = mkContainer {
