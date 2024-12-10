@@ -7,6 +7,7 @@
   - [CUDA](#cuda)
   - [Additional Setup](#additional-setup)
   - [Verify Installation](#verify-installation)
+  - [Create Containers User](#create-containers-user)
 - [Uninstall](#uninstall)
 
 ## Updates
@@ -96,6 +97,21 @@ The new Apptainer runtime using `nvidia-container-cli` currently does not work:
 
 ```shell
 CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://ubuntu nvidia-smi
+```
+
+### Create Containers User
+
+To create a user for running containers, run the following:
+
+```shell
+sudo useradd --system --home-dir /var/empty --shell /sbin/nologin --comment "Containers User" containers
+```
+
+To allow the user to run containers, run the following:
+
+```shell
+echo "containers:2147483647:2147483648" | sudo tee -a /etc/subuid
+echo "containers:2147483647:2147483648" | sudo tee -a /etc/subgid
 ```
 
 ## Uninstall
