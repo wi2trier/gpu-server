@@ -5,7 +5,6 @@
   - [Ubuntu](#ubuntu)
   - [Nix](#nix)
   - [CUDA](#cuda)
-  - [Additional Setup](#additional-setup)
   - [Verify Installation](#verify-installation)
   - [Create Containers User](#create-containers-user)
 - [Uninstall](#uninstall)
@@ -16,7 +15,6 @@ To apply changes to the config, run the following:
 
 ```shell
 sudo nix run github:wi2trier/gpu-server
-sudo nix run github:wi2trier/gpu-server#system-setup
 ```
 
 ## Initial Setup
@@ -66,15 +64,6 @@ Restart the server to load the new driver.
 
 ```shell
 sudo reboot
-```
-
-### Additional Setup
-
-The following script sets up some basic configuration for the server.
-It can be applied at any time later on to update the configuration.
-
-```shell
-sudo nix run github:wi2trier/gpu-server#system-setup
 ```
 
 ### Verify Installation

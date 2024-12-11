@@ -27,7 +27,6 @@ in
       _module.args = {
         inherit pkgs;
       };
-      packages.default = config.packages.system-install;
       checks = config.packages;
     };
 }
