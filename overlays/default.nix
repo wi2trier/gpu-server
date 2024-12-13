@@ -8,7 +8,7 @@ final: prev: {
   unstable = import inputs.nixpkgs-unstable {
     inherit system config;
   };
-  inherit (final.unstable) uv open-webui;
+  inherit (final.unstable) uv open-webui ollama;
   apptainer = prev.apptainer.override {
     enableNvidiaContainerCli = false;
     forceNvcCli = false;
@@ -32,5 +32,4 @@ final: prev: {
   } (builtins.readFile ./userctl.py);
   build-container = final.callPackage ./build-container.nix { inherit (inputs) self; };
   build-apptainer = final.callPackage ./build-apptainer.nix { };
-  ollama = final.callPackage ./ollama.nix { };
 }
