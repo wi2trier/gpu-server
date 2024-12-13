@@ -32,4 +32,5 @@ final: prev: {
   } (builtins.readFile ./userctl.py);
   build-container = final.callPackage ./build-container.nix { inherit (inputs) self; };
   build-apptainer = final.callPackage ./build-apptainer.nix { };
+  ollama-bin = final.callPackage ./ollama.nix { };
 }
