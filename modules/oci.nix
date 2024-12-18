@@ -52,7 +52,7 @@ in
       });
   virtualisation.oci-containers.containers = {
     ollama = mkContainer {
-      enable = false;
+      enable = true;
       image = "docker.io/ollama/ollama:latest";
       volumes = [
         "/var/lib/ollama-oci:/root/.ollama"
@@ -63,7 +63,7 @@ in
       ];
     };
     open-webui = mkContainer {
-      enable = false;
+      enable = true;
       image = "ghcr.io/open-webui/open-webui:latest";
       ports = [
         "3000:8080"
