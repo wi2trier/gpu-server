@@ -25,6 +25,7 @@ let
     ]);
 in
 {
+  virtualisation.oci-containers.backend = "podman";
   systemd.services = lib.mapAttrs' (
     n: v:
     lib.nameValuePair "${config.virtualisation.oci-containers.backend}-${n}" {
