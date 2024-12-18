@@ -93,14 +93,26 @@ CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://ubuntu nvidia-smi
 To create a user for running containers, run the following:
 
 ```shell
-sudo useradd --system --home-dir /var/empty --shell /sbin/nologin --comment "Containers User" containers
+sudo useradd --system --create-home --shell /sbin/nologin --comment "Containers User" containers
 ```
 
-To allow the user to run containers, run the following:
+To allow the user to run containers in a user namespace, run the following:
 
 ```shell
 echo "containers:2147483647:2147483648" | sudo tee -a /etc/subuid
 echo "containers:2147483647:2147483648" | sudo tee -a /etc/subgid
+```
+
+We are using this user for systemd units, so enable lingering:
+
+```shell
+sudo loginctl enable-linger containers
+```
+
+In case you want to remove the user, run the following:
+
+```shell
+sudo userdel --remove containers
 ```
 
 ## Uninstall
