@@ -8,7 +8,7 @@ let
       extraOptions ? [ ],
       ...
     }:
-    lib.mkIf enable {
+    lib.optionalAttrs enable {
       labels = {
         "io.containers.autoupdate" = "registry";
       } // labels;
