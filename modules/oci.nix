@@ -3,11 +3,12 @@ let
   user = "containers";
   mkContainer =
     attrs@{
+      enable,
       labels ? { },
       extraOptions ? [ ],
       ...
     }:
-    {
+    lib.mkIf enable {
       labels = {
         "io.containers.autoupdate" = "registry";
       } // labels;
@@ -20,6 +21,7 @@ let
       ] ++ extraOptions;
     }
     // (lib.removeAttrs attrs [
+      "enable"
       "labels"
       "extraOptions"
     ]);
@@ -50,6 +52,7 @@ in
       });
   virtualisation.oci-containers.containers = {
     ollama = mkContainer {
+      enable = false;
       image = "docker.io/ollama/ollama:latest";
       volumes = [
         "/var/lib/ollama-oci:/root/.ollama"
@@ -60,6 +63,7 @@ in
       ];
     };
     open-webui = mkContainer {
+      enable = false;
       image = "ghcr.io/open-webui/open-webui:latest";
       ports = [
         "3000:8080"
