@@ -26,10 +26,6 @@ let
 in
 {
   virtualisation.oci-containers.backend = "podman";
-  systemd.packages = [
-    "/usr/bin/newuidmap"
-    "/usr/bin/newgidmap"
-  ];
   systemd.services = lib.mapAttrs' (
     n: v:
     lib.nameValuePair "${config.virtualisation.oci-containers.backend}-${n}" {

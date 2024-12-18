@@ -18,6 +18,10 @@
         n: v:
         lib.nameValuePair "${config.virtualisation.oci-containers.backend}-${n}" {
           wantedBy = lib.mkForce [ "system-manager.target" ];
+          path = [
+            "/usr/bin/newuidmap"
+            "/usr/bin/newgidmap"
+          ];
         }
       ) config.virtualisation.oci-containers.containers;
     }
