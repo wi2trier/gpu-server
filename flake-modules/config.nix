@@ -18,6 +18,7 @@ in
       extraSpecialArgs = specialArgs;
       modules = [
         ../modules
+        ../options
         ../options-upstream
         {
           _module.args.pkgs = lib.mkForce pkgs;
@@ -29,6 +30,7 @@ in
       inherit system pkgs specialArgs;
       modules = [
         ../modules
+        ../options
         (
           { modulesPath, ... }:
           {
