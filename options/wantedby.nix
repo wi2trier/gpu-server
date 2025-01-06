@@ -15,8 +15,8 @@
     }
     {
       systemd.services = lib.mapAttrs' (
-        n: v:
-        lib.nameValuePair "${config.virtualisation.oci-containers.backend}-${n}" {
+        _: container:
+        lib.nameValuePair container.serviceName {
           wantedBy = lib.mkForce [ "system-manager.target" ];
         }
       ) config.virtualisation.oci-containers.containers;
