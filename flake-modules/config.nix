@@ -18,7 +18,7 @@ in
       extraSpecialArgs = specialArgs;
       modules = [
         ../modules
-        ../options
+        ../options-upstream
         {
           _module.args.pkgs = lib.mkForce pkgs;
           nixpkgs.hostPlatform = system;
