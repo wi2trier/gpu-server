@@ -49,7 +49,7 @@ in
         Description = "Podman container ${name}";
       } // config.unit;
       Install = {
-        WantedBy = "system-manager.target";
+        WantedBy = "default.target";
       } // config.install;
       Service = {
         Restart = "always";
