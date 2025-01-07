@@ -40,13 +40,13 @@ in
     };
   };
   config = {
-    ref = "${name}.container";
+    ref = "${config.name}.container";
     text = unitConfigToText {
       Container = {
-        Name = name;
+        Name = config.name;
       } // config.container;
       Unit = {
-        Description = "Podman container ${name}";
+        Description = "Podman container ${config.name}";
       } // config.unit;
       Install = {
         WantedBy = "default.target";

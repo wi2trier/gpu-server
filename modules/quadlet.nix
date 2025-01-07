@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  containerDefaults = name: {
+  containerDefaults = {
     container = {
       Pull = "newer";
       AutoUpdate = "registry";
@@ -27,7 +27,7 @@ in
   virtualisation.quadlet = {
     enable = false;
     containers = lib.mapAttrs mkContainer {
-      ollama = {
+      ollama-quadlet = {
         container = {
           Image = "docker.io/ollama/ollama:latest";
           Volume = [
@@ -38,7 +38,7 @@ in
           ];
         };
       };
-      open-webui = {
+      open-webui-quadlet = {
         container = {
           Image = "ghcr.io/open-webui/open-webui:latest";
           PublishPort = [
