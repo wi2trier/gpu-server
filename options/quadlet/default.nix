@@ -45,7 +45,6 @@ in
         name = "containers/systemd/users/990/${value.ref}";
         value = {
           inherit (value) text;
-          mode = "0600";
         };
       }) cfg.containers;
   };
