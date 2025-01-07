@@ -18,23 +18,23 @@ in
     ref = mkOption { readOnly = true; };
     text = mkOption { internal = true; };
 
-    Container = mkOption {
+    container = mkOption {
       type = types.attrsOf unitOption;
       default = { };
     };
-    Unit = mkOption {
+    unit = mkOption {
       type = types.attrsOf unitOption;
       default = { };
     };
-    Service = mkOption {
+    service = mkOption {
       type = types.attrsOf unitOption;
       default = { };
     };
-    Install = mkOption {
+    install = mkOption {
       type = types.attrsOf unitOption;
       default = { };
     };
-    Quadlet = mkOption {
+    quadlet = mkOption {
       type = types.attrsOf unitOption;
       default = { };
     };
