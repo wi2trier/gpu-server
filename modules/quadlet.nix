@@ -1,29 +1,17 @@
 { lib, ... }:
 let
-  mkDefaults = name: {
-    Container = {
-      Name = name;
+  containerDefaults = name: {
+    container = {
       Pull = "newer";
       AutoUpdate = "registry";
-    };
-    Unit = {
-      Description = "Podman container ${name}";
-    };
-    Service = {
-      Restart = "always";
-      Environment = "PATH=/usr/bin";
-      TimeoutStartSec = 900;
-    };
-    Install = {
-      WantedBy = "system-manager.target";
     };
   };
 
   mkContainer =
-    name: mkConfig:
+    name: containerConfig:
     lib.mkMerge [
-      (mkConfig name)
-      (mkDefaults name)
+      containerDefaults
+      containerConfig
     ];
 in
 {
@@ -39,8 +27,8 @@ in
   virtualisation.quadlet = {
     enable = true;
     containers = lib.mapAttrs mkContainer {
-      ollama = name: {
-        Container = {
+      ollama = {
+        container = {
           Image = "docker.io/ollama/ollama:latest";
           Volume = [
             "/var/lib/ollama-quadlet:/root/.ollama:U"
@@ -50,8 +38,8 @@ in
           ];
         };
       };
-      open-webui = name: {
-        Container = {
+      open-webui = {
+        container = {
           Image = "ghcr.io/open-webui/open-webui:latest";
           PublishPort = [
             "3000:8080"

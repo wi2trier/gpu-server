@@ -8,12 +8,10 @@
 let
   cfg = config.virtualisation.quadlet;
 
-  inherit (lib) mkOption types;
-  inherit (systemdUtils.unitOptions) unitOption;
-
   nixosUtils = import "${inputs.nixpkgs}/nixos/lib/utils.nix" { inherit lib config pkgs; };
   systemdUtils = nixosUtils.systemdUtils;
-  unitOptions = types.attrsOf unitOption;
+
+  inherit (lib) mkOption types;
 
   unitConfigToText =
     unitConfig:
@@ -29,7 +27,9 @@ in
     virtualisation.quadlet = {
       enable = lib.mkEnableOption "quadlet";
       containers = mkOption {
-        type = types.attrsOf unitOptions;
+        type = types.attrsOf (
+          types.submodule (import ./container.nix { inherit systemdUtils unitConfigToText; })
+        );
         default = { };
       };
     };
@@ -41,10 +41,10 @@ in
           source = "${pkgs.podman}/lib/systemd/user-generators/podman-user-generator";
         };
       }
-      // lib.mapAttrs' (name: value: {
-        name = "containers/systemd/users/990/${name}.container";
+      // lib.mapAttrs' (_: value: {
+        name = "containers/systemd/users/990/${value.ref}";
         value = {
-          text = unitConfigToText value;
+          inherit (value) text;
           mode = "0600";
         };
       }) cfg.containers;
