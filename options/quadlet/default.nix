@@ -15,7 +15,7 @@ let
 
   unitConfigToText =
     unitConfig:
-    lib.concatStringsSep "\n\n" (
+    lib.concatLines (
       lib.mapAttrsToList (name: value: ''
         [${name}]
         ${systemdUtils.lib.attrsToSection value}

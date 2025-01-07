@@ -25,7 +25,7 @@ in
         d.mode = "0755";
       });
   virtualisation.quadlet = {
-    enable = true;
+    enable = false;
     containers = lib.mapAttrs mkContainer {
       ollama = {
         container = {
