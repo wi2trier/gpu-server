@@ -31,6 +31,7 @@ in
       ]
       (name: {
         d.mode = "0755";
+        d.user = "quadlet";
       });
   virtualisation.quadlet = {
     enable = false;
@@ -39,7 +40,7 @@ in
         containerConfig = {
           Image = "docker.io/ollama/ollama:latest";
           Volume = [
-            "/var/lib/ollama-quadlet:/root/.ollama:U"
+            "/var/lib/ollama-quadlet:/root/.ollama"
           ];
           AddDevice = [
             "nvidia.com/gpu=all"
@@ -53,7 +54,7 @@ in
             "3000:8080"
           ];
           Volume = [
-            "/var/lib/open-webui-quadlet:/app/backend/data:U"
+            "/var/lib/open-webui-quadlet:/app/backend/data"
           ];
           AddHost = [
             "host.docker.internal:host-gateway"
