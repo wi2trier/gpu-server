@@ -60,7 +60,7 @@ in
           #   "host.docker.internal:host-gateway"
           # ];
           PodmanArgs = [
-            "--add-host=host.docker.internal:host-gateway"
+            "--add-host=host.containers.internal:host-gateway"
           ];
         };
       };
