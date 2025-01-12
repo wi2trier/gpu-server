@@ -6,6 +6,13 @@ let
       Pull = "newer";
       AutoUpdate = "registry";
     };
+    serviceConfig = {
+      ExecSearchPath = [ "/usr/bin" ];
+    };
+    # not needed as the containers are rootless
+    # installConfig = {
+    #   WantedBy = [ "system-manager.target" ];
+    # };
   };
 
   mkContainer =
