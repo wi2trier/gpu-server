@@ -21,6 +21,12 @@ let
       containerConfig
     ];
 in
+# TODO: Services are not automatically loaded, the following workaround is needed:
+# sudo loginctl disable-linger quadlet && sudo loginctl enable-linger quadlet
+# TODO: Auto-Update and Pruning do not work currently,
+# they are defined as user-services by quadlet-nix which is unsupported by system-manager
+# sudo systemctl --machine=quadlet@.host --user status open-webui-quadlet.service
+# sudo journalctl _SYSTEMD_USER_UNIT=open-webui-quadlet.service _UID=990
 {
   systemd.tmpfiles.settings.quadlet =
     lib.genAttrs
@@ -33,7 +39,7 @@ in
         d.user = "quadlet";
       });
   virtualisation.quadlet = {
-    enable = true;
+    enable = false;
     containers = lib.mapAttrs mkContainer {
       ollama-quadlet = {
         containerConfig = {
@@ -57,7 +63,7 @@ in
           ];
           # TODO: Not supported by current podman version
           # AddHost = [
-          #   "host.docker.internal:host-gateway"
+          #   "host.containers.internal:host-gateway"
           # ];
           PodmanArgs = [
             "--add-host=host.containers.internal:host-gateway"
