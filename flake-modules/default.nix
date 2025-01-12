@@ -5,27 +5,31 @@
   ...
 }:
 let
-  config = {
-    allowUnfree = true;
-    cudaSupport = false;
-  };
-  system = "x86_64-linux";
-  pkgs = import inputs.nixpkgs {
-    inherit system config;
-    overlays = lib.singleton (import ../overlays { inherit inputs system config; });
+  nixpkgsArgs = rec {
+    config = {
+      allowUnfree = true;
+      cudaSupport = false;
+    };
+    overlays = lib.singleton (
+      import ../overlays {
+        inherit inputs;
+        nixpkgsConfig = config;
+      }
+    );
   };
 in
 {
   imports = lib'.flocken.getModules ./.;
-  systems = lib.singleton system;
+  systems = lib.singleton "x86_64-linux";
   _module.args = {
-    inherit system pkgs;
+    inherit nixpkgsArgs;
   };
   perSystem =
-    { config, ... }:
+    { config, system, ... }:
     {
-      _module.args = {
-        inherit pkgs;
+      _module.args.pkgs = import inputs.nixpkgs {
+        inherit system;
+        inherit (nixpkgsArgs) config overlays;
       };
       checks = config.packages;
     };

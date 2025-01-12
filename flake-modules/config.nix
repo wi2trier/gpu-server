@@ -2,9 +2,8 @@
   lib,
   inputs,
   self,
-  pkgs,
-  system,
   lib',
+  nixpkgsArgs,
   ...
 }:
 let
@@ -13,6 +12,11 @@ let
   };
 in
 {
+  perSystem =
+    { ... }:
+    {
+      checks.system-config = self.systemConfigs.default;
+    };
   flake = {
     systemConfigs.default = inputs.system-manager.lib.makeSystemConfig {
       extraSpecialArgs = specialArgs;
@@ -20,14 +24,26 @@ in
         ../modules
         ../options
         ../options-upstream
-        {
-          _module.args.pkgs = lib.mkForce pkgs;
-          nixpkgs.hostPlatform = system;
-        }
+        (
+          { lib, config, ... }:
+          {
+            nixpkgs = {
+              hostPlatform = "x86_64-linux";
+              # does not work due to infinite recursion
+              # inherit (nixpkgsArgs) config overlays;
+            };
+            _module.args.pkgs = lib.mkForce (
+              import inputs.nixpkgs {
+                system = config.nixpkgs.hostPlatform;
+                inherit (nixpkgsArgs) config overlays;
+              }
+            );
+          }
+        )
       ];
     };
     nixosConfigurations.default = inputs.nixpkgs.lib.nixosSystem {
-      inherit system pkgs specialArgs;
+      inherit specialArgs;
       modules = [
         ../modules
         ../options
@@ -35,8 +51,12 @@ in
           { modulesPath, ... }:
           {
             # use virtual machine profile, otherwise file systems need to be defined
-            imports = [ "${modulesPath}/virtualisation/lxc-container.nix" ];
+            imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
             system.stateVersion = lib.trivial.release;
+            nixpkgs = {
+              hostPlatform = "x86_64-linux";
+              inherit (nixpkgsArgs) config overlays;
+            };
           }
         )
       ];

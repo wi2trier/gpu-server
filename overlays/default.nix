@@ -1,12 +1,16 @@
 {
   inputs,
-  system,
-  config,
+  nixpkgsConfig,
 }:
-final: prev: {
+final: prev:
+let
+  inherit (final.stdenv.hostPlatform) system;
+in
+{
   stable = prev;
   unstable = import inputs.nixpkgs-unstable {
-    inherit system config;
+    inherit system;
+    config = nixpkgsConfig;
   };
   inherit (final.unstable) uv open-webui ollama;
   apptainer = prev.apptainer.override {

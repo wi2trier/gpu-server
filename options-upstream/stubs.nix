@@ -2,22 +2,18 @@
   lib,
   ...
 }:
+let
+  stubOption = lib.mkOption {
+    internal = true;
+    default = { };
+    type = with lib.types; attrsOf anything;
+  };
+in
 {
   options = {
-    networking.firewall = lib.mkOption {
-      internal = true;
-      default = { };
-      type = lib.types.attrs;
-    };
-    networking.proxy.envVars = lib.mkOption {
-      internal = true;
-      default = { };
-      type = lib.types.attrs;
-    };
-    virtualisation.docker = lib.mkOption {
-      internal = true;
-      default = { };
-      type = lib.types.attrs;
-    };
+    networking.firewall = stubOption;
+    networking.proxy.envVars = stubOption;
+    virtualisation.docker = stubOption;
+    systemd.user = stubOption;
   };
 }

@@ -1,7 +1,8 @@
 { lib, ... }:
 let
   containerDefaults = {
-    container = {
+    uid = 990;
+    containerConfig = {
       Pull = "newer";
       AutoUpdate = "registry";
     };
@@ -28,7 +29,7 @@ in
     enable = false;
     containers = lib.mapAttrs mkContainer {
       ollama-quadlet = {
-        container = {
+        containerConfig = {
           Image = "docker.io/ollama/ollama:latest";
           Volume = [
             "/var/lib/ollama-quadlet:/root/.ollama:U"
@@ -39,7 +40,7 @@ in
         };
       };
       open-webui-quadlet = {
-        container = {
+        containerConfig = {
           Image = "ghcr.io/open-webui/open-webui:latest";
           PublishPort = [
             "3000:8080"
