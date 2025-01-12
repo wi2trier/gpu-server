@@ -34,7 +34,7 @@ in
         d.user = "quadlet";
       });
   virtualisation.quadlet = {
-    enable = false;
+    enable = true;
     containers = lib.mapAttrs mkContainer {
       ollama-quadlet = {
         containerConfig = {
