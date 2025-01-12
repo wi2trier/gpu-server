@@ -9,10 +9,9 @@ let
     serviceConfig = {
       ExecSearchPath = [ "/usr/bin" ];
     };
-    # not needed as the containers are rootless
-    # installConfig = {
-    #   WantedBy = [ "system-manager.target" ];
-    # };
+    installConfig = {
+      WantedBy = [ "system-manager.target" ];
+    };
   };
 
   mkContainer =
