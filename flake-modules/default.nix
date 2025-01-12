@@ -2,6 +2,7 @@
   inputs,
   lib,
   lib',
+  self,
   ...
 }:
 let
@@ -31,6 +32,7 @@ in
         inherit system;
         inherit (nixpkgsArgs) config overlays;
       };
-      checks = config.packages;
+      checks = lib.removeAttrs config.packages [ "system-manager-config" ];
+      packages.system-manager-config = self.systemConfigs.default;
     };
 }

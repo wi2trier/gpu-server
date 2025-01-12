@@ -12,11 +12,6 @@ let
   };
 in
 {
-  perSystem =
-    { ... }:
-    {
-      checks.system-config = self.systemConfigs.default;
-    };
   flake = {
     systemConfigs.default = inputs.system-manager.lib.makeSystemConfig {
       extraSpecialArgs = specialArgs;
