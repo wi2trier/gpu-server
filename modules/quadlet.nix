@@ -55,8 +55,12 @@ in
           Volume = [
             "/var/lib/open-webui-quadlet:/app/backend/data"
           ];
-          AddHost = [
-            "host.docker.internal:host-gateway"
+          # TODO: Not supported by current podman version
+          # AddHost = [
+          #   "host.docker.internal:host-gateway"
+          # ];
+          PodmanArgs = [
+            "--add-host=host.docker.internal:host-gateway"
           ];
         };
       };
