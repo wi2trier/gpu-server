@@ -164,11 +164,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1736708134,
-        "narHash": "sha256-qOMvGfTcQaq9ffTtGUL18B7QY4TS/UXB2/duAX2um/o=",
+        "lastModified": 1736708727,
+        "narHash": "sha256-tFM3XzCsqHW8YPBjSWf9lMVnQeEt/G639PAHuQmEuL4=",
         "owner": "mirkolenz",
         "repo": "quadlet-nix",
-        "rev": "eb189d3ce0b918f620c37168baa551a08db72041",
+        "rev": "6026769c4b84bac404437faf7ef566734cfa4c9f",
         "type": "github"
       },
       "original": {
@@ -196,11 +196,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1736520442,
-        "narHash": "sha256-rM7caMf6kN2YqW4QjDe5xWYuc0rcFZjMknAgxNBEgBE=",
+        "lastModified": 1736722307,
+        "narHash": "sha256-2D+CqiHHzuiT+thjuNCMYQXXKQSAZSS1rtAxBV4A1Q0=",
         "owner": "numtide",
         "repo": "system-manager",
-        "rev": "489c060d2ecaf04142d8127733b97182454322e1",
+        "rev": "196586a97d2b9be12e0b8e646ac1ec4f213cc9cd",
         "type": "github"
       },
       "original": {
