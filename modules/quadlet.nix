@@ -9,9 +9,7 @@ let
     serviceConfig = {
       ExecSearchPath = [ "/usr/bin" ];
     };
-    installConfig = {
-      WantedBy = [ "system-manager.target" ];
-    };
+    # installConfig.WantedBy not needed because it depends on default.target due to uid setting
   };
 
   mkContainer =
@@ -21,12 +19,11 @@ let
       containerConfig
     ];
 in
-# TODO: Services are not automatically loaded, the following workaround is needed:
-# sudo loginctl disable-linger quadlet && sudo loginctl enable-linger quadlet
-# TODO: Auto-Update and Pruning do not work currently,
-# they are defined as user-services by quadlet-nix which is unsupported by system-manager
-# sudo systemctl --machine=quadlet@.host --user status open-webui-quadlet.service
-# sudo journalctl _SYSTEMD_USER_UNIT=open-webui-quadlet.service _UID=990
+# TODO: Auto-Update and Pruning do not work currently, they are defined as user-services by quadlet-nix which is unsupported by system-manager
+
+# Commands to manage user services:
+# sudo systemctl --machine=quadlet@ --user status NAME.service
+# sudo journalctl _UID=990 _SYSTEMD_USER_UNIT=NAME.service
 {
   systemd.tmpfiles.settings.quadlet =
     lib.genAttrs
@@ -60,13 +57,6 @@ in
           ];
           Volume = [
             "/var/lib/open-webui-quadlet:/app/backend/data"
-          ];
-          # TODO: Not supported by current podman version
-          # AddHost = [
-          #   "host.containers.internal:host-gateway"
-          # ];
-          PodmanArgs = [
-            "--add-host=host.containers.internal:host-gateway"
           ];
         };
       };
