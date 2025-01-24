@@ -13,8 +13,12 @@ writeShellApplication {
     /usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
     chmod -R 755 /etc/cdi
 
-    # set compute mode to default (https://stackoverflow.com/a/50056586)
-    /usr/bin/nvidia-smi -c 0
+    # set compute mode (https://stackoverflow.com/a/50056586)
+    # 0 Default
+    # 1 Exclusive_Thread
+    # 2 Prohibited
+    # 3 Exclusive_Process
+    /usr/bin/nvidia-smi -c 3
 
     # disable default motd
     chmod -x /etc/update-motd.d/*
