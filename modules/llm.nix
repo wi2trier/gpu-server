@@ -3,6 +3,16 @@
   services.ollama = {
     enable = true;
     acceleration = "cuda";
+    # https://github.com/ollama/ollama/blob/main/docs/faq.md
+    # ollama serve --help
+    environmentVariables = {
+      OLLAMA_FLASH_ATTENTION = "1";
+      OLLAMA_KEEP_ALIVE = "1m";
+      OLLAMA_KV_CACHE_TYPE = "q8_0";
+      OLLAMA_MAX_LOADED_MODELS = "2";
+      OLLAMA_MAX_QUEUE = "64";
+      OLLAMA_NUM_PARALLEL = "1";
+    };
     loadModels = [
       "aya-expanse:32b"
       "aya-expanse:8b"
