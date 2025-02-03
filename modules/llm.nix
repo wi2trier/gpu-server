@@ -14,6 +14,7 @@
       OLLAMA_NUM_PARALLEL = "1";
     };
     loadModels = [
+      "aya-expanse:32b"
       "command-r:35b"
       "deepseek-r1:32b"
       "gemma2:27b"
