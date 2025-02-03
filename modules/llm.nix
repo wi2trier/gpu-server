@@ -9,21 +9,15 @@
       OLLAMA_FLASH_ATTENTION = "1";
       OLLAMA_KEEP_ALIVE = "1m";
       OLLAMA_KV_CACHE_TYPE = "q8_0";
-      OLLAMA_MAX_LOADED_MODELS = "2";
+      OLLAMA_MAX_LOADED_MODELS = "1";
       OLLAMA_MAX_QUEUE = "64";
       OLLAMA_NUM_PARALLEL = "1";
     };
     loadModels = [
-      "aya-expanse:32b"
-      "aya-expanse:8b"
       "command-r:35b"
-      "command-r7b:7b"
-      "deepseek-r1:14b"
-      "deepseek-r1:70b"
+      "deepseek-r1:32b"
       "gemma2:27b"
-      "gemma2:9b"
-      "llama3.2:3b"
-      "llama3.3:70b"
+      "mistral-small:24b"
       "phi4:14b"
     ];
   };
