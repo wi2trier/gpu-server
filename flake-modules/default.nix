@@ -32,7 +32,8 @@ in
         inherit system;
         inherit (nixpkgsArgs) config overlays;
       };
-      checks = lib.removeAttrs config.packages [ "system-manager-config" ];
-      packages.system-manager-config = self.systemConfigs.default;
+      # the system config should not be built, only evaluated
+      checks = lib.removeAttrs config.packages [ "system-config" ];
+      packages.system-config = self.systemConfigs.default.config.build.toplevel;
     };
 }
