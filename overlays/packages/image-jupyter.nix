@@ -2,7 +2,7 @@
   lib,
   writeShellScriptBin,
   python3,
-  base,
+  imageBase,
   uv,
 }:
 let
@@ -44,14 +44,14 @@ let
     "ServerApp.terminado_settings" = ''shell_command=["/bin/sh"]'';
   };
 
-  entrypoint = base.passthru.wrapLibraryPath (
+  entrypoint = imageBase.wrapLibraryPath (
     writeShellScriptBin "entrypoint" ''
       ${lib.getExe venvSetup}
       exec ${venvPath}/bin/jupyter lab ${jupyterArgs} "$@"
     ''
   );
 in
-base.override {
+imageBase.build {
   name = "jupyter";
   entrypoint = [ (lib.getExe entrypoint) ];
   contents = [ uv ];

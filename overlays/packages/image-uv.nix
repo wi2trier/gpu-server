@@ -1,12 +1,12 @@
 {
   lib,
   uv,
-  base,
+  imageBase,
 }:
 let
-  uvWrapper = base.passthru.wrapLibraryPath uv;
+  uvWrapper = imageBase.wrapLibraryPath uv;
 in
-base.override {
+imageBase.build {
   name = "uv";
   contents = [ uvWrapper ];
   entrypoint = [ (lib.getExe uvWrapper) ];

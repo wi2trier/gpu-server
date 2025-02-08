@@ -3,7 +3,7 @@
   lib,
   nix,
   pigz,
-  self,
+  selfOutPath,
 }:
 writeShellApplication {
   # https://github.com/NixOS/nixpkgs/blob/aa9d4729cbc99dabacb50e3994dcefb3ea0f7447/pkgs/build-support/docker/default.nix#L490
@@ -15,7 +15,7 @@ writeShellApplication {
     fi
     cd "''${2:-.}" || exit 1
     BUILDER_SCRIPT="$1-builder.sh"
-    ${lib.getExe nix} build --show-trace -o "$BUILDER_SCRIPT" "${self.outPath}#image-$1"
+    ${lib.getExe nix} build --show-trace -o "$BUILDER_SCRIPT" "${selfOutPath}#image-$1"
     ./"$BUILDER_SCRIPT" \
       | ${lib.getExe' pigz "pigz"} -nTR \
       > "$1.tar.gz"

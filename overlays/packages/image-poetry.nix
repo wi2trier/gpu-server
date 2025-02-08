@@ -1,12 +1,12 @@
 {
   lib,
   poetry,
-  base,
+  imageBase,
 }:
 let
-  poetryWrapper = base.passthru.wrapLibraryPath poetry;
+  poetryWrapper = imageBase.wrapLibraryPath poetry;
 in
-base.override {
+imageBase.build {
   name = "poetry";
   contents = [ poetryWrapper ];
   entrypoint = [ (lib.getExe poetryWrapper) ];
