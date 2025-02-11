@@ -13,6 +13,12 @@ let
 in
 {
   flake = {
+    nixosModules.default = {
+      imports = [
+        ../modules
+        ../options
+      ];
+    };
     systemConfigs.default = inputs.system-manager.lib.makeSystemConfig {
       extraSpecialArgs = specialArgs;
       modules = [
