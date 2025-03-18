@@ -1,11 +1,13 @@
-{ ... }:
+{ pkgs, ... }:
 {
   services.ollama = {
     enable = true;
+    package = pkgs.ollama-bin;
     acceleration = "cuda";
     # https://github.com/ollama/ollama/blob/main/docs/faq.md
     # ollama serve --help
     environmentVariables = {
+      OLLAMA_CONTEXT_LENGTH = "16384";
       OLLAMA_FLASH_ATTENTION = "1";
       OLLAMA_KEEP_ALIVE = "10m";
       OLLAMA_KV_CACHE_TYPE = "q8_0";
