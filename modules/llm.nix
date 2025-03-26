@@ -2,7 +2,8 @@
 {
   services.ollama = {
     enable = true;
-    package = pkgs.ollama-bin;
+    # package = pkgs.ollama-bin;
+    package = pkgs.ollama;
     acceleration = "cuda";
     # https://github.com/ollama/ollama/blob/main/docs/faq.md
     # ollama serve --help
@@ -16,12 +17,10 @@
       OLLAMA_NUM_PARALLEL = "1";
     };
     loadModels = [
-      "aya-expanse:32b"
       "command-r:35b"
       "deepseek-r1:32b"
-      "gemma2:27b"
+      "gemma3:27b"
       "mistral-small:24b"
-      "phi4:14b"
     ];
   };
   services.open-webui = {
