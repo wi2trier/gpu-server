@@ -6,12 +6,12 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "ollama";
-  version = "0.6.1";
+  version = "0.6.2";
 
   # nix store prefetch-file --unpack "$(nix eval --raw .#packages.x86_64-linux.ollama-bin.src.url)"
   src = fetchzip {
     url = "https://github.com/ollama/ollama/releases/download/v${version}/ollama-linux-amd64.tgz";
-    hash = "sha256-mOnOxW/odWQ//wqmMdlMd6xrouf5kUZM/JEdMycskPI=";
+    hash = "sha256-46tGDEXtX5EYpnkImC/7xUM9cSCBdDmBPiszDY3xk5w=";
     stripRoot = false;
   };
 

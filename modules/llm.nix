@@ -2,8 +2,8 @@
 {
   services.ollama = {
     enable = true;
-    # package = pkgs.ollama-bin;
-    package = pkgs.ollama;
+    package = pkgs.ollama-bin;
+    # package = pkgs.ollama;
     acceleration = "cuda";
     # https://github.com/ollama/ollama/blob/main/docs/faq.md
     # ollama serve --help
