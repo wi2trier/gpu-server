@@ -6,12 +6,14 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "ollama";
-  version = "0.6.2";
+  version = "0.6.3";
 
+  # to update, run etiher of the following commands:
   # nix store prefetch-file --unpack "$(nix eval --raw .#packages.x86_64-linux.ollama-bin.src.url)"
+  # VERSION=x.y.z nix store prefetch-file --unpack "https://github.com/ollama/ollama/releases/download/v${VERSION}/ollama-linux-amd64.tgz"
   src = fetchzip {
     url = "https://github.com/ollama/ollama/releases/download/v${version}/ollama-linux-amd64.tgz";
-    hash = "sha256-46tGDEXtX5EYpnkImC/7xUM9cSCBdDmBPiszDY3xk5w=";
+    hash = "sha256-hrU7KXYLqjFlWzY8E1/smG1tdfwOTr91VWXVXqyC5Ug=";
     stripRoot = false;
   };
 
