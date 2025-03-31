@@ -75,6 +75,7 @@ rec {
             SHELL = "/bin/sh";
             PIP_DISABLE_PIP_VERSION_CHECK = "1";
             EDITOR = "nano";
+            SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
           }
           // env
         );
