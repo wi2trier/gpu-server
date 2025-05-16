@@ -6,7 +6,12 @@
     ociSeccompBpfHook.enable = false;
     containersConf = {
       cniPlugins = lib.mkForce [ ];
-      settings = lib.mkForce { };
+      settings = lib.mkForce {
+        engine = {
+          compose_providers = [ (lib.getExe pkgs.podman-compose) ];
+          compose_warning_logs = false;
+        };
+      };
     };
     registries.search = [ "docker.io" ];
   };
