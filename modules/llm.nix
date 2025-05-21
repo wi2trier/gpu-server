@@ -17,10 +17,9 @@
       OLLAMA_NUM_PARALLEL = "1";
     };
     loadModels = [
-      "command-r:35b"
-      "deepseek-r1:32b"
       "gemma3:27b"
-      "mistral-small:24b"
+      "mistral-small3.1:24b"
+      "qwen3:32b"
     ];
   };
   services.open-webui = {
