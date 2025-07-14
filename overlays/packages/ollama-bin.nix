@@ -1,20 +1,21 @@
 {
-  fetchzip,
+  fetchurl,
   lib,
   stdenvNoCC,
   acceleration ? null,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "ollama";
-  version = "0.9.5";
+  version = "0.9.6";
 
-  # to update, run the following commands:
-  # VERSION=0.9.5 nix store prefetch-file --unpack "https://github.com/ollama/ollama/releases/download/v$VERSION/ollama-linux-amd64.tgz"
-  src = fetchzip {
+  # https://github.com/ollama/ollama/releases/latest
+  # use the hash as shown on the github release page
+  src = fetchurl {
     url = "https://github.com/ollama/ollama/releases/download/v${version}/ollama-linux-amd64.tgz";
-    hash = "sha256-ela5dNflXi1ZoPlSQhhPAKXoH33SmFaf59yBqforKZY=";
-    stripRoot = false;
+    hash = "sha256:dff2167a87813899a761704a4240e5edf5766df7d6a5f7d4f27b7d36c6ea2f2f";
   };
+
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
