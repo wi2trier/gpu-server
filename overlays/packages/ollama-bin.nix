@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  doInstallCheck = false; # env: '{{storeDir}}/bin/ollama': No such file or directory
 
   passthru = {
     inherit acceleration;
