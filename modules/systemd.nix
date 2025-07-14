@@ -5,7 +5,7 @@
       enable = true;
       startAt = "*-*-* 04:00:00";
       script = ''
-        ${lib.getExe pkgs.nix} upgrade-nix
+        /nix/var/nix/profiles/default/bin/nix upgrade-nix
         ${lib.getExe pkgs.nix} run github:wi2trier/gpu-server --refresh
         ${lib.getExe pkgs.podman} auto-update
       '';
