@@ -2,6 +2,7 @@
   fetchurl,
   lib,
   stdenvNoCC,
+  versionCheckHook,
   acceleration ? null,
 }:
 stdenvNoCC.mkDerivation rec {
@@ -16,6 +17,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   sourceRoot = ".";
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -25,6 +27,10 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     inherit acceleration;
@@ -38,5 +44,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mirkolenz ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
