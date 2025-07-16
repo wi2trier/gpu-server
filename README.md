@@ -105,6 +105,11 @@ All GPUs of the server are set to exclusive compute mode, meaning that only one 
 To select a GPU, you can set the `CUDA_VISIBLE_DEVICES=$GPU_ID` environment variable.
 Please use the aforementioned `nvidia-smi` command to check which GPUs are currently in use.
 
+> [!important]
+> The system has eight GPUs, but two NUMA nodes with 4 GPUs each: GPUs 0,1,2,3 are connected with NVLink and GPUs 5,6,7,8 are connected with NVLink.
+> For performance reasons, we **strongly** recommend to stay within one of these nodes when selecting GPUs.
+
+
 ### tmux
 
 The `tmux` command allows you to spawn a "virtual" shell that persists even after you disconnect from the server.
@@ -320,6 +325,34 @@ OLLAMA_HOST=SEE_ABOVE ollama pull MODEL_NAME
 
 To make requests, either use the `ollama` library or the `openai` library.
 Remember to modify their respective endpoints to point to the IP of the GPU server and the chosen port.
+
+## LMDeploy Setup
+
+Alternatively, you can use [LMDeploy](https://github.com/InternLM/lmdeploy) to deploy and run LLMs.
+LMDeploy offers a higher throughput than Ollama due to its CUDA Kernels for the given GPUs. It also allow easy batching.
+
+To run LMDeploy, use podman: 
+
+```shell
+podman run -d --gpus $GPUS \
+  -p PORT:PORT \
+  docker.io/openmmlab/lmdeploy:latest-cu12 \
+  lmdeploy serve api_server $HF_LLM_NAME
+```
+This will start an OpenAI-compatible endpoint at the corresponding port. More options can be found [in the documentation](https://lmdeploy.readthedocs.io/en/latest/llm/api_server.html).
+
+As an example, this command runs Qwen/Qwen3-32B on four GPUs with 32K context on port 23333:
+
+```shell
+docker run -d --gpus 0,1,2,3 \
+  -p 23333:23333 \
+  docker.io/openmmlab/lmdeploy:latest-cu12 \
+  lmdeploy serve api_server Qwen/Qwen3-32B \
+      --tp 4 \
+      --session-len 32768 \
+      --cache-max-entry-count 0.85
+```
+
 
 ## Editor Integrations
 
