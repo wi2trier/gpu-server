@@ -1,14 +1,5 @@
 # Server Setup
 
-- [Updates](#updates)
-- [Initial Setup](#initial-setup)
-  - [Ubuntu](#ubuntu)
-  - [Nix](#nix)
-  - [CUDA](#cuda)
-  - [Verify Installation](#verify-installation)
-  - [Create Quadlet User](#create-quadlet-user)
-- [Uninstall](#uninstall)
-
 ## Updates
 
 To apply changes to the config, run the following:

@@ -1,11 +1,5 @@
 # Admin Documentation
 
-- [User Management](#user-management)
-  - [Adding Users](#adding-users)
-  - [Removing Users](#removing-users)
-  - [Editing Users](#editing-users)
-- [Process Management](#process-management)
-
 ## User Management
 
 We offer the custom command `userctl` to manage users on the server.

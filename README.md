@@ -1,31 +1,5 @@
 # WI2 GPU Server
 
-- [Overview](#overview)
-- [Access](#access)
-- [General Usage](#general-usage)
-  - [Installing/Using Packages](#installingusing-packages)
-  - [GPU Selection](#gpu-selection)
-  - [tmux](#tmux)
-- [Apptainer Usage](#apptainer-usage)
-  - [Image Selection](#image-selection)
-  - [GPU Selection](#gpu-selection-1)
-  - [File Access](#file-access)
-  - [Port Forwarding](#port-forwarding)
-  - [Image Caching](#image-caching)
-  - [Running Services](#running-services)
-- [Podman Usage](#podman-usage)
-  - [GPU Selection](#gpu-selection-2)
-  - [Image Caching](#image-caching-1)
-- [Ready-to-Use Container Images](#ready-to-use-container-images)
-  - [Poetry](#poetry)
-  - [uv](#uv)
-  - [Jupyter](#jupyter)
-- [Ollama Usage](#ollama-usage)
-- [Editor Integrations](#editor-integrations)
-  - [Visual Studio Code](#visual-studio-code)
-  - [PyCharm](#pycharm)
-- [Additional Docs](#additional-docs)
-
 ## Overview
 
 Our GPU server is provided for research in the field of machine learning and deep learning.
