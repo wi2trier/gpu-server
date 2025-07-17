@@ -46,7 +46,7 @@ We found the following utilities to be useful for everyday use:
 - `nvidia-smi` and `gpustat`: Show the active processes on the GPUs.
 - `tmux`: Create a new terminal session that can be detached and reattached later.
 
-### Installing/Using Packages
+### Custom Packages
 
 We use the [Nix package manager](https://nixos.org) to declaratively manage the server configuration.
 This allows you to spawn a temporary shell with additional packages easily.
@@ -220,7 +220,7 @@ You may delete the entire cache as follows:
 podman system reset
 ```
 
-## Ready-to-Use Container Images
+## Prebuilt Container Images
 
 We provide a number of ready-to-use container images for common use cases.
 They are updated regularly, so we require you to store a copy of them in your home folder before using them.
@@ -299,7 +299,7 @@ OLLAMA_HOST=SEE_ABOVE ollama pull MODEL_NAME
 To make requests, either use the `ollama` library or the `openai` library.
 Remember to modify their respective endpoints to point to the IP of the GPU server and the chosen port.
 
-## LMDeploy Setup
+## LMDeploy Usage
 
 Alternatively, you can use [LMDeploy](https://github.com/InternLM/lmdeploy) to deploy and run LLMs.
 LMDeploy offers a higher throughput than Ollama due to its CUDA Kernels for the given GPUs. It also allow easy batching.
