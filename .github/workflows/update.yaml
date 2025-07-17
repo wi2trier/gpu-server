@@ -15,15 +15,13 @@ jobs:
         with:
           extra-conf: |
             accept-flake-config = true
+            commit-lock-file-summary = "chore(deps): update flake.lock"
       - uses: cachix/cachix-action@v16
         with:
           name: wi2trier
           authToken: ${{ secrets.CACHIX_TOKEN }}
       - name: nix flake update
-        run: |
-          nix flake update \
-            --commit-lock-file \
-            --commit-lock-file-summary "chore(deps): update flake.lock"
+        run: nix flake update --commit-lock-file
       - name: nix flake check
         run: nix flake check --show-trace --print-build-logs
       - run: git push
