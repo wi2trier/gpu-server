@@ -15,7 +15,7 @@ jobs:
         with:
           extra-conf: |
             accept-flake-config = true
-            commit-lock-file-summary = "chore(deps): update flake.lock"
+            commit-lock-file-summary = chore(deps): update flake.lock
       - uses: cachix/cachix-action@v16
         with:
           name: wi2trier
