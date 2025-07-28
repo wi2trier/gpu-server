@@ -10,5 +10,6 @@
     "${inputs.nixpkgs-unstable}/nixos/modules/services/misc/open-webui.nix"
     "${nixosModulesPath}/virtualisation/containers.nix"
     "${nixosModulesPath}/virtualisation/oci-containers.nix"
-  ] ++ (lib'.flocken.getModules ./.);
+  ]
+  ++ (lib'.flocken.getModules ./.);
 }

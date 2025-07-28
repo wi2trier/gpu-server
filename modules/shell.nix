@@ -19,15 +19,14 @@ in
     "fish/config.fish".source = pkgs.writeTextFile {
       name = "config.fish";
       executable = true;
-      text =
-        ''
-          set -gx PATH "/run/system-manager/sw/bin" $PATH
-        ''
-        + lib.concatLines (
-          lib.mapAttrsToList (name: value: ''
-            set -gx ${name} "${value}"
-          '') envVars
-        );
+      text = ''
+        set -gx PATH "/run/system-manager/sw/bin" $PATH
+      ''
+      + lib.concatLines (
+        lib.mapAttrsToList (name: value: ''
+          set -gx ${name} "${value}"
+        '') envVars
+      );
     };
   };
 }
