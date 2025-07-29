@@ -34,10 +34,5 @@ writeShellApplication {
 
     # Remove broken cuda links
     find -L ${cudaTarget} -maxdepth 1 -type l -delete
-
-    # Restart lingering user services for quadlet
-    systemctl restart user@990.service
-    # Alternative
-    # loginctl disable-linger quadlet && loginctl enable-linger quadlet
   '';
 }

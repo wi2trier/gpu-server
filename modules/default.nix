@@ -1,13 +1,10 @@
 {
   lib',
   pkgs,
-  inputs,
   ...
 }:
 {
-  imports = (lib'.flocken.getModules ./.) ++ [
-    inputs.quadlet-nix.nixosModules.default
-  ];
+  imports = lib'.flocken.getModules ./.;
   environment = {
     systemPackages = with pkgs; [
       nix

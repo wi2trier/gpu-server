@@ -36,27 +36,6 @@
         "type": "github"
       }
     },
-    "flake-parts_3": {
-      "inputs": {
-        "nixpkgs-lib": [
-          "quadlet-nix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1749398372,
-        "narHash": "sha256-tYBdgS56eXYaWVW3fsnPQ/nFlgWi/Z2Ymhyu21zVM98=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "9305fe4e5c2a6fcf5ba6a3ff155720fbe4076569",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
     "flocken": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -159,28 +138,6 @@
         "type": "github"
       }
     },
-    "quadlet-nix": {
-      "inputs": {
-        "flake-parts": "flake-parts_3",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1749535653,
-        "narHash": "sha256-SfEuUIusLHjCpmd9yiHw8pBqrlxKrFIHhiM4eMeSHBs=",
-        "owner": "mirkolenz",
-        "repo": "quadlet-nix",
-        "rev": "c68d1c6b07f76c3ce5a53106b6eee934d86c5391",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mirkolenz",
-        "ref": "v1",
-        "repo": "quadlet-nix",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -188,7 +145,6 @@
         "nixglhost": "nixglhost",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "quadlet-nix": "quadlet-nix",
         "system-manager": "system-manager",
         "treefmt-nix": "treefmt-nix"
       }

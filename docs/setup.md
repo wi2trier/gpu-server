@@ -79,23 +79,6 @@ The new Apptainer runtime using `nvidia-container-cli` currently does not work:
 CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://ubuntu nvidia-smi
 ```
 
-### Create Quadlet User
-
-To create a user for running quadlet containers, run the following:
-
-```shell
-sudo useradd --system --create-home --shell /sbin/nologin --uid 990 --comment "Quadlet User" quadlet
-sudo loginctl enable-linger quadlet
-echo "quadlet:100000000:65536" | sudo tee -a /etc/subuid
-echo "quadlet:100000000:65536" | sudo tee -a /etc/subgid
-```
-
-In case you want to remove the user, run the following:
-
-```shell
-sudo userdel --remove quadlet
-```
-
 ## Uninstall
 
 ```shell
