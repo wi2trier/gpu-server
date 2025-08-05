@@ -2,7 +2,6 @@
   fetchurl,
   lib,
   stdenv,
-  autoPatchelfHook,
   acceleration ? null,
 }:
 stdenv.mkDerivation rec {
@@ -21,12 +20,6 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-  ];
-
-  nativeBuildInputs = [ autoPatchelfHook ];
-
   installPhase = ''
     runHook preInstall
 
@@ -38,8 +31,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  autoPatchelfIgnoreMissingDeps = true;
 
   passthru = {
     inherit acceleration;
