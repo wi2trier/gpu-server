@@ -39,9 +39,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # preFixup = ''
-  #   addAutoPatchelfSearchPath ./lib/ollama
-  # '';
+  autoPatchelfIgnoreMissingDeps = true;
 
   passthru = {
     inherit acceleration;
