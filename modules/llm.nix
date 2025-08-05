@@ -18,7 +18,7 @@
     };
     loadModels = [
       "gemma3:27b"
-      "magistral:24b"
+      "gpt-oss:20b"
       "mistral-small3.2:24b"
       "qwen3:32b"
     ];

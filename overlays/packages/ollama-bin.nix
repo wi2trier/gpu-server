@@ -1,36 +1,44 @@
 {
   fetchurl,
   lib,
-  stdenvNoCC,
-  versionCheckHook,
+  stdenv,
+  autoPatchelfHook,
   acceleration ? null,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ollama";
-  version = "0.9.6";
+  version = "0.11.0";
 
   # https://github.com/ollama/ollama/releases/latest
-  # use the hash as shown on the github release page
+  # copy the hash for asset `ollama-linux-amd64.tgz` from the release page
   src = fetchurl {
     url = "https://github.com/ollama/ollama/releases/download/v${version}/ollama-linux-amd64.tgz";
-    hash = "sha256:e6cf44273391ad14835e556627a77f0e80bd18f3cdddca38ef5be215710e1871";
+    hash = "sha256:6627e9898ab0e7924e4bdda05a7c41c66eaa23404ef237ae952c1ae2c86129de";
   };
 
   sourceRoot = ".";
+
   dontBuild = true;
+  dontConfigure = true;
+
+  buildInputs = [
+    stdenv.cc.cc.lib
+  ];
+
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -r * $out
+    mkdir -p $out/bin
+    install -Dm755 ./bin/ollama $out/bin/ollama
 
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = false; # env: '{{storeDir}}/bin/ollama': No such file or directory
+  # preFixup = ''
+  #   addAutoPatchelfSearchPath ./lib/ollama
+  # '';
 
   passthru = {
     inherit acceleration;
