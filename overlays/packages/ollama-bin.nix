@@ -1,10 +1,10 @@
 {
   fetchurl,
   lib,
-  stdenv,
+  stdenvNoCC,
   acceleration ? null,
 }:
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "ollama";
   version = "0.11.0";
 
