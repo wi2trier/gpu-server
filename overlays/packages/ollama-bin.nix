@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -Dm755 ./bin/ollama $out/bin/ollama
 
     mkdir -p $out/lib/ollama
-    install -Dm644 ./lib/ollama/* $out/lib/ollama/
+    cp -r ./lib/ollama/* $out/lib/ollama/
 
     runHook postInstall
   '';
