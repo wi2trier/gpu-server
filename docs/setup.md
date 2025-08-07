@@ -26,7 +26,7 @@ sudo apt install -y git curl wget uidmap
 Then install nix using the [DeterminateSystems installer](https://github.com/DeterminateSystems/nix-installer).
 
 ```shell
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+curl -fsSL https://install.determinate.systems/nix | sh -s -- install
 ```
 
 Afterwards, open a new shell to apply the changes (e.g., exit and reconnect via ssh).
