@@ -191,6 +191,7 @@ def edit(
         Optional[datetime],
         typer.Option(formats=[DATE_FORMAT]),
     ] = None,
+    reset_password: bool = False,
     quota: Optional[str] = None,
 ) -> None:
     usermod_args: list[str] = []
@@ -215,6 +216,25 @@ def edit(
             "Setting ZFS quota...",
             ["zfs", "set", *zfs_options(zfs_args), homedir_zfs(user)],
         )
+
+    if reset_password:
+        password = secrets.token_urlsafe()
+
+        # https://manpages.ubuntu.com/manpages/jammy/en/man8/chpasswd.8.html
+        run_cmd(
+            "Generating new password...",
+            ["chpasswd"],
+            input=f"{user}:{password}",
+        )
+
+        # https://manpages.ubuntu.com/manpages/jammy/en/man1/passwd.1.html
+        run_cmd(
+            "Forcing password change on first login...",
+            ["passwd", "--expire", user],
+        )
+
+        typer.echo()
+        typer.echo(f"Initial password: {password}")
 
 
 if __name__ == "__main__":
