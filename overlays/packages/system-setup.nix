@@ -6,9 +6,6 @@ in
 writeShellApplication {
   name = "system-setup";
   text = ''
-    # set up nix configuration
-    cp -f ${../../etc/nix.conf} /etc/nix/nix.conf
-
     # set up cuda support for oci engines like podman
     /usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
     chmod -R 755 /etc/cdi
