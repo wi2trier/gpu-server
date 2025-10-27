@@ -45,3 +45,23 @@ Some users may forget to stop their processes or block all GPUs at once.
 In such cases, you can use the tool `gpustat -p` to list all processes and their corresponding process id.
 You can then kill the process using `sudo kill $PID`.
 Use this with caution, as it will kill the process immediately without any warning.
+
+## Systemd Service Management
+
+The server uses `systemd` to manage the background services `ollama` and `open-webui`.
+Ollama is declared as a dependency of Open-WebUI, so restarting Ollama will also restart Open-WebUI.
+You can use the following commands to manage these services:
+
+```shell
+sudo systemctl TASK SERVICE_NAME
+# for example:
+sudo systemctl restart ollama
+```
+
+To view the logs of a service, use:
+
+```shell
+sudo journalctl -u SERVICE_NAME -f
+# for example:
+sudo journalctl -u ollama -f
+```
