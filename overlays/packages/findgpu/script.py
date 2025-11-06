@@ -1,8 +1,8 @@
 # https://gist.github.com/afspies/7e211b83ca5a8902849b05ded9a10696
 # https://discuss.pytorch.org/t/it-there-anyway-to-let-program-select-free-gpu-automatically/17560/13
 
-import subprocess
 import random
+import subprocess
 
 
 def run_cmd(cmd: str) -> str:
@@ -33,6 +33,9 @@ def get_free_gpu_indices():
 
 if __name__ == "__main__":
     free_gpus = get_free_gpu_indices()
+
+    # remove GPU 0 from the list
+    free_gpus = [gpu for gpu in free_gpus if gpu != 0]
 
     if len(free_gpus) == 0:
         print("100")
