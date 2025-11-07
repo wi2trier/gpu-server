@@ -237,5 +237,45 @@ def edit(
         typer.echo(f"Initial password: {password}")
 
 
+@app.command()
+def info(
+    user: Annotated[
+        str,
+        typer.Argument(callback=generate_username),
+    ],
+) -> None:
+    """Show the account metadata for ``user``.
+
+    Args:
+        user: The system username.
+    """
+
+    expire_date = "never"
+
+    for line in run_cmd(None, ["chage", "--list", user]).splitlines():
+        head, _, tail = line.partition(":")
+
+        if head.strip().lower() == "account expires":
+            value = tail.strip()
+            expire_date = value if value else "never"
+            break
+
+    quota = run_cmd(
+        None,
+        [
+            "zfs",
+            "get",
+            "-Hpo",
+            "value",
+            "quota",
+            homedir_zfs(user),
+        ],
+    )
+
+    typer.echo(f"Username: {user}")
+    typer.echo(f"Expiration date: {expire_date}")
+    typer.echo(f"Quota: {quota}")
+
+
 if __name__ == "__main__":
     app()
