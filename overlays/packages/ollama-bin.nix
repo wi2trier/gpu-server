@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "ollama";
-  version = "0.12.9";
+  version = "0.12.10";
 
   # https://github.com/ollama/ollama/releases/latest
   # copy the hash for asset `ollama-linux-amd64.tgz` from the release page
   src = fetchurl {
     url = "https://github.com/ollama/ollama/releases/download/v${version}/ollama-linux-amd64.tgz";
-    hash = "sha256:f9784545497bc7475087b2c7b1430299173564cbd7a99d2b1f23ef4a40b4453b";
+    hash = "sha256:8f4bf70a9856a34ba71355745c2189a472e2691a020ebd2e242a58e4d2094722";
   };
 
   sourceRoot = ".";
