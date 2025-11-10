@@ -30,6 +30,7 @@
         "recap.cachix.org-1:KElwRDtaJbbQxmmS2SyxWHqs9bdJbaZHzb2iINTfQws="
         "pyproject-nix.cachix.org-1:UNzugsOlQIu2iOz0VyZNBQm2JSrL/kwxeCcFGw+jMe0= mirkolenz.cachix.org-1:R0dgCJ93t33K/gncNbKgUdJzwgsYVXeExRsZNz5jpho="
         "mirkolenz.cachix.org-1:R0dgCJ93t33K/gncNbKgUdJzwgsYVXeExRsZNz5jpho="
+        "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
       ];
       trusted-substituters = [
         "https://nix-community.cachix.org"
@@ -37,6 +38,7 @@
         "https://recap.cachix.org"
         "https://pyproject-nix.cachix.org"
         "https://mirkolenz.cachix.org"
+        "https://install.determinate.systems"
       ];
       warn-dirty = false;
     };
