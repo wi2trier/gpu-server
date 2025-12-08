@@ -2,17 +2,16 @@
   fetchurl,
   lib,
   stdenvNoCC,
-  acceleration ? null,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "ollama";
-  version = "0.12.10";
+  version = "0.13.1";
 
   # https://github.com/ollama/ollama/releases/latest
   # copy the hash for asset `ollama-linux-amd64.tgz` from the release page
   src = fetchurl {
     url = "https://github.com/ollama/ollama/releases/download/v${version}/ollama-linux-amd64.tgz";
-    hash = "sha256:8f4bf70a9856a34ba71355745c2189a472e2691a020ebd2e242a58e4d2094722";
+    hash = "sha256:4997753db0c578d24f8fc95d1538741609d72529ab6e913ecbf910ae919b0232";
   };
 
   sourceRoot = ".";
@@ -31,10 +30,6 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru = {
-    inherit acceleration;
-  };
 
   meta = {
     homepage = "https://ollama.com";

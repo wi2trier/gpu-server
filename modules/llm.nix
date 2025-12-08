@@ -4,7 +4,6 @@
     enable = true;
     # package = pkgs.ollama;
     package = pkgs.ollama-bin;
-    acceleration = "cuda";
     # https://github.com/ollama/ollama/blob/main/docs/faq.md
     # ollama serve --help
     environmentVariables = {
