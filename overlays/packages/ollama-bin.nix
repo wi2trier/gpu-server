@@ -2,6 +2,8 @@
   fetchurl,
   lib,
   stdenvNoCC,
+  installShellFiles,
+  acceleration ? null,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "ollama";
@@ -19,17 +21,26 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
+  # https://github.com/ollama/ollama/blob/main/docs/development.md#library-detection
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    install -Dm755 ./bin/ollama $out/bin/ollama
+    installBin ./bin/ollama
 
-    mkdir -p $out/lib/ollama
-    cp -r ./lib/ollama/* $out/lib/ollama/
+    mkdir -p $out/lib
+    cp -r ./lib/ollama $out/lib/
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit acceleration;
+  };
 
   meta = {
     homepage = "https://ollama.com";
