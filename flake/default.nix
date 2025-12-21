@@ -40,7 +40,7 @@ in
         "system-config"
       ];
       packages = pkgs.exports // {
-        inherit (pkgs) system-manager;
+        inherit (pkgs) system-manager nix-update;
         default = pkgs.system-builder;
         system-config = self.systemConfigs.default.config.build.toplevel;
       };

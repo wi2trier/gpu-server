@@ -22,6 +22,10 @@ jobs:
           authToken: ${{ secrets.CACHIX_TOKEN }}
       - name: nix flake update
         run: nix flake update --commit-lock-file
+      - name: update ollama
+        run: |
+          nix run .#nix-update -- ollama-bin
+          git commit -m "chore(deps): update ollama-bin" ./overlays/packages/ollama-bin.nix || echo "no changes to commit"
       - name: nix flake check
         run: nix flake check --show-trace --print-build-logs
       - run: git push
