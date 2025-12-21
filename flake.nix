@@ -33,8 +33,8 @@
   };
 
   outputs =
-    inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake {
+    inputs:
+    inputs.flake-parts.lib.mkFlake {
       inherit inputs;
       specialArgs = {
         lib' = {
@@ -42,5 +42,5 @@
           flocken = inputs.flocken.lib;
         };
       };
-    } { imports = [ ./flake-modules ]; };
+    } ./flake;
 }
