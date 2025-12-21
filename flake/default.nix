@@ -6,15 +6,12 @@
   ...
 }:
 let
-  nixpkgsArgs = rec {
-    config = {
-      allowUnfree = true;
-      cudaSupport = false;
-    };
+  nixpkgsArgs = {
+    config = self.nixpkgsConfig;
     overlays = lib.singleton (
       import ../overlays {
         inherit inputs;
-        nixpkgsConfig = config;
+        inherit (self) nixpkgsConfig;
       }
     );
   };
@@ -48,4 +45,8 @@ in
         system-config = self.systemConfigs.default.config.build.toplevel;
       };
     };
+  flake.nixpkgsConfig = {
+    allowUnfree = true;
+    cudaSupport = false;
+  };
 }
