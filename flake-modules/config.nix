@@ -24,7 +24,7 @@ in
       modules = [
         ../modules
         ../options
-        ../options-upstream
+        ../upstream
         (
           { lib, config, ... }:
           {
