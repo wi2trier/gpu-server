@@ -3,6 +3,7 @@
   lib,
   stdenvNoCC,
   installShellFiles,
+  zstd,
   acceleration ? null,
 }:
 stdenvNoCC.mkDerivation rec {
@@ -23,7 +24,16 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     installShellFiles
+    zstd
   ];
+
+  unpackPhase = ''
+    runHook  preUnpack
+
+    zstd -dc $src | tar -xvf -
+
+    runHook postUnpack
+  '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
   # https://github.com/ollama/ollama/blob/main/docs/development.md#library-detection
