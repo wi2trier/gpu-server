@@ -12,9 +12,10 @@ stdenvNoCC.mkDerivation rec {
 
   # https://github.com/ollama/ollama/releases/latest
   # copy the hash for asset `ollama-linux-amd64.tar.zst` from the release page
+  # VERSION="x.y.z" nix store prefetch-file "https://github.com/ollama/ollama/releases/download/v$VERSION/ollama-linux-amd64.tar.zst"
   src = fetchurl {
     url = "https://github.com/ollama/ollama/releases/download/v${version}/ollama-linux-amd64.tar.zst";
-    hash = "sha256:a65ae9f8a725153ce92a94b806d1fa8c93a8fbe8f2c95dce09529fb14c41271f";
+    hash = "sha256-RF+u48o7l8FY5CyZ5arrtgss7aGBMDl8F/qisk4Vbis=";
   };
 
   sourceRoot = ".";
