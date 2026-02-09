@@ -18,10 +18,6 @@ in
     config = nixpkgsConfig;
   };
   inherit (final.unstable) uv open-webui ollama;
-  apptainer = prev.apptainer.override {
-    enableNvidiaContainerCli = false;
-    forceNvcCli = false;
-  };
   system-manager = inputs.system-manager.packages.${system}.default;
   nixglhost = inputs.nixglhost.packages.${system}.default;
   mkCudaWrapper = final.callPackage ./cuda-wrapper.nix { };
