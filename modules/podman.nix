@@ -15,6 +15,10 @@
     };
     registries.search = [ "docker.io" ];
   };
-  virtualisation.podman.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    # Use the host's /usr/bin for setuid binaries like newuidmap/newgidmap
+    package = pkgs.podman.override { extraPackages = [ "/usr" ]; };
+  };
   environment.systemPackages = with pkgs; [ podman-compose ];
 }
