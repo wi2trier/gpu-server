@@ -1,10 +1,6 @@
 # https://github.com/numtide/system-manager/blob/main/nix/modules/environment.nix
 # We use config.fish directly since conf.d is not sources by fish built with nix
-{ pkgs, lib, ... }:
-let
-  envVars = {
-  };
-in
+{ ... }:
 {
   environment.etc = {
     # Make sure that no user uses all GPUs accidentally
