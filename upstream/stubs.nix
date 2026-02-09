@@ -11,7 +11,6 @@ let
 in
 {
   options = {
-    networking.firewall = stubOption;
     networking.proxy.envVars = stubOption;
     virtualisation.docker = stubOption;
     systemd.user = stubOption;
