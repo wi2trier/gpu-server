@@ -14,10 +14,10 @@
         "pipe-operators"
       ];
       extra-nix-path = "nixpkgs=flake:nixpkgs";
-      keep-derivations = false;
+      keep-derivations = true;
       keep-failed = false;
       keep-going = true;
-      keep-outputs = true;
+      keep-outputs = false;
       log-lines = 1000;
       max-jobs = "auto";
       sandbox = true;
