@@ -19,5 +19,4 @@
       build-container
     ];
   };
-  services.userborn.enable = false;
 }
