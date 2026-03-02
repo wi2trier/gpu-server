@@ -1,5 +1,5 @@
 # https://github.com/numtide/system-manager/blob/main/nix/modules/environment.nix
-# We use config.fish directly since conf.d is not sources by fish built with nix
+# We use config.fish directly since conf.d is not sourced by fish built with nix
 { ... }:
 {
   environment.etc = {
