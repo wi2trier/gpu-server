@@ -15,6 +15,7 @@
       OLLAMA_MAX_QUEUE = "64";
       OLLAMA_NUM_PARALLEL = "1";
     };
+    syncModels = true;
     loadModels = [
       "gemma3:27b"
       "gpt-oss:20b"
