@@ -13,6 +13,5 @@ in
   options = {
     networking.proxy.envVars = stubOption;
     virtualisation.docker = stubOption;
-    systemd.user = stubOption;
   };
 }
