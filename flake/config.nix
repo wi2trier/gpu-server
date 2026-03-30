@@ -20,7 +20,7 @@ in
       ];
     };
     systemConfigs.default = inputs.system-manager.lib.makeSystemConfig {
-      extraSpecialArgs = specialArgs;
+      inherit specialArgs;
       modules = [
         ../modules
         ../options
