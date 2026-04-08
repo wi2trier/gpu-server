@@ -3,6 +3,9 @@
   nix = {
     enable = true;
     settings = {
+      allowed-users = [ "@wheel" ];
+      trusted-users = [ "@wheel" ];
+
       always-allow-substitutes = true;
       auto-optimise-store = true;
       build-users-group = "nixbld";
