@@ -3,8 +3,14 @@
   nix = {
     enable = true;
     settings = {
-      allowed-users = [ "@wheel" ];
-      trusted-users = [ "@wheel" ];
+      allowed-users = [
+        "@wheel"
+        "@sudo"
+      ];
+      trusted-users = [
+        "@wheel"
+        "@sudo"
+      ];
 
       always-allow-substitutes = true;
       auto-optimise-store = true;
