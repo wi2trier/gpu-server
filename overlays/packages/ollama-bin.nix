@@ -8,14 +8,14 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ollama";
-  version = "0.20.2";
+  version = "0.20.6";
 
   # https://github.com/ollama/ollama/releases/latest
   # copy the hash for asset `ollama-linux-amd64.tar.zst` from the release page
   # VERSION="x.y.z" nix store prefetch-file "https://github.com/ollama/ollama/releases/download/v$VERSION/ollama-linux-amd64.tar.zst"
   src = fetchurl {
     url = "https://github.com/ollama/ollama/releases/download/v${finalAttrs.version}/ollama-linux-amd64.tar.zst";
-    hash = "sha256-qYl6rKEp3uWM4amHgj1CVPlo/uuJGsyFDn8g/7BCYlE=";
+    hash = "sha256-8hUtu7HMkcyM0/eV+HvQJHurdp6HSYZvuUPAJbUeZ68=";
   };
 
   sourceRoot = ".";
