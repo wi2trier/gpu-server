@@ -10,6 +10,11 @@ in
 # TODO: Add support for auto-prune
 {
   options = {
+    virtualisation.docker = lib.mkOption {
+      internal = true;
+      default = { };
+      type = lib.types.raw;
+    };
     virtualisation.podman = {
       enable = lib.mkEnableOption "podman";
       package = lib.mkOption {

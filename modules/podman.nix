@@ -15,6 +15,7 @@
     };
     registries.search = [ "docker.io" ];
   };
+  virtualisation.oci-containers.backend = "podman";
   virtualisation.podman = {
     enable = true;
     # Use the host's /usr/bin for setuid binaries like newuidmap/newgidmap
