@@ -7,7 +7,12 @@ let
   inherit (final.stdenv.hostPlatform) system;
   inherit (prev) lib;
   exports = lib.packagesFromDirectoryRecursive {
-    inherit (final) callPackage;
+    callPackage = lib.callPackageWith (
+      final
+      // {
+        inherit inputs;
+      }
+    );
     directory = ./packages;
   };
 in
