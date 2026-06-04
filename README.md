@@ -44,7 +44,7 @@ We found the following utilities to be useful for everyday use:
 
 - `htop`: Show the active processes on the server.
 - `nvidia-smi` and `gpustat`: Show the active processes on the GPUs.
-- `tmux`: Create a new terminal session that can be detached and reattached later.
+- `tmux` and `zellij`: Create a terminal multiplexer session that can be detached and reattached later.
 
 ### Custom Packages
 

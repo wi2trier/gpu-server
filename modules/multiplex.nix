@@ -1,7 +1,10 @@
 { pkgs, ... }:
 {
   environment = {
-    systemPackages = with pkgs; [ tmux ];
+    systemPackages = with pkgs; [
+      tmux
+      zellij
+    ];
     etc."tmux.conf".text = ''
       new-session
     '';
