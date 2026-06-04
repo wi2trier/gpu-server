@@ -49,7 +49,7 @@ Use this with caution, as it will kill the process immediately without any warni
 ## Systemd Service Management
 
 The server uses `systemd` to manage the background services `ollama` and `open-webui`.
-Ollama is declared as a dependency of Open-WebUI, so restarting Ollama will also restart Open-WebUI.
+Open-WebUI connects to Ollama, but restarting Ollama does not automatically restart Open-WebUI.
 You can use the following commands to manage these services:
 
 ```shell

@@ -51,6 +51,9 @@ sudo apt update
 sudo apt install -y cuda-drivers-580 cuda-toolkit-12-9 nvidia-container-toolkit
 ```
 
+The NVIDIA Container Toolkit provides `nvidia-ctk`, which the system manager activation uses to generate the CDI device specification (`/etc/cdi/nvidia.yaml`) that Podman relies on for GPU access.
+The spec is regenerated on every boot, so the driver and the spec stay in sync after the reboot below.
+
 Restart the server to load the new driver.
 
 ```shell
@@ -62,6 +65,7 @@ sudo reboot
 Correctly setting up the CUDA drivers is crucial, so please verify that the following commands work as expected.
 
 ```shell
+systemctl is-active gpu-server-activation
 CUDA_VISIBLE_DEVICES=0 apptainer run --nv docker://ubuntu nvidia-smi
 podman run --rm --device nvidia.com/gpu=0 ubuntu nvidia-smi
 ```

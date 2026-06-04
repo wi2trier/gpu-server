@@ -80,7 +80,7 @@ To select a GPU, you can set the `CUDA_VISIBLE_DEVICES=$GPU_ID` environment vari
 Please use the aforementioned `nvidia-smi` command to check which GPUs are currently in use.
 
 > [!important]
-> The system has eight GPUs, but two NUMA nodes with 4 GPUs each: GPUs 0,1,2,3 are connected with NVLink and GPUs 5,6,7,8 are connected with NVLink.
+> The system has eight GPUs, but two NUMA nodes with 4 GPUs each: GPUs 0,1,2,3 are connected with NVLink and GPUs 4,5,6,7 are connected with NVLink.
 > For performance reasons, we **strongly** recommend to stay within one of these nodes when selecting GPUs.
 
 ### tmux
@@ -204,7 +204,7 @@ Please keep in mind that in order to work correctly, Podman requires more config
 
 ### GPU Selection
 
-We provide support for accessing the GPUs via the officlal [Container Device Interface](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html).
+We provide support for accessing the GPUs via the official [Container Device Interface](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/cdi-support.html).
 Consequently, you can use the `--device` flag to access the GPUs from within the container like so:
 
 ```shell
@@ -277,7 +277,8 @@ Please note that the binaries installed in the virtual environment are only avai
 ## Ollama Usage
 
 The server is equipped with the [Ollama](https://ollama.com) library for serving LLMs.
-It automatically selects one free GPU, but you can override this behavior by setting the `CUDA_VISIBLE_DEVICES` environment variable (just like with Apptainer).
+Ollama is intentionally not wrapped by automatic GPU selection, unlike Apptainer.
+Choose the GPU explicitly by setting the `CUDA_VISIBLE_DEVICES` environment variable.
 By default, Ollama does not allow remote requests and uses a fixed port (potentially conflicting with other users).
 To change this, you need to modify the `OLLAMA_HOST` environment variable:
 
@@ -302,23 +303,28 @@ Remember to modify their respective endpoints to point to the IP of the GPU serv
 ## LMDeploy Usage
 
 Alternatively, you can use [LMDeploy](https://github.com/InternLM/lmdeploy) to deploy and run LLMs.
-LMDeploy offers a higher throughput than Ollama due to its CUDA Kernels for the given GPUs. It also allow easy batching.
+LMDeploy offers a higher throughput than Ollama due to its CUDA kernels for the given GPUs.
+It also allows easy batching.
 
 To run LMDeploy, use podman:
 
 ```shell
-podman run --gpus $GPUS \
+podman run --device nvidia.com/gpu=$GPU_ID \
   -p PORT:PORT \
   docker.io/openmmlab/lmdeploy:latest-cu12 \
   lmdeploy serve api_server $HF_LLM_NAME
 ```
 
-This will start an OpenAI-compatible endpoint at the corresponding port. More options can be found [in the documentation](https://lmdeploy.readthedocs.io/en/latest/llm/api_server.html).
+This will start an OpenAI-compatible endpoint at the corresponding port.
+More options can be found [in the documentation](https://lmdeploy.readthedocs.io/en/latest/llm/api_server.html).
 
 As an example, this command runs Qwen/Qwen3-32B on four GPUs with 32K context on port 23333:
 
 ```shell
-podman run --gpus 0,1,2,3 \
+podman run --device nvidia.com/gpu=0 \
+  --device nvidia.com/gpu=1 \
+  --device nvidia.com/gpu=2 \
+  --device nvidia.com/gpu=3 \
   -p 23333:23333 \
   docker.io/openmmlab/lmdeploy:latest-cu12 \
   lmdeploy serve api_server Qwen/Qwen3-32B \
