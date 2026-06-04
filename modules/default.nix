@@ -11,7 +11,6 @@
       git
       git-lfs
       python3Packages.gpustat
-      nixglhost
       uv
       findgpu
       userctl

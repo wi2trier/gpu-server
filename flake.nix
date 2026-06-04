@@ -7,10 +7,6 @@
       url = "github:numtide/system-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixglhost = {
-      url = "github:numtide/nix-gl-host";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flocken = {
       url = "github:mirkolenz/flocken/v2";
       inputs.nixpkgs.follows = "nixpkgs";

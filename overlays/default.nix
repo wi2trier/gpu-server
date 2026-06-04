@@ -19,7 +19,6 @@ in
   };
   inherit (final.unstable) uv open-webui ollama;
   system-manager = inputs.system-manager.packages.${system}.default;
-  nixglhost = inputs.nixglhost.packages.${system}.default;
   mkCudaWrapper = final.callPackage ./cuda-wrapper.nix { };
   imageBase = final.callPackage ./image-base.nix { };
   selfOutPath = inputs.self.outPath;
