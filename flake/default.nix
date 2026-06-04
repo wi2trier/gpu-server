@@ -8,12 +8,7 @@
 let
   nixpkgsArgs = {
     config = self.nixpkgsConfig;
-    overlays = lib.singleton (
-      import ../overlays {
-        inherit inputs;
-        inherit (self) nixpkgsConfig;
-      }
-    );
+    overlays = lib.singleton self.overlays.default;
   };
 in
 {
@@ -45,8 +40,14 @@ in
         system-config = self.systemConfigs.default.config.build.toplevel;
       };
     };
-  flake.nixpkgsConfig = {
-    allowUnfree = true;
-    cudaSupport = false;
+  flake = {
+    nixpkgsConfig = {
+      allowUnfree = true;
+      cudaSupport = false;
+    };
+    overlays.default = import ../overlays {
+      inherit inputs;
+      inherit (self) nixpkgsConfig;
+    };
   };
 }

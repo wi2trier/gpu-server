@@ -3,7 +3,6 @@
   inputs,
   self,
   lib',
-  nixpkgsArgs,
   ...
 }:
 let
@@ -21,26 +20,19 @@ in
     };
     systemConfigs.default = inputs.system-manager.lib.makeSystemConfig {
       inherit specialArgs;
+      # system-manager keeps a top-level overlays argument for recursive cases.
+      # nixpkgs.config works as a module option, but nixpkgs.overlays can recurse with overlay functions.
+      overlays = [ self.overlays.default ];
       modules = [
         ../modules
         ../options
         ../upstream
-        (
-          { lib, config, ... }:
-          {
-            nixpkgs = {
-              hostPlatform = "x86_64-linux";
-              # does not work due to infinite recursion
-              # inherit (nixpkgsArgs) config overlays;
-            };
-            _module.args.pkgs = lib.mkForce (
-              import inputs.nixpkgs {
-                system = config.nixpkgs.hostPlatform;
-                inherit (nixpkgsArgs) config overlays;
-              }
-            );
-          }
-        )
+        {
+          nixpkgs = {
+            hostPlatform = "x86_64-linux";
+            config = self.nixpkgsConfig;
+          };
+        }
       ];
     };
     nixosConfigurations.default = inputs.nixpkgs.lib.nixosSystem {
@@ -56,7 +48,8 @@ in
             system.stateVersion = lib.trivial.release;
             nixpkgs = {
               hostPlatform = "x86_64-linux";
-              inherit (nixpkgsArgs) config overlays;
+              config = self.nixpkgsConfig;
+              overlays = [ self.overlays.default ];
             };
           }
         )
