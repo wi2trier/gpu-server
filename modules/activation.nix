@@ -17,10 +17,9 @@ in
       RemainAfterExit = true;
     };
     script = ''
-      # set up cuda support for oci engines like podman
-      install -d -m 0755 /etc/cdi
-      /usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
-      chmod -R 755 /etc/cdi
+      # refresh CDI devices for oci engines like podman
+      /usr/bin/systemctl enable --now nvidia-cdi-refresh.path
+      /usr/bin/systemctl restart nvidia-cdi-refresh.service
 
       # set compute mode (https://stackoverflow.com/a/50056586)
       # 0 Default
@@ -29,11 +28,11 @@ in
       # 3 Exclusive_Process
       /usr/bin/nvidia-smi -c 3
 
-      # Remove old cuda links
+      # Keep Nix and Apptainer CUDA consumers pointed at the host driver libraries
       rm -rf ${cudaTarget}
       install -d -m 0755 ${cudaTarget}
 
-      # Link all cuda .so files specified in Apptainer
+      # Link all cuda .so files specified by Apptainer
       while IFS= read -r file; do
         case "$file" in
           *.so)
