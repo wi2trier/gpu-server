@@ -4,9 +4,21 @@ let
   cudaTarget = "/run/opengl-driver/lib";
 in
 {
-  system.activationScripts = {
-    cuda = ''
+  systemd.services.gpu-server-activation = {
+    description = "Apply GPU server host activation state";
+    wantedBy = [ "multi-user.target" ];
+    restartIfChanged = true;
+    path = with pkgs; [
+      coreutils
+      findutils
+    ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
       # set up cuda support for oci engines like podman
+      install -d -m 0755 /etc/cdi
       /usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
       chmod -R 755 /etc/cdi
 
@@ -19,21 +31,29 @@ in
 
       # Remove old cuda links
       rm -rf ${cudaTarget}
-      mkdir -p ${cudaTarget}
+      install -d -m 0755 ${cudaTarget}
 
       # Link all cuda .so files specified in Apptainer
-      grep '\.so$' ${pkgs.apptainer}/etc/apptainer/nvliblist.conf | while read -r file; do
-        ln -s ${cudaSource}/"$file".* ${cudaTarget}
-      done
+      while IFS= read -r file; do
+        case "$file" in
+          *.so)
+            for lib in ${cudaSource}/"$file".*; do
+              [ -e "$lib" ] || continue
+              ln -s "$lib" ${cudaTarget}/
+            done
+            ;;
+        esac
+      done < ${pkgs.apptainer}/etc/apptainer/nvliblist.conf
 
       # Remove broken cuda links
       find -L ${cudaTarget} -maxdepth 1 -type l -delete
-    '';
-    disableMotd = ''
-      chmod -x /etc/update-motd.d/*
-    '';
-    upgradeNix = ''
-      /nix/var/nix/profiles/default/bin/nix upgrade-nix
+
+      if [ -d /etc/update-motd.d ]; then
+        for file in /etc/update-motd.d/*; do
+          [ -e "$file" ] || continue
+          chmod -x "$file"
+        done
+      fi
     '';
   };
 }
