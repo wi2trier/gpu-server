@@ -14,4 +14,13 @@
     '';
     startAt = [ "03:00" ];
   };
+
+  systemd.services.nix-gc = {
+    description = "Collect Nix garbage";
+    serviceConfig.Type = "oneshot";
+    script = ''
+      /nix/var/nix/profiles/default/bin/nix-collect-garbage --delete-older-than 30d
+    '';
+    startAt = [ "05:00" ];
+  };
 }
