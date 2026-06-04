@@ -41,7 +41,7 @@ in
       apps.default.program = pkgs.writeShellApplication {
         name = "system-manager";
         text = ''
-          ${lib.getExe pkgs.system-manager} --flake ${self.outPath} "$@"
+          ${lib.getExe' pkgs.system-manager "system-manager"} "$@" --flake ${self.outPath}
         '';
       };
     };
