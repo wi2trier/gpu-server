@@ -1,6 +1,6 @@
 import random
 import subprocess
-from collections.abc import Iterable, Sequence
+from collections.abc import Sequence
 
 __all__ = ["main"]
 
@@ -12,11 +12,7 @@ def _run_nvidia_smi(arguments: Sequence[str]) -> list[str]:
         stdout=subprocess.PIPE,
         text=True,
     )
-    return [
-        line.strip()
-        for line in result.stdout.splitlines()
-        if line.strip()
-    ]
+    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
 
 def _query_gpu_bus_ids() -> dict[str, int]:
@@ -42,27 +38,25 @@ def _query_used_gpu_bus_ids() -> set[str]:
     return set(lines)
 
 
-def _available_gpu_indices(excluded_indices: Iterable[int]) -> list[int]:
-    excluded = set(excluded_indices)
+def _available_gpu_indices() -> list[int]:
     gpu_bus_ids = _query_gpu_bus_ids()
     used_bus_ids = _query_used_gpu_bus_ids()
     used_indices = {
         gpu_bus_ids[bus_id] for bus_id in used_bus_ids if bus_id in gpu_bus_ids
     }
     return [
-        index
-        for index in sorted(gpu_bus_ids.values())
-        if index not in used_indices and index not in excluded
+        index for index in sorted(gpu_bus_ids.values()) if index not in used_indices
     ]
 
 
 def main() -> None:
-    """Print an available GPU index for CUDA_VISIBLE_DEVICES."""
-    available_gpus = _available_gpu_indices(excluded_indices=(0,))
-    if available_gpus:
-        print(random.choice(available_gpus))
-    else:
-        print("100")
+    """Print a free GPU index, or the sentinel 100 if none are free.
+
+    The sentinel is a non-existent device id meaning no GPU is selected. The
+    shell defaults and container wrappers rely on it.
+    """
+    available_gpus = _available_gpu_indices()
+    print(random.choice(available_gpus) if available_gpus else "100")
 
 
 if __name__ == "__main__":
