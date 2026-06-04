@@ -5,7 +5,7 @@
 To apply changes to the config, run the following:
 
 ```shell
-sudo nix run github:wi2trier/gpu-server
+sudo nix run github:wi2trier/gpu-server -- switch
 ```
 
 ## Initial Setup
@@ -33,7 +33,7 @@ Afterwards, open a new shell to apply the changes (e.g., exit and reconnect via 
 Then we can apply the system manager configuration for the first time.
 
 ```shell
-sudo /nix/var/nix/profiles/default/bin/nix run github:wi2trier/gpu-server
+sudo /nix/var/nix/profiles/default/bin/nix run github:wi2trier/gpu-server -- switch
 ```
 
 Again open a new shell to apply the changes.
@@ -86,5 +86,5 @@ CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://ubuntu nvidia-smi
 ## Uninstall
 
 ```shell
-sudo nix run github:wi2trier/gpu-server#system-uninstall
+sudo nix run github:wi2trier/gpu-server -- uninstall
 ```

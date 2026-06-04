@@ -20,7 +20,6 @@ in
   inherit (final.unstable) uv open-webui ollama;
   system-manager = inputs.system-manager.packages.${system}.default;
   imageBase = final.callPackage ./image-base.nix { };
-  selfOutPath = inputs.self.outPath;
   inherit exports;
 }
 // exports

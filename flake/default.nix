@@ -36,8 +36,13 @@ in
       ];
       packages = pkgs.exports // {
         inherit (pkgs) system-manager nix-update;
-        default = pkgs.system-builder;
         system-config = self.systemConfigs.default.config.build.toplevel;
+      };
+      apps.default.program = pkgs.writeShellApplication {
+        name = "system-manager";
+        text = ''
+          ${lib.getExe pkgs.system-manager} --flake ${self.outPath} "$@"
+        '';
       };
     };
   flake = {
