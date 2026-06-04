@@ -1,43 +1,69 @@
-# https://gist.github.com/afspies/7e211b83ca5a8902849b05ded9a10696
-# https://discuss.pytorch.org/t/it-there-anyway-to-let-program-select-free-gpu-automatically/17560/13
-
 import random
 import subprocess
+from collections.abc import Iterable, Sequence
+
+__all__ = ["main"]
 
 
-def run_cmd(cmd: str) -> str:
-    return (subprocess.check_output(cmd, shell=True)).decode("utf-8").rstrip("\n")
+def _run_nvidia_smi(arguments: Sequence[str]) -> list[str]:
+    result = subprocess.run(
+        ["nvidia-smi", *arguments],
+        check=True,
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    return [
+        line.strip()
+        for line in result.stdout.splitlines()
+        if line.strip()
+    ]
 
 
-def get_free_gpu_indices():
-    out = run_cmd("nvidia-smi -q -d Memory | grep -A4 GPU")
-    out = (out.split("\n"))[1:]
-    out = [line for line in out if "--" not in line]
+def _query_gpu_bus_ids() -> dict[str, int]:
+    lines = _run_nvidia_smi(
+        [
+            "--query-gpu=index,pci.bus_id",
+            "--format=csv,noheader,nounits",
+        ]
+    )
+    return {
+        bus_id.strip(): int(index)
+        for index, bus_id in (line.split(",", 1) for line in lines)
+    }
 
-    total_gpu_num = int(len(out) / 5)
-    gpu_bus_ids = []
-    for i in range(total_gpu_num):
-        gpu_bus_ids.append(
-            [line.strip().split()[1] for line in out[(i * 5) : (i * 5 + 1)]][0]
-        )
 
-    out = run_cmd("nvidia-smi --query-compute-apps=gpu_bus_id --format=csv")
-    gpu_bus_ids_in_use = (out.split("\n"))[1:]
-    gpu_ids_in_use = []
+def _query_used_gpu_bus_ids() -> set[str]:
+    lines = _run_nvidia_smi(
+        [
+            "--query-compute-apps=gpu_bus_id",
+            "--format=csv,noheader,nounits",
+        ]
+    )
+    return set(lines)
 
-    for bus_id in gpu_bus_ids_in_use:
-        gpu_ids_in_use.append(gpu_bus_ids.index(bus_id))
 
-    return [i for i in range(total_gpu_num) if i not in gpu_ids_in_use]
+def _available_gpu_indices(excluded_indices: Iterable[int]) -> list[int]:
+    excluded = set(excluded_indices)
+    gpu_bus_ids = _query_gpu_bus_ids()
+    used_bus_ids = _query_used_gpu_bus_ids()
+    used_indices = {
+        gpu_bus_ids[bus_id] for bus_id in used_bus_ids if bus_id in gpu_bus_ids
+    }
+    return [
+        index
+        for index in sorted(gpu_bus_ids.values())
+        if index not in used_indices and index not in excluded
+    ]
+
+
+def main() -> None:
+    """Print an available GPU index for CUDA_VISIBLE_DEVICES."""
+    available_gpus = _available_gpu_indices(excluded_indices=(0,))
+    if available_gpus:
+        print(random.choice(available_gpus))
+    else:
+        print("100")
 
 
 if __name__ == "__main__":
-    free_gpus = get_free_gpu_indices()
-
-    # remove GPU 0 from the list
-    free_gpus = [gpu for gpu in free_gpus if gpu != 0]
-
-    if len(free_gpus) == 0:
-        print("100")
-    else:
-        print(random.choice(free_gpus))
+    main()

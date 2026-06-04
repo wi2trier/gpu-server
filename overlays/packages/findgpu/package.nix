@@ -1,7 +1,2 @@
 { writers }:
-writers.writePython3Bin "findgpu" {
-  flakeIgnore = [
-    "E203"
-    "E501"
-  ];
-} ./script.py
+writers.writePython3Bin "findgpu" { } ./script.py
