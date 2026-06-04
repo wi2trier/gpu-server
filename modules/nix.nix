@@ -3,15 +3,6 @@
   nix = {
     enable = true;
     settings = {
-      allowed-users = [
-        "@wheel"
-        "@sudo"
-      ];
-      trusted-users = [
-        "@wheel"
-        "@sudo"
-      ];
-
       always-allow-substitutes = true;
       auto-optimise-store = true;
       build-users-group = "nixbld";
@@ -19,7 +10,6 @@
       experimental-features = [
         "flakes"
         "nix-command"
-        "no-url-literals"
         "pipe-operators"
       ];
       extra-nix-path = "nixpkgs=flake:nixpkgs";
@@ -27,9 +17,14 @@
       keep-failed = false;
       keep-going = true;
       keep-outputs = false;
+      lint-url-literals = "fatal";
       log-lines = 1000;
       max-jobs = "auto";
       sandbox = true;
+      trusted-users = [
+        "@wheel"
+        "@sudo"
+      ];
       substituters = [
         "https://nix-community.cachix.org"
       ];
