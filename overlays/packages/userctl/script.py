@@ -1,11 +1,11 @@
 import os
 import secrets
 import subprocess
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from datetime import datetime
-from typing import Annotated, Mapping, Optional
+from typing import Annotated
 
-import typer
+import typer  # type: ignore
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -23,12 +23,9 @@ def run_cmd(msg: str | None, cmd: Sequence[str], input: str | None = None) -> st
     if msg:
         typer.echo(msg)
 
-    cmd_kwargs = {}
+    stdin = input.encode("utf-8") + b"\n" if input else None
 
-    if input:
-        cmd_kwargs["input"] = input.encode("utf-8") + b"\n"
-
-    return subprocess.check_output(cmd, **cmd_kwargs).decode("utf-8").rstrip("\n")
+    return subprocess.check_output(cmd, input=stdin).decode("utf-8").rstrip("\n")
 
 
 def generate_username(email: str):
@@ -41,7 +38,7 @@ def generate_username(email: str):
     return email.lower().split("@")[0]
 
 
-def zfs_options(kwargs: Mapping[str, str], prefix: Optional[str] = None) -> list[str]:
+def zfs_options(kwargs: Mapping[str, str], prefix: str | None = None) -> list[str]:
     args: list[str] = []
 
     for key, value in kwargs.items():
@@ -69,10 +66,10 @@ def add(
     ],
     full_name: str,
     expire_date: Annotated[
-        Optional[datetime],
+        datetime | None,
         typer.Option(formats=[DATE_FORMAT]),
     ] = None,
-    quota: Optional[str] = None,
+    quota: str | None = None,
 ) -> None:
     password = secrets.token_urlsafe()
 
@@ -188,11 +185,11 @@ def edit(
         typer.Argument(callback=generate_username),
     ],
     expire_date: Annotated[
-        Optional[datetime],
+        datetime | None,
         typer.Option(formats=[DATE_FORMAT]),
     ] = None,
     reset_password: bool = False,
-    quota: Optional[str] = None,
+    quota: str | None = None,
 ) -> None:
     usermod_args: list[str] = []
 
