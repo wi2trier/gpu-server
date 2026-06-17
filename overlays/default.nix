@@ -17,12 +17,11 @@ let
   };
 in
 {
-  stable = prev;
-  unstable = import inputs.nixpkgs-unstable {
+  unstable = prev;
+  stable = import inputs.nixpkgs-stable {
     inherit system;
     config = nixpkgsConfig;
   };
-  inherit (final.unstable) uv open-webui ollama;
   system-manager = inputs.system-manager.packages.${system}.default;
   imageBase = final.callPackage ./image-base.nix { };
   inherit exports;

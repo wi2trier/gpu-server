@@ -39,7 +39,7 @@ in
           };
           to = {
             type = "path";
-            path = inputs.nixpkgs.outPath;
+            path = inputs.nixpkgs-stable.outPath;
           };
         }
         {
@@ -49,7 +49,7 @@ in
           };
           to = {
             type = "path";
-            path = inputs.nixpkgs-unstable.outPath;
+            path = inputs.nixpkgs.outPath;
           };
         }
       ];
