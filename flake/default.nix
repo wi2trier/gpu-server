@@ -48,7 +48,7 @@ in
   flake = {
     nixpkgsConfig = {
       allowUnfree = true;
-      cudaSupport = false;
+      cudaSupport = true;
     };
     overlays.default = import ../overlays {
       inherit inputs;
