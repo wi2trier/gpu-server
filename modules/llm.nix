@@ -2,7 +2,10 @@
 {
   services.ollama = {
     enable = true;
-    package = pkgs.ollama;
+    package = pkgs.ollama.override {
+      acceleration = "cuda";
+      cudaArches = [ "sm_70" ];
+    };
     # package = pkgs.ollama-bin;
     # https://github.com/ollama/ollama/blob/main/docs/faq.md
     # ollama serve --help
