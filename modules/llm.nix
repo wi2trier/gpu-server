@@ -17,10 +17,8 @@
     };
     syncModels = true;
     loadModels = [
-      "gemma3:27b"
-      "gpt-oss:20b"
-      "mistral-small3.2:24b"
-      "qwen3:32b"
+      "gemma4:31b"
+      "qwen3.6:27b"
     ];
   };
   services.open-webui = {
