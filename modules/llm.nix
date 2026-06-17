@@ -7,11 +7,13 @@
     # https://github.com/ollama/ollama/blob/main/docs/faq.md
     # ollama serve --help
     environmentVariables = {
+      CUDA_DEVICE_ORDER = "PCI_BUS_ID";
+      CUDA_VISIBLE_DEVICES = "0,1";
       OLLAMA_CONTEXT_LENGTH = "16384";
       OLLAMA_FLASH_ATTENTION = "1";
       OLLAMA_KEEP_ALIVE = "10m";
       OLLAMA_KV_CACHE_TYPE = "q8_0";
-      OLLAMA_MAX_LOADED_MODELS = "4";
+      OLLAMA_MAX_LOADED_MODELS = "2";
       OLLAMA_MAX_QUEUE = "64";
       OLLAMA_NUM_PARALLEL = "1";
     };

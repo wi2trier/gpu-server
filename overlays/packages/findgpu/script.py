@@ -1,6 +1,6 @@
 import random
 import subprocess
-from collections.abc import Sequence
+from collections.abc import Collection, Sequence
 
 __all__ = ["main"]
 
@@ -38,14 +38,16 @@ def _query_used_gpu_bus_ids() -> set[str]:
     return set(lines)
 
 
-def _available_gpu_indices() -> list[int]:
+def _available_gpu_indices(excluded: Collection[int]) -> list[int]:
     gpu_bus_ids = _query_gpu_bus_ids()
     used_bus_ids = _query_used_gpu_bus_ids()
     used_indices = {
         gpu_bus_ids[bus_id] for bus_id in used_bus_ids if bus_id in gpu_bus_ids
     }
     return [
-        index for index in sorted(gpu_bus_ids.values()) if index not in used_indices
+        index
+        for index in sorted(gpu_bus_ids.values())
+        if index not in used_indices and index not in excluded
     ]
 
 
@@ -55,7 +57,8 @@ def main() -> None:
     The sentinel is a non-existent device id meaning no GPU is selected. The
     shell defaults and container wrappers rely on it.
     """
-    available_gpus = _available_gpu_indices()
+    ollama_gpu_indices = frozenset({0, 1})
+    available_gpus = _available_gpu_indices(excluded=ollama_gpu_indices)
     print(random.choice(available_gpus) if available_gpus else "100")
 
 
