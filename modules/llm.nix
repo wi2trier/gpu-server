@@ -1,5 +1,10 @@
 { pkgs, ... }:
 {
+  environment.systemPackages = with pkgs; [
+    (llama-cpp.override {
+      cudaSupport = true;
+    })
+  ];
   services.ollama = {
     enable = true;
     package = pkgs.ollama.override {
