@@ -66,7 +66,7 @@ in
           };
         };
         # https://unsloth.ai/docs/models/gemma-4/qat
-        # Non-reasoning dense model without an MTP draft, so no speculation.
+        # Reasoning model without an MTP draft, so no speculation.
         "gemma4-31b" = {
           enable = true;
           port = 18102;
@@ -74,7 +74,7 @@ in
           settings = {
             # keep-sorted start
             hf-repo = "unsloth/gemma-4-31B-it-qat-GGUF:UD-Q4_K_XL";
-            reasoning = "off";
+            reasoning = "on";
             temperature = 1.0;
             top-k = 20;
             top-p = 0.95;
