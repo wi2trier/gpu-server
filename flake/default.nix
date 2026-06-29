@@ -49,6 +49,10 @@ in
     nixpkgsConfig = {
       allowUnfree = true;
       cudaSupport = false;
+      # Build CUDA packages natively for the server's Tesla V100 (sm_70), which
+      # nixpkgs omits from its defaults. Native SASS avoids a load-time PTX JIT
+      # that the hardened llama-cpp service (MemoryDenyWriteExecute) would block.
+      cudaCapabilities = [ "7.0" ];
     };
     overlays.default = import ../overlays {
       inherit inputs;
