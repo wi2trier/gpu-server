@@ -30,13 +30,15 @@
         cache-ram = 64 * 1024; # MiB
         cache-type-k = "q8_0";
         cache-type-v = "q8_0";
-        ctx-size = 96 * 1024 * parallel;
+        ctx-size = 128 * 1024 * parallel;
         flash-attn = "on";
+        kv-unified = false;
         mlock = true;
         mmap = false;
         n-gpu-layers = "all";
-        parallel = 2;
+        parallel = 1;
         reasoning = "on";
+        split-mode = "tensor";
         # keep-sorted end
       };
 
