@@ -31,14 +31,13 @@
         cache-type-k = "q8_0";
         cache-type-v = "q8_0";
         ctx-size = 128 * 1024 * parallel;
-        flash-attn = "on";
+        flash-attn = "auto";
         kv-unified = false;
         mlock = true;
         mmap = false;
         n-gpu-layers = "all";
         parallel = 1;
         reasoning = "on";
-        split-mode = "tensor";
         # keep-sorted end
       };
 
@@ -79,10 +78,17 @@
         "mistral-medium-3.5-128b" = {
           enable = true;
           port = 18103;
-          environment.CUDA_VISIBLE_DEVICES = "4,5,6,7";
+          # NVLink P2P lets the four cards copy directly over NVLink instead of
+          # bouncing through host memory; validate output and unset if unstable.
+          environment = {
+            CUDA_VISIBLE_DEVICES = "4,5,6,7";
+            GGML_CUDA_P2P = "1";
+          };
           settings = {
             # keep-sorted start
+            fit = false;
             hf-repo = "unsloth/Mistral-Medium-3.5-128B-GGUF:UD-Q4_K_XL";
+            split-mode = "tensor";
             temperature = 0.7;
             # keep-sorted end
           };
