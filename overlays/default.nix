@@ -26,8 +26,17 @@ in
   imageBase = final.callPackage ./image-base.nix { };
   inherit exports;
 
-  # cuda-specific adjustments for the v100 cards
-  cudaPackages = prev.cudaPackages_12_9;
+  # cuda-specific adjustments for the v100 cards. NCCL dlopens libnvidia-ml.so.1
+  # at runtime for NVLink topology, but that is a driver library (like libcuda)
+  # and the nixpkgs nccl lacks the driver runpath, so bake it in globally via
+  # autoAddDriverRunpath, letting every consumer resolve /run/opengl-driver/lib.
+  cudaPackages = prev.cudaPackages_12_9.overrideScope (
+    cudaFinal: cudaPrev: {
+      nccl = cudaPrev.nccl.overrideAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.autoAddDriverRunpath ];
+      });
+    }
+  );
   ollama = prev.ollama.override { acceleration = "cuda"; };
   # NCCL provides fast multi-GPU AllReduce for tensor-split models; nixpkgs has
   # no flag for it, so enable GGML_CUDA_NCCL and add the library by hand.
