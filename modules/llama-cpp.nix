@@ -83,6 +83,7 @@
           environment = {
             CUDA_VISIBLE_DEVICES = "4,5,6,7";
             GGML_CUDA_P2P = "1";
+            NCCL_DEBUG = "INFO";
           };
           settings = {
             # keep-sorted start
