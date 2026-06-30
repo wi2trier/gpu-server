@@ -16,9 +16,7 @@
       userctl
       build-apptainer
       build-container
-      (ollama.override {
-        acceleration = "cuda";
-      })
+      ollama
     ];
   };
 }

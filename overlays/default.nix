@@ -25,5 +25,10 @@ in
   system-manager = inputs.system-manager.packages.${system}.default;
   imageBase = final.callPackage ./image-base.nix { };
   inherit exports;
+
+  # cuda-specific adjustments for the v100 cards
+  cudaPackages = prev.cudaPackages_12_9;
+  ollama = prev.ollama.override { acceleration = "cuda"; };
+  llama-cpp = prev.llama-cpp.override { cudaSupport = true; };
 }
 // exports

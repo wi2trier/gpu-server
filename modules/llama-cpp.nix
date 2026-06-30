@@ -1,20 +1,15 @@
 {
   inputs,
-  config,
-  lib,
   pkgs,
   ...
 }:
-let
-  llama-cpp = pkgs.llama-cpp.override { cudaSupport = true; };
-in
 {
   # `core` carries the llmhop reverse proxy plus the llama.cpp systemd backend.
   # The quadlet backends (vllm, sglang) are deliberately left out since
   # system-manager cannot run quadlet units.
   imports = [ inputs.llmhop.nixosModules.core ];
 
-  environment.systemPackages = [
+  environment.systemPackages = with pkgs; [
     llama-cpp
   ];
 
@@ -24,7 +19,6 @@ in
 
     llama-cpp = {
       enable = true;
-      package = llama-cpp;
       # Keep nvidia-smi indices in sync with CUDA_VISIBLE_DEVICES.
       environment.CUDA_DEVICE_ORDER = "PCI_BUS_ID";
 
