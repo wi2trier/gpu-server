@@ -103,10 +103,11 @@
   # getifaddrs() (an AF_NETLINK socket) to enumerate interfaces during
   # tensor-parallel init, which the baked-in hardening otherwise blocks.
   systemd.services."llama-cpp-mistral-medium-3.5-128b".serviceConfig.RestrictAddressFamilies =
-    lib.mkForce [
-      "AF_INET"
-      "AF_INET6"
-      "AF_UNIX"
-      "AF_NETLINK"
-    ];
+    lib.mkForce
+      [
+        "AF_INET"
+        "AF_INET6"
+        "AF_UNIX"
+        "AF_NETLINK"
+      ];
 }
