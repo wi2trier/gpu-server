@@ -86,7 +86,7 @@
           };
           settings = {
             # keep-sorted start
-            fit = false;
+            fit = "off"; # incompatible with tensor split
             hf-repo = "unsloth/Mistral-Medium-3.5-128B-GGUF:UD-Q4_K_XL";
             split-mode = "tensor";
             temperature = 0.7;
