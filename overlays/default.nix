@@ -29,6 +29,13 @@ in
   # cuda-specific adjustments for the v100 cards
   cudaPackages = prev.cudaPackages_12_9;
   ollama = prev.ollama.override { acceleration = "cuda"; };
-  llama-cpp = prev.llama-cpp.override { cudaSupport = true; };
+  # NCCL provides fast multi-GPU AllReduce for tensor-split models; nixpkgs has
+  # no flag for it, so enable GGML_CUDA_NCCL and add the library by hand.
+  llama-cpp = (prev.llama-cpp.override { cudaSupport = true; }).overrideAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [ final.cudaPackages.nccl ];
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      (lib.cmakeBool "GGML_CUDA_NCCL" true)
+    ];
+  });
 }
 // exports
