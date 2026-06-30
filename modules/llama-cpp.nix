@@ -86,16 +86,4 @@ in
       };
     };
   };
-
-  # llmhop's hardening sets ProtectClock = true, which implies a
-  # `DeviceAllow=char-rtc` entry. Any DeviceAllow flips systemd's device cgroup
-  # into allowlist mode, so /dev/nvidia* is denied and the workers enumerate no
-  # GPU ("no CUDA-capable device is detected"). Clock protection is moot here
-  # anyway since CapabilityBoundingSet is already empty (no CAP_SYS_TIME).
-  systemd.services = lib.concatMapAttrs (
-    name: model:
-    lib.optionalAttrs model.enable {
-      "llama-cpp-${name}".serviceConfig.ProtectClock = lib.mkForce false;
-    }
-  ) config.services.llmhop.llama-cpp.models;
 }
