@@ -27,7 +27,7 @@
       # itself, so the per-model budget matches a single-card deployment.
       modelSettings = rec {
         # keep-sorted start
-        cache-ram = 128 * 1024; # MiB
+        cache-ram = 64 * 1024; # MiB
         cache-type-k = "q8_0";
         cache-type-v = "q8_0";
         ctx-size = 96 * 1024 * parallel;
@@ -36,6 +36,7 @@
         mmap = false;
         n-gpu-layers = "all";
         parallel = 2;
+        reasoning = "on";
         # keep-sorted end
       };
 
@@ -44,7 +45,6 @@
       # sharded across the GPUs 4-7 NVLink node.
       models = {
         # https://unsloth.ai/docs/models/qwen3.6
-        # Reasoning model with multi-token-prediction speculative decoding.
         "qwen3.6-27b" = {
           enable = true;
           port = 18101;
@@ -53,9 +53,6 @@
             # keep-sorted start
             hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
             min-p = 0.00;
-            reasoning = "on";
-            # spec-draft-n-max = 4;
-            # spec-type = "draft-mtp";
             temperature = 1.0;
             top-k = 20;
             top-p = 0.95;
@@ -63,7 +60,6 @@
           };
         };
         # https://unsloth.ai/docs/models/gemma-4/qat
-        # Reasoning model without an MTP draft, so no speculation.
         "gemma4-31b" = {
           enable = true;
           port = 18102;
@@ -71,17 +67,13 @@
           settings = {
             # keep-sorted start
             hf-repo = "unsloth/gemma-4-31B-it-qat-GGUF:UD-Q4_K_XL";
-            reasoning = "on";
-            spec-draft-n-max = 4;
-            spec-type = "draft-mtp";
             temperature = 1.0;
             top-k = 20;
             top-p = 0.95;
             # keep-sorted end
           };
         };
-        # https://huggingface.co/unsloth/Mistral-Medium-3.5-128B-GGUF
-        # 128B reasoning model sharded across the GPUs 4-7 NVLink node (4x V100).
+        # https://unsloth.ai/docs/models/mistral-3.5
         "mistral-medium-3.5-128b" = {
           enable = true;
           port = 18103;
@@ -89,7 +81,6 @@
           settings = {
             # keep-sorted start
             hf-repo = "unsloth/Mistral-Medium-3.5-128B-GGUF:UD-Q4_K_XL";
-            reasoning = "on";
             temperature = 0.7;
             # keep-sorted end
           };
