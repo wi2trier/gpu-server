@@ -39,8 +39,9 @@
         # keep-sorted end
       };
 
-      # The cards run in exclusive process mode, so each always-on model is
-      # pinned to a distinct GPU within the GPUs 0-3 NVLink node.
+      # The cards run in exclusive process mode. Single-GPU models are pinned to
+      # a distinct card within the GPUs 0-3 NVLink node, while larger models are
+      # sharded across the GPUs 4-7 NVLink node.
       models = {
         # https://unsloth.ai/docs/models/qwen3.6
         # Reasoning model with multi-token-prediction speculative decoding.
@@ -76,6 +77,20 @@
             temperature = 1.0;
             top-k = 20;
             top-p = 0.95;
+            # keep-sorted end
+          };
+        };
+        # https://huggingface.co/unsloth/Mistral-Medium-3.5-128B-GGUF
+        # 128B reasoning model sharded across the GPUs 4-7 NVLink node (4x V100).
+        "mistral-medium-3.5-128b" = {
+          enable = true;
+          port = 18103;
+          environment.CUDA_VISIBLE_DEVICES = "4,5,6,7";
+          settings = {
+            # keep-sorted start
+            hf-repo = "unsloth/Mistral-Medium-3.5-128B-GGUF:UD-Q4_K_XL";
+            reasoning = "on";
+            temperature = 0.7;
             # keep-sorted end
           };
         };
