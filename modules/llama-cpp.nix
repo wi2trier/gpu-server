@@ -54,7 +54,7 @@
           settings = {
             # keep-sorted start
             hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
-            min-p = 0.00;
+            min-p = 0.0;
             temperature = 1.0;
             top-k = 20;
             top-p = 0.95;
@@ -75,8 +75,8 @@
             # keep-sorted end
           };
         };
-        # https://unsloth.ai/docs/models/mistral-3.5
-        "mistral-medium-3.5-128b" = {
+        # https://unsloth.ai/docs/models/qwen3.5
+        "qwen3.5-122b-a10b" = {
           enable = true;
           port = 18103;
           # NVLink P2P lets the four cards copy directly over NVLink instead of
@@ -88,9 +88,12 @@
           settings = {
             # keep-sorted start
             fit = "off"; # incompatible with tensor split
-            hf-repo = "unsloth/Mistral-Medium-3.5-128B-GGUF:UD-Q4_K_XL";
+            hf-repo = "unsloth/Qwen3.5-122B-A10B-MTP-GGUF:UD-Q4_K_XL";
+            min-p = 0.0;
             split-mode = "tensor";
-            temperature = 0.7;
+            temperature = 1.0;
+            top-k = 20;
+            top-p = 0.95;
             # keep-sorted end
           };
         };
