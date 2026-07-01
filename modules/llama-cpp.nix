@@ -103,14 +103,21 @@
     };
   };
 
-  # Debugging override mirroring the llmhop AF_NETLINK fix so we can iterate
-  # without bumping the flake input; drop once llmhop is updated. NCCL calls
-  # getifaddrs() (an AF_NETLINK socket) to enumerate interfaces during
-  # tensor-parallel init, which the baked-in hardening otherwise blocks.
-  systemd.services."qwen3.5-122b-a10b".serviceConfig.RestrictAddressFamilies = lib.mkForce [
-    "AF_INET"
-    "AF_INET6"
-    "AF_UNIX"
-    "AF_NETLINK"
-  ];
+  # Relax two baked-in llmhop hardening directives that block NCCL during
+  # tensor-parallel init; drop once llmhop ships these. Note the `llama-cpp-`
+  # prefix that `mkService` adds: the previous override targeted a bare
+  # `qwen3.5-122b-a10b` unit that does not exist, so it silently did nothing.
+  #   - RestrictAddressFamilies: NCCL's getifaddrs() interface scan needs an
+  #     AF_NETLINK socket, absent from the baked-in allow-list.
+  #   - SocketBindDeny: NCCL binds ephemeral loopback sockets for its bootstrap,
+  #     which the `SocketBindDeny = "any"` plus single-port allow-list refuses.
+  systemd.services."llama-cpp-qwen3.5-122b-a10b".serviceConfig = {
+    RestrictAddressFamilies = lib.mkForce [
+      "AF_INET"
+      "AF_INET6"
+      "AF_UNIX"
+      "AF_NETLINK"
+    ];
+    # SocketBindDeny = lib.mkForce [ ];
+  };
 }
