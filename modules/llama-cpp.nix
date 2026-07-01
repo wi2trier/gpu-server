@@ -86,11 +86,13 @@
           environment = {
             CUDA_VISIBLE_DEVICES = "4,5,6,7";
             GGML_CUDA_P2P = "1";
+            NCCL_DEBUG = "INFO";
           };
           settings = {
             # keep-sorted start
             fit = "off"; # incompatible with tensor split
             hf-repo = "unsloth/Qwen3.5-122B-A10B-MTP-GGUF:UD-Q4_K_XL";
+            image-min-tokens = 1024;
             min-p = 0.0;
             spec-draft-n-max = 6;
             spec-type = "draft-mtp";
