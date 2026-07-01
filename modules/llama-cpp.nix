@@ -109,12 +109,10 @@
   # without bumping the flake input; drop once llmhop is updated. NCCL calls
   # getifaddrs() (an AF_NETLINK socket) to enumerate interfaces during
   # tensor-parallel init, which the baked-in hardening otherwise blocks.
-  systemd.services."llama-cpp-mistral-medium-3.5-128b".serviceConfig.RestrictAddressFamilies =
-    lib.mkForce
-      [
-        "AF_INET"
-        "AF_INET6"
-        "AF_UNIX"
-        "AF_NETLINK"
-      ];
+  systemd.services."qwen3.5-122b-a10b".serviceConfig.RestrictAddressFamilies = lib.mkForce [
+    "AF_INET"
+    "AF_INET6"
+    "AF_UNIX"
+    "AF_NETLINK"
+  ];
 }
