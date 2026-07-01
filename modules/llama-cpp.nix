@@ -81,10 +81,14 @@
           port = 18103;
           # NVLink P2P lets the four cards copy directly over NVLink instead of
           # bouncing through host memory; validate output and unset if unstable.
+          # NCCL only needs sockets for intra-process rendezvous here (data rides
+          # NVLink), so pin it to loopback and skip the absent InfiniBand probe.
           environment = {
             CUDA_VISIBLE_DEVICES = "4,5,6,7";
             GGML_CUDA_P2P = "1";
-            NCCL_DEBUG = "INFO";
+            NCCL_DEBUG = "WARN";
+            NCCL_IB_DISABLE = "1";
+            NCCL_SOCKET_IFNAME = "lo";
           };
           settings = {
             # keep-sorted start
@@ -103,21 +107,17 @@
     };
   };
 
-  # Relax two baked-in llmhop hardening directives that block NCCL during
-  # tensor-parallel init; drop once llmhop ships these. Note the `llama-cpp-`
+  # Relax a baked-in llmhop hardening directive that blocks NCCL during
+  # tensor-parallel init; drop once llmhop ships it. Note the `llama-cpp-`
   # prefix that `mkService` adds: the previous override targeted a bare
   # `qwen3.5-122b-a10b` unit that does not exist, so it silently did nothing.
-  #   - RestrictAddressFamilies: NCCL's getifaddrs() interface scan needs an
-  #     AF_NETLINK socket, absent from the baked-in allow-list.
-  #   - SocketBindDeny: NCCL binds ephemeral loopback sockets for its bootstrap,
-  #     which the `SocketBindDeny = "any"` plus single-port allow-list refuses.
-  systemd.services."llama-cpp-qwen3.5-122b-a10b".serviceConfig = {
-    RestrictAddressFamilies = lib.mkForce [
+  # NCCL's getifaddrs() interface scan needs an AF_NETLINK socket, which the
+  # baked-in RestrictAddressFamilies allow-list omits.
+  systemd.services."llama-cpp-qwen3.5-122b-a10b".serviceConfig.RestrictAddressFamilies =
+    lib.mkForce [
       "AF_INET"
       "AF_INET6"
       "AF_UNIX"
       "AF_NETLINK"
     ];
-    # SocketBindDeny = lib.mkForce [ ];
-  };
 }
