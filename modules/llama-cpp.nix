@@ -55,8 +55,6 @@
             # keep-sorted start
             hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
             min-p = 0.0;
-            spec-draft-n-max = 4;
-            spec-type = "draft-mtp";
             temperature = 1.0;
             top-k = 20;
             top-p = 0.95;
@@ -94,8 +92,6 @@
             hf-repo = "unsloth/Qwen3.5-122B-A10B-MTP-GGUF:UD-Q4_K_XL";
             image-min-tokens = 1024;
             min-p = 0.0;
-            spec-draft-n-max = 6;
-            spec-type = "draft-mtp";
             split-mode = "tensor";
             temperature = 1.0;
             top-k = 20;
