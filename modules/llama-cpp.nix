@@ -107,17 +107,26 @@
     };
   };
 
-  # Relax a baked-in llmhop hardening directive that blocks NCCL during
-  # tensor-parallel init; drop once llmhop ships it. Note the `llama-cpp-`
-  # prefix that `mkService` adds: the previous override targeted a bare
-  # `qwen3.5-122b-a10b` unit that does not exist, so it silently did nothing.
-  # NCCL's getifaddrs() interface scan needs an AF_NETLINK socket, which the
-  # baked-in RestrictAddressFamilies allow-list omits.
-  systemd.services."llama-cpp-qwen3.5-122b-a10b".serviceConfig.RestrictAddressFamilies =
-    lib.mkForce [
+  # Relax two baked-in llmhop hardening directives that block NCCL during
+  # tensor-parallel init; drop once llmhop exposes a per-model escape hatch.
+  # Note the `llama-cpp-` prefix that `mkService` adds: a bare
+  # `qwen3.5-122b-a10b` unit does not exist, so an override without it is a
+  # silent no-op.
+  #   - RestrictAddressFamilies (seccomp, enforced everywhere): NCCL's
+  #     getifaddrs() interface scan needs an AF_NETLINK socket.
+  #   - SocketBindAllow (BPF, enforced only on modern systemd): NCCL's
+  #     bootstrap/proxy/RAS listeners bind ephemeral (port 0) TCP sockets, which
+  #     the inherited `SocketBindDeny = "any"` refuses. SocketBind cannot express
+  #     "ephemeral only" (the bind hook sees port 0, never the assigned port), so
+  #     allow-all-TCP is the tightest workable rule; UDP stays denied. Inert on
+  #     this host's systemd 249, but keeps NCCL working on modern systemd.
+  systemd.services."llama-cpp-qwen3.5-122b-a10b".serviceConfig = {
+    RestrictAddressFamilies = lib.mkForce [
       "AF_INET"
       "AF_INET6"
       "AF_UNIX"
       "AF_NETLINK"
     ];
+    SocketBindAllow = lib.mkForce [ "tcp" ];
+  };
 }
