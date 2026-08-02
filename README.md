@@ -251,12 +251,6 @@ podman run --rm --device nvidia.com/gpu=0 docker-archive:IMAGE_NAME.tar.gz
 > This allows to cache the dependencies and reuse them across multiple runs.
 > Please make sure to add the virtual environment to your `.gitignore` file and always start the container in the same working directory.
 
-### Poetry
-
-The image `poetry` contains Python 3 together with the package manager Poetry.
-This image allows proper dependency specification via `pyproject.toml` and `poetry.lock` files.
-Using `apptainer run IMAGE ARGS...` executes `poetry ARGS...`, so you could execute a Python script via `apptainer run IMAGE run python SCRIPT.py`.
-
 ### uv
 
 The image `uv` contains Python 3 together with the package manager uv.
