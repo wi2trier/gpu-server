@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llmhop = {
-      url = "github:mirkolenz/llmhop/v1";
+      url = "github:mirkolenz/llmhop/v2";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";

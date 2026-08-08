@@ -131,23 +131,26 @@
         "nixpkgs": [
           "nixpkgs"
         ],
+        "pyproject-build-systems": "pyproject-build-systems",
+        "pyproject-nix": "pyproject-nix",
         "quadlet-nix": "quadlet-nix",
         "systems": "systems_2",
         "treefmt-nix": [
           "treefmt-nix"
-        ]
+        ],
+        "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1782804152,
-        "narHash": "sha256-lUG9B7uhqAwyLm+A3IT603fZjh5aj7n3L/I/iixTSkI=",
+        "lastModified": 1786095524,
+        "narHash": "sha256-sAO0ntXtjUNYFYyIJ8ticuDrADxeBCZCo5Lsfr0E5Tc=",
         "owner": "mirkolenz",
         "repo": "llmhop",
-        "rev": "a4f88d06d902336c0932222f4d99c7eaf156f475",
+        "rev": "952a627a6bc772db526663c44a663a9efef9885e",
         "type": "github"
       },
       "original": {
         "owner": "mirkolenz",
-        "ref": "v1",
+        "ref": "v2",
         "repo": "llmhop",
         "type": "github"
       }
@@ -242,6 +245,56 @@
         "type": "github"
       }
     },
+    "pyproject-build-systems": {
+      "inputs": {
+        "nixpkgs": [
+          "llmhop",
+          "nixpkgs"
+        ],
+        "pyproject-nix": [
+          "llmhop",
+          "pyproject-nix"
+        ],
+        "uv2nix": [
+          "llmhop",
+          "uv2nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785730568,
+        "narHash": "sha256-NjSPsgjJ7MSpBtTkUcmNhRe6AFZ96+zsca2M8YuQi8Y=",
+        "owner": "pyproject-nix",
+        "repo": "build-system-pkgs",
+        "rev": "90fde00db3687922d39d95fc591475fd0bbbcd72",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "build-system-pkgs",
+        "type": "github"
+      }
+    },
+    "pyproject-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "llmhop",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784591072,
+        "narHash": "sha256-zP/WaDxrRu8GANZM61+V2LT/7ycEEdoyLWn7M6WzU7M=",
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "rev": "e3b599ca2e7fcf93d4edf65d7f19bbf6491724f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "type": "github"
+      }
+    },
     "quadlet-nix": {
       "inputs": {
         "flake-parts": [
@@ -254,11 +307,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1777533192,
-        "narHash": "sha256-wyVFzV5cL5VD4bMYJHWZzPBjvSxT31U9RuUIJN6bu/s=",
+        "lastModified": 1782201940,
+        "narHash": "sha256-dJu10XjrOaVjKvV5YXVgVI1U3nRw2jyYffSRlazgpQ0=",
         "owner": "mirkolenz",
         "repo": "quadlet-nix",
-        "rev": "24c845e9b9e17e8ea195cbb2632ee0d8e997018a",
+        "rev": "1abb8f63e55f31b1192c1150b9875ce6417f2dd3",
         "type": "github"
       },
       "original": {
@@ -392,6 +445,31 @@
         "owner": "jfroche",
         "ref": "system-manager",
         "repo": "userborn",
+        "type": "github"
+      }
+    },
+    "uv2nix": {
+      "inputs": {
+        "nixpkgs": [
+          "llmhop",
+          "nixpkgs"
+        ],
+        "pyproject-nix": [
+          "llmhop",
+          "pyproject-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785277507,
+        "narHash": "sha256-9Tq3UDX2hD/aveW/HvkBlAmEwJTOlY5HQXJM+L5BGmE=",
+        "owner": "pyproject-nix",
+        "repo": "uv2nix",
+        "rev": "5a836d395cbf5fc22670eb98dd4aa4fc4d406977",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "uv2nix",
         "type": "github"
       }
     }

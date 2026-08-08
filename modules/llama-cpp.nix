@@ -1,14 +1,13 @@
 {
   inputs,
-  lib,
   pkgs,
   ...
 }:
 {
-  # `core` carries the llmhop reverse proxy plus the llama.cpp systemd backend.
-  # The quadlet backends (vllm, sglang) are deliberately left out since
+  # The default module carries the llmhop reverse proxy and native backends.
+  # The quadlet backends are deliberately left out since
   # system-manager cannot run quadlet units.
-  imports = [ inputs.llmhop.nixosModules.core ];
+  imports = [ inputs.llmhop.nixosModules.default ];
 
   environment.systemPackages = with pkgs; [
     llama-cpp
@@ -16,7 +15,8 @@
 
   services.llmhop = {
     enable = true;
-    settings.listen = "127.0.0.1:18000";
+    host = "127.0.0.1";
+    port = 18000;
 
     llama-cpp = {
       enable = true;
@@ -86,8 +86,6 @@
             CUDA_VISIBLE_DEVICES = "4,5,6,7";
             GGML_CUDA_P2P = "1";
             NCCL_DEBUG = "WARN";
-            NCCL_IB_DISABLE = "1";
-            NCCL_SOCKET_IFNAME = "lo";
           };
           settings = {
             # keep-sorted start
@@ -104,28 +102,5 @@
         };
       };
     };
-  };
-
-  # Relax two baked-in llmhop hardening directives that block NCCL during
-  # tensor-parallel init; drop once llmhop exposes a per-model escape hatch.
-  # Note the `llama-cpp-` prefix that `mkService` adds: a bare
-  # `qwen3.5-122b-a10b` unit does not exist, so an override without it is a
-  # silent no-op.
-  #   - RestrictAddressFamilies (seccomp, enforced everywhere): NCCL's
-  #     getifaddrs() interface scan needs an AF_NETLINK socket.
-  #   - SocketBindAllow (BPF, enforced only on modern systemd): NCCL's
-  #     bootstrap/proxy/RAS listeners bind ephemeral (port 0) TCP sockets, which
-  #     the inherited `SocketBindDeny = "any"` refuses. SocketBind cannot express
-  #     "ephemeral only" (the bind hook sees port 0, never the assigned port), so
-  #     allow-all-TCP is the tightest workable rule; UDP stays denied. Inert on
-  #     this host's systemd 249, but keeps NCCL working on modern systemd.
-  systemd.services."llama-cpp-qwen3.5-122b-a10b".serviceConfig = {
-    RestrictAddressFamilies = lib.mkForce [
-      "AF_INET"
-      "AF_INET6"
-      "AF_UNIX"
-      "AF_NETLINK"
-    ];
-    SocketBindAllow = lib.mkForce [ "tcp" ];
   };
 }
