@@ -32,12 +32,14 @@
         cache-type-k = "q8_0";
         cache-type-v = "q8_0";
         ctx-size = 128 * 1024 * parallel;
+        fit = "off";
         flash-attn = "auto";
         kv-unified = false;
         mlock = true;
         mmap = false;
         n-gpu-layers = "all";
         parallel = 1;
+        reasoning-preserve = true;
         # keep-sorted end
       };
 
@@ -46,13 +48,12 @@
       # sharded across the GPUs 4-7 NVLink node.
       models = {
         # https://unsloth.ai/docs/models/qwen3.6
-        "qwen3.6-27b" = {
-          enable = true;
+        "qwen3.8-27b" = {
           port = 18101;
           environment.CUDA_VISIBLE_DEVICES = "0";
           settings = {
             # keep-sorted start
-            hf-repo = "unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q4_K_XL";
+            hf-repo = "unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL";
             min-p = 0.0;
             temperature = 1.0;
             top-k = 20;
@@ -62,7 +63,6 @@
         };
         # https://unsloth.ai/docs/models/gemma-4/qat
         "gemma4-31b" = {
-          enable = true;
           port = 18102;
           environment.CUDA_VISIBLE_DEVICES = "1";
           settings = {
@@ -76,7 +76,7 @@
         };
         # https://unsloth.ai/docs/models/qwen3.5
         "qwen3.5-122b-a10b" = {
-          enable = true;
+          enable = false;
           port = 18103;
           # NVLink P2P lets the four cards copy directly over NVLink instead of
           # bouncing through host memory; validate output and unset if unstable.
