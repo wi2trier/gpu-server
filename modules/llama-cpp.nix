@@ -1,5 +1,7 @@
 {
+  config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
@@ -12,6 +14,18 @@
   environment.systemPackages = with pkgs; [
     llama-cpp
   ];
+
+  # llmhop only orders the workers after network.target, so they race the
+  # activation service that populates /run/opengl-driver/lib. Losing that race
+  # is silent: ggml dlopens its CUDA backend, the missing libcuda.so.1 makes the
+  # load fail, and the suppressed error leaves the worker serving from CPU.
+  systemd.services = lib.mapAttrs' (
+    name: _:
+    lib.nameValuePair "llama-cpp-${name}" {
+      after = [ "gpu-server-activation.service" ];
+      requires = [ "gpu-server-activation.service" ];
+    }
+  ) (lib.filterAttrs (_: model: model.enable) config.services.llmhop.llama-cpp.models);
 
   services.llmhop = {
     enable = true;
@@ -79,8 +93,6 @@
           port = 18103;
           # NVLink P2P lets the four cards copy directly over NVLink instead of
           # bouncing through host memory; validate output and unset if unstable.
-          # NCCL only needs sockets for intra-process rendezvous here (data rides
-          # NVLink), so pin it to loopback and skip the absent InfiniBand probe.
           environment = {
             CUDA_VISIBLE_DEVICES = "4,5,6,7";
             GGML_CUDA_P2P = "1";
