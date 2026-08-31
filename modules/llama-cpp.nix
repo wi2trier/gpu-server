@@ -35,8 +35,7 @@
         fit = "off";
         flash-attn = "auto";
         kv-unified = false;
-        mlock = true;
-        mmap = false;
+        load-mode = "mlock";
         n-gpu-layers = "all";
         parallel = 1;
         reasoning-preserve = true;
