@@ -37,73 +37,42 @@
       # Keep nvidia-smi indices in sync with CUDA_VISIBLE_DEVICES.
       environment.CUDA_DEVICE_ORDER = "PCI_BUS_ID";
 
-      # https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md
-      # Shared across both workers. Each model gets a full Tesla V100 (32 GB) to
-      # itself, so the per-model budget matches a single-card deployment.
+      # https://github.com/ggml-org/llama.cpp/blob/v0.4.0/tools/server/README.md
+      # Qwen3.8 has a native 256 KiB context. llama-server divides ctx-size
+      # across its slots, so reserve one full context for each request.
       modelSettings = rec {
         # keep-sorted start
-        cache-ram = 64 * 1024; # MiB
-        cache-type-k = "q8_0";
-        cache-type-v = "q8_0";
-        ctx-size = 128 * 1024 * parallel;
+        cache-ram = 0;
+        cache-type-k = "f16";
+        cache-type-v = "f16";
+        ctx-size = 256 * 1024 * parallel;
         fit = "off";
-        flash-attn = "auto";
+        flash-attn = "on";
         kv-unified = false;
         load-mode = "mlock";
         n-gpu-layers = "all";
-        parallel = 1;
+        parallel = 2;
         reasoning-preserve = true;
         # keep-sorted end
       };
 
-      # The cards run in exclusive process mode. Single-GPU models are pinned to
-      # a distinct card within the GPUs 0-3 NVLink node, while larger models are
-      # sharded across the GPUs 4-7 NVLink node.
       models = {
-        # https://unsloth.ai/docs/models/qwen3.6
+        # https://huggingface.co/Qwen/Qwen3.8-27B
         "qwen3.8-27b" = {
           port = 18101;
-          environment.CUDA_VISIBLE_DEVICES = "0";
+          environment = {
+            CUDA_VISIBLE_DEVICES = "0,1,2,3";
+            GGML_CUDA_P2P = "1";
+            # https://github.com/ggml-org/llama.cpp/issues/27122
+            LLAMA_GRAPH_REUSE_DISABLE = "1";
+          };
           settings = {
             # keep-sorted start
             hf-repo = "unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL";
             min-p = 0.0;
-            temperature = 1.0;
-            top-k = 20;
-            top-p = 0.95;
-            # keep-sorted end
-          };
-        };
-        # https://unsloth.ai/docs/models/gemma-4/qat
-        "gemma4-31b" = {
-          port = 18102;
-          environment.CUDA_VISIBLE_DEVICES = "1";
-          settings = {
-            # keep-sorted start
-            hf-repo = "unsloth/gemma-4-31B-it-qat-GGUF:UD-Q4_K_XL";
-            temperature = 1.0;
-            top-k = 20;
-            top-p = 0.95;
-            # keep-sorted end
-          };
-        };
-        # https://unsloth.ai/docs/models/qwen3.5
-        "qwen3.5-122b-a10b" = {
-          enable = false;
-          port = 18103;
-          # NVLink P2P lets the four cards copy directly over NVLink instead of
-          # bouncing through host memory; validate output and unset if unstable.
-          environment = {
-            CUDA_VISIBLE_DEVICES = "4,5,6,7";
-            GGML_CUDA_P2P = "1";
-            NCCL_DEBUG = "WARN";
-          };
-          settings = {
-            # keep-sorted start
-            fit = "off"; # incompatible with tensor split
-            hf-repo = "unsloth/Qwen3.5-122B-A10B-MTP-GGUF:UD-Q4_K_XL";
-            image-min-tokens = 1024;
-            min-p = 0.0;
+            spec-draft-n-max = 2;
+            spec-draft-ngl = "all";
+            spec-type = "draft-mtp";
             split-mode = "tensor";
             temperature = 1.0;
             top-k = 20;

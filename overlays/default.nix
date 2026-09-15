@@ -26,7 +26,7 @@ in
   imageBase = final.callPackage ./image-base.nix { };
   inherit exports;
 
-  # cuda-specific adjustments for the v100 cards. NCCL dlopens libnvidia-ml.so.1
+  # CUDA-specific adjustments for the V100 cards. NCCL dlopens libnvidia-ml.so.1
   # at runtime for NVLink topology, but that is a driver library (like libcuda)
   # and the nixpkgs nccl lacks the driver runpath, so bake it in globally via
   # autoAddDriverRunpath, letting every consumer resolve /run/opengl-driver/lib.
@@ -38,11 +38,14 @@ in
     }
   );
   ollama = prev.ollama.override { acceleration = "cuda"; };
-  # NCCL provides fast multi-GPU AllReduce for tensor-split models; nixpkgs has
+  # NCCL provides fast multi-GPU AllReduce for tensor-split models. Nixpkgs has
   # no flag for it, so enable GGML_CUDA_NCCL and add the library by hand.
+  # CUDA graphs leak VRAM with speculative decoding and can fail on Volta.
+  # https://github.com/ggml-org/llama.cpp/issues/25835
   llama-cpp = (prev.llama-cpp.override { cudaSupport = true; }).overrideAttrs (old: {
     buildInputs = (old.buildInputs or [ ]) ++ [ final.cudaPackages.nccl ];
     cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      (lib.cmakeBool "GGML_CUDA_GRAPHS" false)
       (lib.cmakeBool "GGML_CUDA_NCCL" true)
     ];
   });
