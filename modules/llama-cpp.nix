@@ -37,7 +37,6 @@
       # Keep nvidia-smi indices in sync with CUDA_VISIBLE_DEVICES.
       environment.CUDA_DEVICE_ORDER = "PCI_BUS_ID";
 
-      # https://github.com/ggml-org/llama.cpp/blob/v0.4.0/tools/server/README.md
       # Qwen3.8 has a native 256 KiB context. llama-server divides ctx-size
       # across its slots, so reserve one full context for each request.
       modelSettings = rec {
@@ -51,7 +50,7 @@
         kv-unified = false;
         load-mode = "mlock";
         n-gpu-layers = "all";
-        parallel = 2;
+        parallel = 4;
         reasoning-preserve = true;
         # keep-sorted end
       };
@@ -63,8 +62,6 @@
           environment = {
             CUDA_VISIBLE_DEVICES = "0,1,2,3";
             GGML_CUDA_P2P = "1";
-            # https://github.com/ggml-org/llama.cpp/issues/27122
-            LLAMA_GRAPH_REUSE_DISABLE = "1";
           };
           settings = {
             # keep-sorted start
@@ -73,7 +70,9 @@
             spec-draft-n-max = 2;
             spec-draft-ngl = "all";
             spec-type = "draft-mtp";
-            split-mode = "tensor";
+            # Tensor splitting has a reported V100 hang with this model.
+            # https://github.com/ggml-org/llama.cpp/issues/27366
+            split-mode = "layer";
             temperature = 1.0;
             top-k = 20;
             top-p = 0.95;
