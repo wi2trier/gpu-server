@@ -15,7 +15,7 @@ in
       export CUDA_DEVICE_ORDER="${deviceOrder}"
     '';
     "fish/config.fish".text = ''
-      fish_add_path "/run/system-manager/sw/bin"
+      fish_add_path --path "/run/system-manager/sw/bin"
       set -gx CUDA_VISIBLE_DEVICES "${noGpu}"
       set -gx CUDA_DEVICE_ORDER "${deviceOrder}"
     '';
