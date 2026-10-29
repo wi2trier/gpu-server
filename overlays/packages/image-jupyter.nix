@@ -37,7 +37,7 @@ let
     fi
   '';
 
-  jupyterArgs = lib.cli.toGNUCommandLineShell { } {
+  jupyterArgs = lib.cli.toCommandLineShellGNU { } {
     ip = "0.0.0.0";
     allow-root = true;
     no-browser = true;
