@@ -269,6 +269,28 @@ You may install arbitrary Python packages by running `!pip install NAME` in a no
 Alternatively, open a Terminal and execute `pip install NAME` there.
 Please note that the binaries installed in the virtual environment are only available in the Terminal when your working directory contains the `.venv` folder (i.e., using `cd` to change the folder removes `.venv/bin` from your `$PATH`).
 
+## llama.cpp Usage
+
+The server is equipped with [llama.cpp](https://github.com/ggml-org/llama.cpp) for serving LLMs.
+llama.cpp is not wrapped by automatic GPU selection, unlike Apptainer.
+Choose the GPUs explicitly by setting the `CUDA_VISIBLE_DEVICES` environment variable.
+By default, `llama-server` only accepts local requests on port `8080` (potentially conflicting with other users).
+To change this, pass the `--host` and `--port` options:
+
+- Accessing from your computer: `--host 0.0.0.0 --port PORT`.
+  `PORT` must be in the range `6000-8000`.
+- Accessing from the server only: `--host 127.0.0.1 --port PORT`.
+  `PORT` can be arbitrarily chosen `>1024`.
+
+The model is downloaded from Hugging Face on the first start:
+
+```shell
+CUDA_VISIBLE_DEVICES=GPU_ID llama-server -hf HF_REPO:QUANT --host SEE_ABOVE --port SEE_ABOVE
+```
+
+This starts an OpenAI-compatible endpoint at `http://IP:PORT/v1`, so you can use the `openai` library to make requests.
+More options can be found [in the documentation](https://github.com/ggml-org/llama.cpp/tree/master/tools/server).
+
 ## Editor Integrations
 
 ### Visual Studio Code
