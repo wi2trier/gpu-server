@@ -37,6 +37,20 @@ in
       });
     }
   );
+  # posthog is broken since mcp 2, but only one test is affected.
+  # Remove once https://github.com/NixOS/nixpkgs/pull/578265 lands.
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+    (pyFinal: pyPrev: {
+      posthog = pyPrev.posthog.overridePythonAttrs (old: {
+        disabledTests = old.disabledTests ++ [
+          "test_prepare_tool_result_delivers_into_call_tool_result_models"
+        ];
+        meta = old.meta // {
+          broken = false;
+        };
+      });
+    })
+  ];
   ollama = prev.ollama.override { acceleration = "cuda"; };
   # NCCL provides fast multi-GPU AllReduce for tensor-split models. Nixpkgs has
   # no flag for it, so enable GGML_CUDA_NCCL and add the library by hand.
