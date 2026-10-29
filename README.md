@@ -53,19 +53,19 @@ This allows you to spawn a temporary shell with additional packages easily.
 For instance, to create a shell with Python, execute:
 
 ```shell
-nix shell pkgs#python3
+nix shell nixpkgs#python3
 ```
 
 Multiple packages can be specified as follows:
 
 ```shell
-nix shell pkgs#{python3,nodejs}
+nix shell nixpkgs#{python3,nodejs}
 ```
 
 You may also provide a command that shall be run in the shell:
 
 ```shell
-nix shell pkgs#python3 --command python --version
+nix shell nixpkgs#python3 --command python --version
 ```
 
 You can search for available packages on [search.nixos.org](https://search.nixos.org/packages).
@@ -76,7 +76,8 @@ If you would like to install a package permanently, please open an issue on GitH
 ### GPU Selection
 
 All GPUs of the server are set to exclusive compute mode, meaning that only one process can use a GPU at a time.
-To select a GPU, you can set the `CUDA_VISIBLE_DEVICES=$GPU_ID` environment variable.
+By default, `CUDA_VISIBLE_DEVICES` is set to the non-existent GPU `100`, so processes do not see any GPU.
+To select a GPU, set the `CUDA_VISIBLE_DEVICES=$GPU_ID` environment variable.
 Please use the aforementioned `nvidia-smi` command to check which GPUs are currently in use.
 
 > [!important]
@@ -277,7 +278,7 @@ By default, Ollama does not allow remote requests and uses a fixed port (potenti
 To change this, you need to modify the `OLLAMA_HOST` environment variable:
 
 - Accessing from your computer: `OLLAMA_HOST=0.0.0.0:PORT`.
-  `PORT` must be in the range `6000-8000`).
+  `PORT` must be in the range `6000-8000`.
 - Accessing from the server only: `OLLAMA_HOST=127.0.0.1:PORT`.
   `PORT` can be arbitrarily chosen `>1024`.
 
