@@ -15,7 +15,7 @@
     startAt = [ "03:00" ];
   };
 
-  systemd.services.nix-gc = {
+  systemd.services.collect-garbage = {
     description = "Collect Nix garbage";
     serviceConfig.Type = "oneshot";
     script = ''
