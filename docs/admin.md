@@ -48,14 +48,14 @@ Use this with caution, as it will kill the process immediately without any warni
 
 ## Systemd Service Management
 
-The server uses `systemd` to manage the background services `ollama` and `open-webui`.
-Open-WebUI connects to Ollama, but restarting Ollama does not automatically restart Open-WebUI.
+The server uses `systemd` to manage the background services `open-webui`, `llmhop`, and one `llama-cpp-MODEL` service per model (e.g., `llama-cpp-qwen3.8-27b`).
+Open-WebUI serves the llama.cpp models through the `llmhop` gateway.
 You can use the following commands to manage these services:
 
 ```shell
 sudo systemctl TASK SERVICE_NAME
 # for example:
-sudo systemctl restart ollama
+sudo systemctl restart llama-cpp-qwen3.8-27b
 ```
 
 To view the logs of a service, use:
@@ -63,5 +63,5 @@ To view the logs of a service, use:
 ```shell
 sudo journalctl -u SERVICE_NAME -f
 # for example:
-sudo journalctl -u ollama -f
+sudo journalctl -u llama-cpp-qwen3.8-27b -f
 ```
