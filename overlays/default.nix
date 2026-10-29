@@ -41,6 +41,11 @@ in
       });
     })
   ];
+  # open-webui still imports the mcp 1 client API that was removed in mcp 2.
+  # Remove once https://github.com/NixOS/nixpkgs/pull/580342 reaches nixos-unstable.
+  open-webui = prev.open-webui.override {
+    python3Packages = final.python3Packages.overrideScope (pyFinal: pyPrev: { mcp = pyFinal.mcp_1; });
+  };
   # NCCL provides fast multi-GPU AllReduce for tensor-split models. Nixpkgs has
   # no flag for it, so enable GGML_CUDA_NCCL and add the library by hand.
   # CUDA graphs leak VRAM with speculative decoding and can fail on Volta.
