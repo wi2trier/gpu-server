@@ -54,9 +54,6 @@ in
       # that the hardened llama-cpp service (MemoryDenyWriteExecute) would block.
       cudaCapabilities = [ "7.0" ];
     };
-    overlays.default = import ../overlays {
-      inherit inputs;
-      inherit (self) nixpkgsConfig;
-    };
+    overlays.default = import ../overlays { inherit inputs; };
   };
 }

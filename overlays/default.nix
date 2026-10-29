@@ -1,7 +1,4 @@
-{
-  inputs,
-  nixpkgsConfig,
-}:
+{ inputs }:
 final: prev:
 let
   inherit (final.stdenv.hostPlatform) system;
@@ -17,11 +14,6 @@ let
   };
 in
 {
-  unstable = prev;
-  stable = import inputs.nixpkgs-stable {
-    inherit system;
-    config = nixpkgsConfig;
-  };
   system-manager = inputs.system-manager.packages.${system}.default;
   imageBase = final.callPackage ./image-base.nix { };
   inherit exports;

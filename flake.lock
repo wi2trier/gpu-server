@@ -201,22 +201,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-stable": {
-      "locked": {
-        "lastModified": 1793183032,
-        "narHash": "sha256-56mFMf8heLNfYhcgbrh4GpN5x+G9JOfTFXZC3n6w0qM=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "08d3a97586f6b6343b3b5e799980773629432610",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-26.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "pre-commit-hooks-nix": {
       "inputs": {
         "flake-compat": [
@@ -327,7 +311,6 @@
         "flocken": "flocken",
         "llmhop": "llmhop",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-stable": "nixpkgs-stable",
         "system-manager": "system-manager",
         "treefmt-nix": "treefmt-nix"
       }
