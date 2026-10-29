@@ -44,7 +44,7 @@ We found the following utilities to be useful for everyday use:
 
 - `htop`: Show the active processes on the server.
 - `nvidia-smi` and `gpustat`: Show the active processes on the GPUs.
-- `tmux` and `zellij`: Create a terminal multiplexer session that can be detached and reattached later.
+- `zellij`: Create a terminal multiplexer session that can be detached and reattached later.
 
 ### Custom Packages
 
@@ -84,14 +84,15 @@ Please use the aforementioned `nvidia-smi` command to check which GPUs are curre
 > The system has eight GPUs, but two NUMA nodes with 4 GPUs each: GPUs 0,1,2,3 are connected with NVLink and GPUs 4,5,6,7 are connected with NVLink.
 > For performance reasons, we **strongly** recommend to stay within one of these nodes when selecting GPUs.
 
-### tmux
+### zellij
 
-The `tmux` command allows you to spawn a "virtual" shell that persists even after you disconnect from the server.
+The `zellij` command allows you to spawn a "virtual" shell that persists even after you disconnect from the server.
 Among others, this allows you to start a long-running process and then close the session without interrupting it.
-To create a new session, simply execute `tmux`.
-You can then start your process and close the terminal if needed.
-To reattach to the session later, execute `tmux attach`.
-The tmux session can be closed by running `exit` or `tmux kill-session` in the shell.
+To create a new session, simply execute `zellij`.
+You can then start your process and detach from the session by pressing `Ctrl+o` followed by `d`, or simply close the terminal.
+To reattach to the session later, execute `zellij attach`.
+If you have multiple sessions, list them with `zellij list-sessions` and pass the desired name to `zellij attach`.
+The zellij session can be closed by running `exit` in all of its shells or `zellij kill-session $NAME`.
 
 ## Apptainer Usage
 
@@ -171,7 +172,7 @@ All images not accessed within the last `$DAYS` days will be deleted.
 ### [Running Services](https://apptainer.org/docs/user/main/running_services.html)
 
 If starting a service like a Jupyter notebook, you need to keep the terminal open.
-To mitigate this, you may either use the `tmux` command (see above) or start the container as an _instance_:
+To mitigate this, you may either use the `zellij` command (see above) or start the container as an _instance_:
 
 ```shell
 apptainer instance start --nv $IMAGE $INSTANCE_NAME [$ARGS...]
