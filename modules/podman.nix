@@ -5,7 +5,6 @@
     enable = true;
     ociSeccompBpfHook.enable = false;
     containersConf = {
-      cniPlugins = lib.mkForce [ ];
       settings = lib.mkForce {
         engine = {
           compose_providers = [ (lib.getExe pkgs.podman-compose) ];
