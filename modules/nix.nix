@@ -1,5 +1,10 @@
-{ ... }:
+{ inputs, ... }:
 {
+  # Pins the nixpkgs registry entry. NIX_PATH stays in nix.conf to also cover non-login shells.
+  nixpkgs.flake = {
+    source = inputs.nixpkgs.outPath;
+    setNixPath = false;
+  };
   nix = {
     enable = true;
     settings = {
