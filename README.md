@@ -269,63 +269,6 @@ You may install arbitrary Python packages by running `!pip install NAME` in a no
 Alternatively, open a Terminal and execute `pip install NAME` there.
 Please note that the binaries installed in the virtual environment are only available in the Terminal when your working directory contains the `.venv` folder (i.e., using `cd` to change the folder removes `.venv/bin` from your `$PATH`).
 
-## Ollama Usage
-
-The server is equipped with the [Ollama](https://ollama.com) library for serving LLMs.
-Ollama is intentionally not wrapped by automatic GPU selection, unlike Apptainer.
-Choose the GPU explicitly by setting the `CUDA_VISIBLE_DEVICES` environment variable.
-By default, Ollama does not allow remote requests and uses a fixed port (potentially conflicting with other users).
-To change this, you need to modify the `OLLAMA_HOST` environment variable:
-
-- Accessing from your computer: `OLLAMA_HOST=0.0.0.0:PORT`.
-  `PORT` must be in the range `6000-8000`.
-- Accessing from the server only: `OLLAMA_HOST=127.0.0.1:PORT`.
-  `PORT` can be arbitrarily chosen `>1024`.
-
-```shell
-OLLAMA_HOST=SEE_ABOVE ollama serve
-```
-
-In another terminal, pull the models before performing API requests:
-
-```shell
-OLLAMA_HOST=SEE_ABOVE ollama pull MODEL_NAME
-```
-
-To make requests, either use the `ollama` library or the `openai` library.
-Remember to modify their respective endpoints to point to the IP of the GPU server and the chosen port.
-
-## LMDeploy Usage
-
-Alternatively, you can use [LMDeploy](https://github.com/InternLM/lmdeploy) to deploy and run LLMs.
-LMDeploy offers a higher throughput than Ollama due to its CUDA kernels for the given GPUs.
-It also allows easy batching.
-
-To run LMDeploy, use podman:
-
-```shell
-podman run --device nvidia.com/gpu=$GPU_ID \
-  -p PORT:PORT \
-  docker.io/openmmlab/lmdeploy:latest-cu12 \
-  lmdeploy serve api_server $HF_LLM_NAME
-```
-
-This will start an OpenAI-compatible endpoint at the corresponding port.
-More options can be found [in the documentation](https://lmdeploy.readthedocs.io/en/latest/llm/api_server.html).
-
-As an example, this command runs Qwen/Qwen3-32B on four GPUs with 32K context on port 23333:
-
-```shell
-podman run --device nvidia.com/gpu=0 \
-  --device nvidia.com/gpu=1 \
-  --device nvidia.com/gpu=2 \
-  --device nvidia.com/gpu=3 \
-  -p 23333:23333 \
-  docker.io/openmmlab/lmdeploy:latest-cu12 \
-  lmdeploy serve api_server Qwen/Qwen3-32B \
-  --tp 4 --session-len 32768 --cache-max-entry-count 0.85
-```
-
 ## Editor Integrations
 
 ### Visual Studio Code

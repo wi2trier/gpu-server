@@ -43,7 +43,6 @@ in
       });
     })
   ];
-  ollama = prev.ollama.override { acceleration = "cuda"; };
   # NCCL provides fast multi-GPU AllReduce for tensor-split models. Nixpkgs has
   # no flag for it, so enable GGML_CUDA_NCCL and add the library by hand.
   # CUDA graphs leak VRAM with speculative decoding and can fail on Volta.

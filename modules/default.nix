@@ -16,7 +16,6 @@
       userctl
       build-apptainer
       build-container
-      ollama
     ];
   };
 }
