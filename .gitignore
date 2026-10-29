@@ -63,3 +63,5 @@ Temporary Items
 
 /upload.sh
 /olddata
+
+__pycache__/
