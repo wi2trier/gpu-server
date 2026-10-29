@@ -11,9 +11,7 @@
   # system-manager cannot run quadlet units.
   imports = [ inputs.llmhop.nixosModules.default ];
 
-  environment.systemPackages = with pkgs; [
-    llama-cpp
-  ];
+  environment.systemPackages = lib.singleton (pkgs.findgpu.wrap pkgs.llama-cpp);
 
   # llmhop only orders the workers after network.target, so they race the
   # activation service that populates /run/opengl-driver/lib. Losing that race

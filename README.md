@@ -76,9 +76,12 @@ If you would like to install a package permanently, please open an issue on GitH
 ### GPU Selection
 
 All GPUs of the server are set to exclusive compute mode, meaning that only one process can use a GPU at a time.
-By default, `CUDA_VISIBLE_DEVICES` is set to the non-existent GPU `100`, so processes do not see any GPU.
-To select a GPU, set the `CUDA_VISIBLE_DEVICES=$GPU_ID` environment variable.
+By default, `CUDA_VISIBLE_DEVICES` is set to the invalid GPU `-1`, so processes do not see any GPU.
+To select one or more GPUs, set the `CUDA_VISIBLE_DEVICES=$GPU_IDS` environment variable (e.g., `0` or `4,5`).
 Please use the aforementioned `nvidia-smi` command to check which GPUs are currently in use.
+Alternatively, `findgpu $COMMAND` runs a command on the lowest free GPU, while an explicitly set `CUDA_VISIBLE_DEVICES` takes precedence.
+Without a command, `findgpu` only prints the selected GPU.
+Apptainer and llama.cpp use `findgpu` automatically.
 
 > [!important]
 > The system has eight GPUs, but two NUMA nodes with 4 GPUs each: GPUs 0,1,2,3 are connected with NVLink and GPUs 4,5,6,7 are connected with NVLink.
@@ -128,14 +131,13 @@ apptainer run $IMAGE.sif [$ARGS...]
 
 ### GPU Selection
 
-To access the GPUs from within the container, you need to set the `CUDA_VISIBLE_DEVICES` environment variable and pass the `--nv` flag to the Apptainer command.
-Here is the general call signature for the `apptainer exec` command:
+To access the GPUs from within the container, pass the `--nv` flag to the Apptainer command.
+Apptainer then uses the lowest free GPU, unless you select GPUs as described in the [general GPU selection](#gpu-selection) section:
 
 ```shell
-CUDA_VISIBLE_DEVICES=$GPU_ID apptainer exec --nv $IMAGE $COMMAND
+CUDA_VISIBLE_DEVICES=$GPU_IDS apptainer exec --nv $IMAGE $COMMAND
 ```
 
-You may omit the `CUDA_VISIBLE_DEVICES` environment variable, in which case Apptainer will automatically select a GPU that is currently not in use.
 For example, to run the `nvidia-smi` command on any available GPU, execute
 
 ```shell
@@ -273,8 +275,7 @@ Please note that the binaries installed in the virtual environment are only avai
 ## llama.cpp Usage
 
 The server is equipped with [llama.cpp](https://github.com/ggml-org/llama.cpp) for serving LLMs.
-llama.cpp is not wrapped by automatic GPU selection, unlike Apptainer.
-Choose the GPUs explicitly by setting the `CUDA_VISIBLE_DEVICES` environment variable.
+Like Apptainer, it automatically selects the lowest free GPU unless you set the `CUDA_VISIBLE_DEVICES` environment variable explicitly.
 By default, `llama-server` only accepts local requests on port `8080` (potentially conflicting with other users).
 To change this, pass the `--host` and `--port` options:
 
@@ -286,7 +287,7 @@ To change this, pass the `--host` and `--port` options:
 The model is downloaded from Hugging Face on the first start:
 
 ```shell
-CUDA_VISIBLE_DEVICES=GPU_ID llama-server -hf HF_REPO:QUANT --host SEE_ABOVE --port SEE_ABOVE
+llama-server -hf HF_REPO:QUANT --host SEE_ABOVE --port SEE_ABOVE
 ```
 
 This starts an OpenAI-compatible endpoint at `http://IP:PORT/v1`, so you can use the `openai` library to make requests.
