@@ -40,6 +40,16 @@ in
       modules = [
         ../modules
         ../options
+        {
+          # system-manager only option, NixOS owns every file in /etc anyway
+          options.environment.etc = lib.mkOption {
+            type = lib.types.attrsOf (
+              lib.types.submodule {
+                options.replaceExisting = lib.mkEnableOption "replacing a pre-existing file";
+              }
+            );
+          };
+        }
         (
           { modulesPath, ... }:
           {
