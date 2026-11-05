@@ -6,29 +6,30 @@
   ...
 }:
 {
-  # The default module carries the llmhop reverse proxy and native backends.
+  # The default module carries the llmhop gateway and native backends.
   # The quadlet backends are deliberately left out since
   # system-manager cannot run quadlet units.
   imports = [ inputs.llmhop.nixosModules.default ];
 
   environment.systemPackages = lib.singleton (pkgs.findgpu.wrap pkgs.llama-cpp);
 
-  # llmhop only orders the workers after network.target, so they race the
+  # llmhop only orders the workers after their fetchers, so they race the
   # activation service that populates /run/opengl-driver/lib. Losing that race
   # is silent: ggml dlopens its CUDA backend, the missing libcuda.so.1 makes the
   # load fail, and the suppressed error leaves the worker serving from CPU.
   systemd.services = lib.mapAttrs' (
-    name: _:
-    lib.nameValuePair "llama-cpp-${name}" {
+    _: model:
+    lib.nameValuePair model.unit {
       after = [ "gpu-server-activation.service" ];
       requires = [ "gpu-server-activation.service" ];
     }
   ) (lib.filterAttrs (_: model: model.enable) config.services.llmhop.llama-cpp.models);
 
   services.llmhop = {
-    enable = true;
-    host = "127.0.0.1";
-    port = 18000;
+    gateway = {
+      type = "llmhop";
+      llmhop.listen.default.port = 18000;
+    };
 
     llama-cpp = {
       enable = true;
@@ -56,14 +57,13 @@
       models = {
         # https://huggingface.co/Qwen/Qwen3.8-27B
         "qwen3.8-27b" = {
-          port = 18101;
+          model = "unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL";
           environment = {
             CUDA_VISIBLE_DEVICES = "0,1,2,3";
             GGML_CUDA_P2P = "1";
           };
           settings = {
             # keep-sorted start
-            hf-repo = "unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL";
             min-p = 0.0;
             spec-draft-n-max = 2;
             spec-draft-ngl = "all";

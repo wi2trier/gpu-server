@@ -50,6 +50,8 @@ Use this with caution, as it will kill the process immediately without any warni
 
 The server uses `systemd` to manage the background services `open-webui`, `llmhop`, and one `llama-cpp-MODEL` service per model (e.g., `llama-cpp-qwen3.8-27b`).
 Open-WebUI serves the llama.cpp models through the `llmhop` gateway.
+Each model service runs offline and starts after its `llama-cpp-MODEL-fetch` service has downloaded the model to `/var/cache/llama-cpp/MODEL`.
+The timer `llama-cpp-update` fetches all models weekly and restarts every running model service afterwards.
 You can use the following commands to manage these services:
 
 ```shell
