@@ -16,6 +16,7 @@ in
       imports = [
         ../modules
         ../options
+        inputs.llmhop.nixosModules.default
       ];
     };
     systemConfigs.default = inputs.system-manager.lib.makeSystemConfig {
@@ -27,6 +28,7 @@ in
         ../modules
         ../options
         ../upstream
+        inputs.llmhop.systemManagerModules.default
         {
           nixpkgs = {
             hostPlatform = "x86_64-linux";
@@ -38,8 +40,7 @@ in
     nixosConfigurations.default = inputs.nixpkgs.lib.nixosSystem {
       inherit specialArgs;
       modules = [
-        ../modules
-        ../options
+        self.nixosModules.default
         {
           # system-manager only option, NixOS owns every file in /etc anyway
           options.environment.etc = lib.mkOption {

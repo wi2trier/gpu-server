@@ -1,16 +1,10 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
 }:
 {
-  # The default module carries the llmhop gateway and native backends.
-  # The quadlet backends are deliberately left out since
-  # system-manager cannot run quadlet units.
-  imports = [ inputs.llmhop.nixosModules.default ];
-
   environment.systemPackages = lib.singleton (pkgs.findgpu.wrap pkgs.llama-cpp);
 
   # llmhop only orders the workers after their fetchers, so they race the
