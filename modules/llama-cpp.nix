@@ -54,6 +54,10 @@
           model = "unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL";
           environment = {
             CUDA_VISIBLE_DEVICES = "0,1,2,3";
+            # CUDA graphs leak VRAM with speculative decoding on Volta.
+            # Any value disables them, so remove the variable to enable them.
+            # https://github.com/ggml-org/llama.cpp/issues/25835
+            # GGML_CUDA_DISABLE_GRAPHS = "1";
             GGML_CUDA_P2P = "1";
           };
           settings = {

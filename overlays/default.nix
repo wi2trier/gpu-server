@@ -34,12 +34,9 @@ in
   ];
   # NCCL provides fast multi-GPU AllReduce for tensor-split models. Nixpkgs has
   # no flag for it, so enable GGML_CUDA_NCCL and add the library by hand.
-  # CUDA graphs leak VRAM with speculative decoding and can fail on Volta.
-  # https://github.com/ggml-org/llama.cpp/issues/25835
   llama-cpp = (prev.llama-cpp.override { cudaSupport = true; }).overrideAttrs (old: {
     buildInputs = (old.buildInputs or [ ]) ++ [ final.cudaPackages.nccl ];
     cmakeFlags = (old.cmakeFlags or [ ]) ++ [
-      (lib.cmakeBool "GGML_CUDA_GRAPHS" false)
       (lib.cmakeBool "GGML_CUDA_NCCL" true)
     ];
   });
