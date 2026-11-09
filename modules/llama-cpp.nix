@@ -66,9 +66,7 @@
             spec-draft-n-max = 2;
             spec-draft-ngl = "all";
             spec-type = "draft-mtp";
-            # Tensor splitting has a reported V100 hang with this model.
-            # https://github.com/ggml-org/llama.cpp/issues/27366
-            split-mode = "layer";
+            split-mode = "tensor";
             temperature = 1.0;
             top-k = 20;
             top-p = 0.95;
