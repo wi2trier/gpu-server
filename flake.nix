@@ -15,8 +15,6 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
-        flocken.follows = "flocken";
-        treefmt-nix.follows = "treefmt-nix";
       };
     };
     treefmt-nix = {
