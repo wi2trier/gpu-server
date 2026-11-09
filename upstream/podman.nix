@@ -19,7 +19,8 @@ in
       enable = lib.mkEnableOption "podman";
       package = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.podman;
+        # Like the NixOS module, find the shadow wrappers there.
+        default = pkgs.podman.override { extraPackages = [ "/run/wrappers" ]; };
         internal = true;
       };
     };
