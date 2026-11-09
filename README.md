@@ -76,16 +76,14 @@ If you would like to install a package permanently, please open an issue on GitH
 ### GPU Selection
 
 All GPUs of the server are set to exclusive compute mode, meaning that only one process can use a GPU at a time.
+GPUs 0 to 3 are reserved for the LLMs served by the system and cannot be accessed by users, leaving GPUs 4 to 7 (connected with NVLink).
 By default, `CUDA_VISIBLE_DEVICES` is set to the invalid GPU `-1`, so processes do not see any GPU.
-To select one or more GPUs, set the `CUDA_VISIBLE_DEVICES=$GPU_IDS` environment variable (e.g., `0` or `4,5`).
+To select one or more GPUs, set the `CUDA_VISIBLE_DEVICES=$GPU_UUIDS` environment variable to a comma-separated list of UUIDs as printed by `nvidia-smi -L` (e.g., `GPU-5f2b...`).
+CUDA only numbers the GPUs you can access, so the index `0` refers to GPU 4 of `nvidia-smi`, which is why we recommend UUIDs.
 Please use the aforementioned `nvidia-smi` command to check which GPUs are currently in use.
 Alternatively, `findgpu $COMMAND` runs a command on the lowest free GPU, while an explicitly set `CUDA_VISIBLE_DEVICES` takes precedence.
-Without a command, `findgpu` only prints the selected GPU.
+Without a command, `findgpu` only prints the UUID of the selected GPU.
 Apptainer and llama.cpp use `findgpu` automatically.
-
-> [!important]
-> The system has eight GPUs, but two NUMA nodes with 4 GPUs each: GPUs 0,1,2,3 are connected with NVLink and GPUs 4,5,6,7 are connected with NVLink.
-> For performance reasons, we **strongly** recommend to stay within one of these nodes when selecting GPUs.
 
 ### zellij
 
@@ -135,7 +133,7 @@ To access the GPUs from within the container, pass the `--nv` flag to the Apptai
 Apptainer then uses the lowest free GPU, unless you select GPUs as described in the [general GPU selection](#gpu-selection) section:
 
 ```shell
-CUDA_VISIBLE_DEVICES=$GPU_IDS apptainer exec --nv $IMAGE $COMMAND
+CUDA_VISIBLE_DEVICES=$GPU_UUIDS apptainer exec --nv $IMAGE $COMMAND
 ```
 
 For example, to run the `nvidia-smi` command on any available GPU, execute
@@ -215,6 +213,13 @@ Consequently, you can use the `--device` flag to access the GPUs from within the
 podman run --rm --device nvidia.com/gpu=$GPU_ID $IMAGE $COMMAND
 ```
 
+Here, `$GPU_ID` is the index shown by `nvidia-smi` (e.g., `4`) or the UUID of the GPU.
+To use the lowest free GPU, let `findgpu` select it:
+
+```shell
+podman run --rm --device nvidia.com/gpu=$(findgpu) $IMAGE $COMMAND
+```
+
 ### Image Caching
 
 Similar to Apptainer, Podman caches images in your home folder to speed up subsequent runs.
@@ -247,7 +252,7 @@ The image can then be run as follows:
 ```shell
 apptainer run --nv IMAGE_NAME.sif
 # or
-podman run --rm --device nvidia.com/gpu=0 docker-archive:IMAGE_NAME.tar.gz
+podman run --rm --device nvidia.com/gpu=$(findgpu) docker-archive:IMAGE_NAME.tar.gz
 ```
 
 > [!note]

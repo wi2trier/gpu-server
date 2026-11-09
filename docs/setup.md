@@ -51,12 +51,13 @@ sudo apt update
 sudo apt install -y cuda-drivers-580 cuda-toolkit-12-9 nvidia-container-toolkit
 ```
 
-The NVIDIA Container Toolkit provides `nvidia-ctk`, which the system manager activation uses to generate the CDI device specification (`/etc/cdi/nvidia.yaml`) that Podman relies on for GPU access.
-The spec is regenerated on every boot, so the driver and the spec stay in sync after the reboot below.
+The NVIDIA Container Toolkit (version 1.18 or newer) ships and enables the `nvidia-cdi-refresh` units, which keep the CDI device specification (`/var/run/cdi/nvidia.yaml`) that Podman relies on in sync with the driver.
 
-Restart the server to load the new driver.
+The configuration also sets `NVreg_ModifyDeviceFiles=0`, so that systemd-tmpfiles instead of the driver manages the device nodes `/dev/nvidia*` and restricts the reserved GPUs to their services.
+Rebuild the initramfs in case it contains the driver and restart the server to load the new driver with these options.
 
 ```shell
+sudo update-initramfs -u
 sudo reboot
 ```
 
@@ -64,23 +65,32 @@ sudo reboot
 
 Correctly setting up the CUDA drivers is crucial, so please verify that the following commands work as expected.
 
+The driver must leave the device nodes alone, and the minor number of each node must match the GPU index of `nvidia-smi`:
+
 ```shell
-systemctl is-active gpu-server-activation
-CUDA_VISIBLE_DEVICES=0 apptainer run --nv docker://ubuntu nvidia-smi
-podman run --rm --device nvidia.com/gpu=0 ubuntu nvidia-smi
+grep ModifyDeviceFiles /proc/driver/nvidia/params
+ls -l /dev/nvidia*
+grep -H "Device Minor" /proc/driver/nvidia/gpus/*/information
+nvidia-smi --query-gpu=index,pci.bus_id,persistence_mode,compute_mode --format=csv
+```
+
+```shell
+systemctl is-active gpu-server-nvidia nvidia-cdi-refresh.path
+apptainer run --nv docker://ubuntu nvidia-smi
+podman run --rm --device nvidia.com/gpu=$(findgpu) ubuntu nvidia-smi
 ```
 
 In addition, you may test the setup using the `pytorch` image:
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 apptainer run --nv docker://pytorch/pytorch python -c "import torch; print(torch.cuda.is_available())"
-podman run --rm --device nvidia.com/gpu=0 pytorch/pytorch python -c "import torch; print(torch.cuda.is_available())"
+apptainer run --nv docker://pytorch/pytorch python -c "import torch; print(torch.cuda.is_available())"
+podman run --rm --device nvidia.com/gpu=$(findgpu) pytorch/pytorch python -c "import torch; print(torch.cuda.is_available())"
 ```
 
 The new Apptainer runtime using `nvidia-container-cli` currently does not work:
 
 ```shell
-CUDA_VISIBLE_DEVICES=0 apptainer --debug run --nvccli docker://ubuntu nvidia-smi
+apptainer --debug run --nvccli docker://ubuntu nvidia-smi
 ```
 
 ## Uninstall

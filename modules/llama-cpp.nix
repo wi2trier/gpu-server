@@ -4,20 +4,28 @@
   pkgs,
   ...
 }:
+let
+  models = lib.attrValues (
+    lib.filterAttrs (_: model: model.enable) config.services.llmhop.llama-cpp.models
+  );
+  dependencies = [ "gpu-server-nvidia.service" ];
+  gpus = lib.range 0 3;
+in
 {
   environment.systemPackages = lib.singleton (pkgs.findgpu.wrap pkgs.llama-cpp);
 
-  # llmhop only orders the workers after their fetchers, so they race the
-  # activation service that populates /run/opengl-driver/lib. Losing that race
-  # is silent: ggml dlopens its CUDA backend, the missing libcuda.so.1 makes the
-  # load fail, and the suppressed error leaves the worker serving from CPU.
-  systemd.services = lib.mapAttrs' (
-    _: model:
+  gpu-server.gpus.reserved = gpus;
+
+  systemd.services = lib.genAttrs' models (
+    model:
     lib.nameValuePair model.unit {
-      after = [ "gpu-server-activation.service" ];
-      requires = [ "gpu-server-activation.service" ];
+      # Without the driver libraries, ggml silently falls back to the CPU,
+      # and DeviceAllow only resolves the uvm major once its module is loaded.
+      after = dependencies;
+      requires = dependencies;
+      serviceConfig.SupplementaryGroups = [ config.gpu-server.gpus.group ];
     }
-  ) (lib.filterAttrs (_: model: model.enable) config.services.llmhop.llama-cpp.models);
+  );
 
   services.llmhop = {
     gateway = {
@@ -27,8 +35,6 @@
 
     llama-cpp = {
       enable = true;
-      # Keep nvidia-smi indices in sync with CUDA_VISIBLE_DEVICES.
-      environment.CUDA_DEVICE_ORDER = "PCI_BUS_ID";
 
       # Qwen3.8 has a native 256 KiB context. llama-server divides ctx-size
       # across its slots, so reserve one full context for each request.
@@ -52,8 +58,14 @@
         # https://huggingface.co/Qwen/Qwen3.8-27B
         "qwen3.8-27b" = {
           model = "unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL";
+          # The group may open every reserved GPU, so confine the model to its own.
+          # CUDA then numbers them from 0 in the unit.
+          native.devices = [
+            "/dev/nvidiactl"
+            "char-nvidia-uvm"
+          ]
+          ++ map (index: "/dev/nvidia${toString index}") gpus;
           environment = {
-            CUDA_VISIBLE_DEVICES = "0,1,2,3";
             # CUDA graphs leak VRAM with speculative decoding on Volta.
             # Any value disables them, so remove the variable to enable them.
             # https://github.com/ggml-org/llama.cpp/issues/25835

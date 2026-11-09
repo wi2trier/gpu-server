@@ -10,7 +10,7 @@ let
     # CUDA stops at the first invalid id, so by default no process grabs every GPU.
     # findgpu and the binaries wrapped by it replace it with a free GPU.
     CUDA_VISIBLE_DEVICES = "-1";
-    # Without a fixed order, nvidia-smi indices disagree with CUDA_VISIBLE_DEVICES.
+    # Order the accessible GPUs by PCI bus id like nvidia-smi.
     CUDA_DEVICE_ORDER = "PCI_BUS_ID";
   };
 in
