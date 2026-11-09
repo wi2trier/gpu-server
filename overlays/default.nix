@@ -18,17 +18,8 @@ in
   imageBase = final.callPackage ./image-base.nix { };
   inherit exports;
 
-  # CUDA-specific adjustments for the V100 cards. NCCL dlopens libnvidia-ml.so.1
-  # at runtime for NVLink topology, but that is a driver library (like libcuda)
-  # and the nixpkgs nccl lacks the driver runpath, so bake it in globally via
-  # autoAddDriverRunpath, letting every consumer resolve /run/opengl-driver/lib.
-  cudaPackages = prev.cudaPackages_12_9.overrideScope (
-    cudaFinal: cudaPrev: {
-      nccl = cudaPrev.nccl.overrideAttrs (old: {
-        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ final.autoAddDriverRunpath ];
-      });
-    }
-  );
+  # CUDA 13 dropped support for the V100 cards.
+  cudaPackages = prev.cudaPackages_12_9;
   # posthog is broken since mcp 2, and its timing-based tests are flaky under load.
   # Remove once https://github.com/NixOS/nixpkgs/pull/578265 lands.
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
