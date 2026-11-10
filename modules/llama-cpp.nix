@@ -40,6 +40,7 @@ in
       # across its slots, so reserve one full context for each request.
       modelSettings = rec {
         # keep-sorted start
+        batch-size = 512;
         cache-ram = 0;
         cache-type-k = "f16";
         cache-type-v = "f16";
