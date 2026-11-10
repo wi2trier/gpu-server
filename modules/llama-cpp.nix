@@ -65,19 +65,10 @@ in
             "char-nvidia-uvm"
           ]
           ++ map (index: "/dev/nvidia${toString index}") gpus;
-          environment = {
-            # CUDA graphs leak VRAM with speculative decoding on Volta.
-            # Any value disables them, so remove the variable to enable them.
-            # https://github.com/ggml-org/llama.cpp/issues/25835
-            # GGML_CUDA_DISABLE_GRAPHS = "1";
-            GGML_CUDA_P2P = "1";
-          };
+          environment.GGML_CUDA_P2P = "1";
           settings = {
             # keep-sorted start
             min-p = 0.0;
-            spec-draft-n-max = 2;
-            spec-draft-ngl = "all";
-            spec-type = "draft-mtp";
             split-mode = "tensor";
             temperature = 1.0;
             top-k = 20;
