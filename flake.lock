@@ -135,11 +135,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1794230767,
-        "narHash": "sha256-wKsDVs5qNP04xNiMlbsoRxJIf1cN+3O1A4d2Wuo9RL8=",
+        "lastModified": 1794303203,
+        "narHash": "sha256-mKDKhVi0+vc0CRH64wl+HsrKJFUKIgfb+SSYTok8sx0=",
         "owner": "mirkolenz",
         "repo": "llmhop",
-        "rev": "6032f0c8bb910a8d81ecf4149bcedf255c234e66",
+        "rev": "6536de90b57252d587b61315a2fc5f1949e2a0a8",
         "type": "github"
       },
       "original": {
@@ -151,11 +151,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1794042290,
-        "narHash": "sha256-ziZn2PvCJE5JEEpqTdxXwJpPB+L3YqoCpTAMCzyaP3U=",
+        "lastModified": 1794386569,
+        "narHash": "sha256-x9sADJvoVG0L6RejZB+/BB4YiGZFBZrfTlhF4uBq1tQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f4a03c008967841f2a0b3cb7c436fc6fc31671f6",
+        "rev": "d4f25a3e562008648d45bcf2d70bcc7422cad84e",
         "type": "github"
       },
       "original": {
