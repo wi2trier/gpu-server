@@ -30,22 +30,6 @@ in
           broken = false;
         };
       });
-      # cargoSetupHook now forces -sys crates to link system libraries.
-      # Remove once https://github.com/NixOS/nixpkgs/pull/584283 lands.
-      chromadb = pyPrev.chromadb.overridePythonAttrs (old: {
-        buildInputs = old.buildInputs ++ [
-          final.rust-jemalloc-sys
-          final.sqlite
-        ];
-      });
-      # Remove once https://github.com/NixOS/nixpkgs/pull/584290 lands.
-      primp = pyPrev.primp.overridePythonAttrs (old: {
-        nativeBuildInputs = old.nativeBuildInputs ++ [ final.pkg-config ];
-        buildInputs = old.buildInputs ++ [
-          final.aws-lc
-          final.zstd
-        ];
-      });
     })
   ];
   # NCCL provides fast multi-GPU AllReduce for tensor-split models. Nixpkgs has
