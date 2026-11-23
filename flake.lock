@@ -135,16 +135,16 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1795261840,
-        "narHash": "sha256-nU4XxyVkMgEeh1Gsbv0iEDQLhoSwLx8yA7Mj7j38gNU=",
+        "lastModified": 1795428330,
+        "narHash": "sha256-clVvvd3IOvX1tjQtoBSq2ReAxBoD+pk6gU8fU6u1VDA=",
         "owner": "mirkolenz",
         "repo": "llmhop",
-        "rev": "80267ed3658ad18d7bf8335b510f5246c5656b4c",
+        "rev": "0630bbe7822da3b0ca62900587e4ee727ebde72e",
         "type": "github"
       },
       "original": {
         "owner": "mirkolenz",
-        "ref": "v3",
+        "ref": "v4",
         "repo": "llmhop",
         "type": "github"
       }
@@ -281,11 +281,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793953336,
-        "narHash": "sha256-DJcXM28DZRg7v3jE5i3S8NBopJKJqeKPZHZ5arTyGls=",
+        "lastModified": 1795374828,
+        "narHash": "sha256-IiIwOVT3g8+8O7IsKr7eGfs7agwhC0TX6nFlwqnBKWA=",
         "owner": "mirkolenz",
         "repo": "quadlet-nix",
-        "rev": "6902bde23da04bde0e40daf28e0a663636afe8f2",
+        "rev": "bbfa3d412322edda07106500ed2cdf54190dc306",
         "type": "github"
       },
       "original": {

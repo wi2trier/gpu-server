@@ -29,8 +29,12 @@ in
 
   services.llmhop = {
     gateway = {
-      type = "llmhop";
-      llmhop.listen.default.port = 18000;
+      enable = true;
+      listen = {
+        default.port = 18000;
+        # Admins read the metrics with `sudo llmhopctl top`.
+        admin.metrics = true;
+      };
     };
 
     llama-cpp = {
